@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu May 05 13:29:12 2016
-
-@author: Suhas Somnath
-"""
-
 from __future__ import division, print_function, absolute_import
 import sys
 from collections import Iterable
@@ -12,7 +5,7 @@ from warnings import warn
 from numbers import Number
 import matplotlib.pyplot as plt
 import numpy as np
-from .fft import get_noise_floor, are_compatible_filters, build_composite_freq_filter
+from fft import get_noise_floor, are_compatible_filters, build_composite_freq_filter
 from pyUSID import USIDataset
 from pyUSID.io.hdf_utils import check_if_main, get_attr, write_main_dataset, create_results_group
 from pyUSID.viz.plot_utils import set_tick_font_size, plot_curves
@@ -30,7 +23,6 @@ def test_filter(resp_wfm, frequency_filters=None, noise_threshold=None, excit_wf
                 plot_title=None, verbose=False):
     """
     Filters the provided response with the provided filters.
-
     Parameters
     ----------
     resp_wfm : array-like, 1D
@@ -51,7 +43,6 @@ def test_filter(resp_wfm, frequency_filters=None, noise_threshold=None, excit_wf
         Title for the raw vs filtered plots if requested. For example - 'Row 15'
     verbose : (Optional) Boolean
         Prints extra debugging information if True.  Default False
-
     Returns
     -------
     filt_data : 1D numpy float array
@@ -175,120 +166,3 @@ def test_filter(resp_wfm, frequency_filters=None, noise_threshold=None, excit_wf
                                                 title=plot_title)
 
     return filt_data, fig_fft, fig_loops
-
-
-###############################################################################
-
-
-def decompress_response(f_condensed_mat, num_pts, hot_inds):
-    """
-    Returns the time domain representation of waveform(s) that are compressed in the frequency space
-    
-    Parameters
-    ----------
-    f_condensed_mat : 1D or 2D complex numpy arrays
-        Frequency domain signals arranged as [position, frequency]. 
-        Only the positive frequncy bins must be in the compressed dataset. 
-        The dataset is assumed to have been FFT shifted (such that 0 Hz is at the center).
-    num_pts : unsigned int
-        Number of points in the time domain signal
-    hot_inds : 1D unsigned int numpy array
-        Indices of the frequency bins in the compressed data. 
-        This index array will be necessary to reverse map the condensed 
-        FFT into its original form
-        
-    Returns
-    -------
-    time_resp : 2D numpy array
-        Time domain response arranged as [position, time]
-        
-    Notes
-    -----
-    Memory is given higher priority here, so this function loops over the position
-    instead of doing the inverse FFT on the complete data.
-
-    """
-    if num_pts % 1 != 0:
-        raise ValueError('num_pts should be an integer')
-    if not isinstance(f_condensed_mat, (np.ndarray, list)):
-        raise TypeError('f_condensed_mat should be array-like')
-    if f_condensed_mat.dtype not in [np.complex, np.complex64, np.complex128]:
-        raise TypeError('f_condensed_mat should be a complex array')
-    if not isinstance(hot_inds, (np.ndarray, list)):
-        raise TypeError('hot_inds should be array-like')
-    hot_inds = np.array(hot_inds)
-    if hot_inds.ndim > 1:
-        raise ValueError('hot_inds should be a 1D array')
-
-    f_condensed_mat = np.array(f_condensed_mat)
-    f_condensed_mat = np.atleast_2d(f_condensed_mat)
-    hot_inds_mirror = np.flipud(num_pts - hot_inds)
-    time_resp = np.zeros(shape=(f_condensed_mat.shape[0], num_pts), dtype=np.float32)
-    for pos in range(f_condensed_mat.shape[0]):
-        f_complete = np.zeros(shape=num_pts, dtype=np.complex)
-        f_complete[hot_inds] = f_condensed_mat[pos, :]
-        # Now add the mirror (FFT in negative X axis that was removed)
-        f_complete[hot_inds_mirror] = np.flipud(f_condensed_mat[pos, :])
-        time_resp[pos, :] = np.real(np.fft.ifft(np.fft.ifftshift(f_complete)))
-
-    return np.squeeze(time_resp)
-
-
-def reshape_from_lines_to_pixels(h5_main, pts_per_cycle, scan_step_x_m=None):
-    """
-    Breaks up the provided raw G-mode dataset into lines and pixels (from just lines)
-
-    Parameters
-    ----------
-    h5_main : h5py.Dataset object
-        Reference to the main dataset that contains the raw data that is only broken up by lines
-    pts_per_cycle : unsigned int
-        Number of points in a single pixel
-    scan_step_x_m : float
-        Step in meters for pixels
-
-    Returns
-    -------
-    h5_resh : h5py.Dataset object
-        Reference to the main dataset that contains the reshaped data
-    """
-    if not check_if_main(h5_main):
-        raise TypeError('h5_main is not a Main dataset')
-    h5_main = USIDataset(h5_main)
-    if pts_per_cycle % 1 != 0 or pts_per_cycle < 1:
-        raise TypeError('pts_per_cycle should be a positive integer')
-    if scan_step_x_m is not None:
-        if not isinstance(scan_step_x_m, Number):
-            raise TypeError('scan_step_x_m should be a real number')
-    else:
-        scan_step_x_m = 1
-
-    if h5_main.shape[1] % pts_per_cycle != 0:
-        warn('Error in reshaping the provided dataset to pixels. Check points per pixel')
-        raise ValueError
-
-    num_cols = int(h5_main.shape[1] / pts_per_cycle)
-
-    # TODO: DO NOT assume simple 1 spectral dimension!
-    single_ao = np.squeeze(h5_main.h5_spec_vals[:, :pts_per_cycle])
-
-    spec_dims = Dimension(get_attr(h5_main.h5_spec_vals, 'labels')[0],
-                          get_attr(h5_main.h5_spec_vals, 'units')[0], single_ao)
-
-    # TODO: DO NOT assume simple 1D in positions!
-    pos_dims = [Dimension('X', 'm', np.linspace(0, scan_step_x_m, num_cols)),
-                Dimension('Y', 'm', np.linspace(0, h5_main.h5_pos_vals[1, 0], h5_main.shape[0]))]
-
-    h5_group = create_results_group(h5_main, 'Reshape')
-    # TODO: Create empty datasets and then write for very large datasets
-    h5_resh = write_main_dataset(h5_group, (num_cols * h5_main.shape[0], pts_per_cycle), 'Reshaped_Data',
-                                 get_attr(h5_main, 'quantity')[0], get_attr(h5_main, 'units')[0], pos_dims, spec_dims,
-                                 chunks=(10, pts_per_cycle), dtype=h5_main.dtype, compression=h5_main.compression)
-
-    # TODO: DON'T write in one shot assuming small datasets fit in memory!
-    print('Starting to reshape G-mode line data. Please be patient')
-    h5_resh[()] = np.reshape(h5_main[()], (-1, pts_per_cycle))
-
-    print('Finished reshaping G-mode line data to rows and columns')
-
-    return USIDataset(h5_resh)

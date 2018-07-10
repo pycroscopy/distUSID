@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 Created on Tue Oct 20 17:42:41 2015
-
 @author: Suhas Somnath
 """
 ###############################################################################
@@ -17,17 +16,14 @@ from warnings import warn
 def get_fft_stack(image_stack):
     """
     Gets the 2D FFT for a single or stack of images by applying a blackman window
-
     Parameters
     ----------
     image_stack : 2D or 3D real numpy array
         Either a 2D matrix [x, y] or a stack of 2D images arranged as [z or spectral, x, y]
-
     Returns
     -------
     fft_stack : 2D or 3D real numpy array
         2 or 3 dimensional matrix arranged as [z or spectral, x, y]
-
     """
     if image_stack.ndim == 2:
         # single image
@@ -44,12 +40,10 @@ def build_radius_matrix(image_shape):
     Builds a matrix where the value of a given pixel is its L2 distance from the origin, which is located at the
     center of the provided image rather one of the corners of the image. The result from this function is required
     by get_2d_gauss_lpf
-
     Parameters
     ----------
     image_shape: list or tuple
         Number of rows and columns in the image
-
     Returns
     -------
     radius_mat: 2d numpy float array
@@ -64,16 +58,13 @@ def get_2d_gauss_lpf(radius_mat, filter_width):
     """
     Builds a 2D, radially symmetric, low-pass Gaussian filter based on the provided radius matrix. The corresponding
     high pass filter can be built simply by subtracting the resulting low-pass filter from 1.
-
     Multiply the output of this function with the (shifted) fft of an image to apply the filter.
-
     Parameters
     ----------
     radius_mat: 2d numpy float array
         A [NxM] matrix of the same size as the image that this filter will be applied to
     filter_width: float
         Size of the filter
-
     Returns
     -------
     gauss_filt: 2D numpy float array
@@ -85,12 +76,10 @@ def get_2d_gauss_lpf(radius_mat, filter_width):
 def fft_to_real(image):
     """
     Provides the real-space equivalent of the provided image in Fourier space
-
     Parameters
     ----------
     image: 2D numpy float array
         FFT of image that has been fft shifted.
-
     Returns
     -------
     image : 2D numpy float array
@@ -102,7 +91,6 @@ def fft_to_real(image):
 def get_noise_floor(fft_data, tolerance):
     """
     Calculate the noise floor from the FFT data. Algorithm originally written by Mahmut Okatan Baris
-
     Parameters
     ----------
     fft_data : 1D or 2D complex numpy array
@@ -114,7 +102,6 @@ def get_noise_floor(fft_data, tolerance):
     -------
     noise_floor : 1D array-like
         One value per channel / repetition
-
     """
 
     fft_data = np.atleast_2d(fft_data)
@@ -163,7 +150,6 @@ def down_sample(fft_vec, freq_ratio):
     -------
     fft_vec : 1D numpy array
         downsampled waveform
-
     """
     if freq_ratio >= 1:
         warn('Error at downSample: New sampling rate > old sampling rate')
@@ -231,7 +217,6 @@ class NoiseBandFilter(FrequencyFilter):
     def __init__(self, signal_length, samp_rate, freqs, freq_widths, show_plots=False):
         """
         Builds a filter that removes specified noise frequencies
-
         Parameters
         ----------
         signal_length : unsigned int
@@ -244,16 +229,13 @@ class NoiseBandFilter(FrequencyFilter):
             Width around the target frequency that should be set to 0\n
         show_plots : bool
             If True, plots will be displayed during calculation.  Default False
-
         Note
         ----
         sampRate, freqs, freq_widths have same units - eg MHz
-
         Returns
         -------
         noise_filter : 1D numpy array
             Array of ones set to 0 at noise bands
-
         """
         super(NoiseBandFilter, self).__init__(signal_length, samp_rate)
 
@@ -313,7 +295,6 @@ class LowPassFilter(FrequencyFilter):
     def __init__(self, signal_length, samp_rate, f_cutoff, roll_off=0.05):
         """
         Builds a low pass filter
-
         Parameters
         ----------
         signal_length : unsigned int
@@ -325,11 +306,9 @@ class LowPassFilter(FrequencyFilter):
         roll_off : 0 < float < 1
             Frequency band over which the filter rolls off. rol off = 0.05 on a
             100 kHz low pass filter -> roll off from 95 kHz (1) to 100 kHz (0)
-
         Returns
         -------
         LPF : 1D numpy array describing the low pass filter
-
         """
 
         if f_cutoff >= 0.5 * samp_rate:
@@ -372,7 +351,6 @@ class HarmonicPassFilter(FrequencyFilter):
     def __init__(self, signal_length, samp_rate, first_freq, band_width, num_harm, do_plots=False):
         """
         Builds a filter that only keeps N harmonics
-
         Parameters
         ----------
         signal_length : unsigned int
@@ -387,14 +365,11 @@ class HarmonicPassFilter(FrequencyFilter):
             Number of harmonics to preserve
         do_plots : Boolean (optional)
             Whether or not to generate plots. Not necessary after debugging
-
         Note that the frequency values must all have the same units
-
         Returns
         -------
         harm_filter : 1D numpy array
             0s where the signal is to be rejected and 1s at harmonics
-
         """
 
         super(HarmonicPassFilter, self).__init__(signal_length, samp_rate)
@@ -465,30 +440,3 @@ class HarmonicPassFilter(FrequencyFilter):
                       prefix+'bands': self.num_harm}
         this_parms.update(basic_parms)
         return this_parms
-
-    # def remove_noise_harmonics(F_AI_vec,samp_rate,noise_combs):
-    #     """
-    #     Removes specified noise frequencies from the signal
-    #
-    #     Parameters
-    #     ---------------------
-    #     * F_AI_vec -- matrix (chan x pts) already FFT + FFT shifted
-    #
-    #     * sampRate -- sampling rate
-    #
-    #     * freqs -- 1D array of target frequencies
-    #
-    #     * freqWidths -- 1D array of frequency windows that correspond to freqs that should be set to 0
-    #
-    #     * Note: sampRate, freqs, freqWidths have same units - eg MHz
-    #     """
-    #     numpts = size(F_AI_vec,2);
-    #     freqs = []; freqWidths = [];
-    #     for k1 = 1:length(noiseCombs):
-    #         stFreq = noiseCombs(k1).first_harm_freq;
-    #         nBands = noiseCombs(k1).num_harmonics;
-    #         if nBands < 0
-    #             nBands =
-    #         end
-    #     end
-    #     F_AI_vec = removeNoiseFreqs(F_AI_vec,sampRate,freqs,freqWidths);
