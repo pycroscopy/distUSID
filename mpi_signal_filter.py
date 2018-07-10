@@ -1,23 +1,118 @@
 # -*- coding: utf-8 -*-
 """
 Created on Tue Nov 07 11:48:53 2017
-
 @author: Suhas Somnath
-
 """
 
 from __future__ import division, print_function, absolute_import, unicode_literals
 import h5py
 import numpy as np
 from collections import Iterable
-from pyUSID.processing.process import Process, parallel_compute
-from pyUSID.io.hdf_utils import create_results_group, write_main_dataset, write_simple_attrs, create_empty_dataset, \
+from pyUSID.io.hdf_utils import create_results_group, write_main_dataset, write_simple_attrs, \
     write_ind_val_dsets
 from pyUSID.io.write_utils import Dimension
-from .fft import get_noise_floor, are_compatible_filters, build_composite_freq_filter
-from .gmode_utils import test_filter
+from fft import get_noise_floor, are_compatible_filters, build_composite_freq_filter
+from gmode_utils import test_filter
 
+try:
+    from mpi4py import MPI
+    if MPI.COMM_WORLD.Get_size() == 1:
+        # mpi4py available but NOT called via mpirun or mpiexec => single node
+        MPI = None
+except ImportError:
+    # mpi4py not even present! Single node by default:
+    MPI = None
+from mpi_process import Process, parallel_compute
 # TODO: correct implementation of num_pix
+
+def create_empty_dataset(source_dset, dtype, dset_name, h5_group=None, new_attrs=None, skip_refs=False):
+    """
+    Creates an empty dataset in the h5 file based on the provided dataset in the same or specified group
+    Parameters
+    ----------
+    source_dset : h5py.Dataset object
+        Source object that provides information on the group and shape of the dataset
+    dtype : dtype
+        Data type of the fit / guess datasets
+    dset_name : String / Unicode
+        Name of the dataset
+    h5_group : h5py.Group object, optional. Default = None
+        Group within which this dataset will be created
+    new_attrs : dictionary (Optional)
+        Any new attributes that need to be written to the dataset
+    skip_refs : boolean, optional
+        Should ObjectReferences and RegionReferences be skipped when copying attributes from the
+        `source_dset`
+    Returns
+    -------
+    h5_new_dset : h5py.Dataset object
+        Newly created dataset
+    """
+    from pyUSID.io.dtype_utils import validate_dtype
+    from pyUSID.io.hdf_utils import copy_attributes, check_if_main, write_book_keeping_attrs
+    from pyUSID import USIDataset
+    import sys
+    if sys.version_info.major == 3:
+        unicode = str
+
+    if not isinstance(source_dset, h5py.Dataset):
+        raise TypeError('source_deset should be a h5py.Dataset object')
+    _ = validate_dtype(dtype)
+    if new_attrs is not None:
+        if not isinstance(new_attrs, dict):
+            raise TypeError('new_attrs should be a dictionary')
+    else:
+        new_attrs = dict()
+
+    if h5_group is None:
+        h5_group = source_dset.parent
+    else:
+        if not isinstance(h5_group, (h5py.Group, h5py.File)):
+            raise TypeError('h5_group should be a h5py.Group or h5py.File object')
+
+    if not isinstance(dset_name, (str, unicode)):
+        raise TypeError('dset_name should be a string')
+    dset_name = dset_name.strip()
+    if len(dset_name) == 0:
+        raise ValueError('dset_name cannot be empty!')
+    if '-' in dset_name:
+        warn('dset_name should not contain the "-" character. Reformatted name from:{} to '
+             '{}'.format(dset_name, dset_name.replace('-', '_')))
+    dset_name = dset_name.replace('-', '_')
+
+    if dset_name in h5_group.keys():
+        if isinstance(h5_group[dset_name], h5py.Dataset):
+            warn('A dataset named: {} already exists in group: {}'.format(dset_name, h5_group.name))
+            h5_new_dset = h5_group[dset_name]
+            # Make sure it has the correct shape and dtype
+            if any((source_dset.shape != h5_new_dset.shape, dtype != h5_new_dset.dtype)):
+                warn('Either the shape (existing: {} desired: {}) or dtype (existing: {} desired: {}) of the dataset '
+                     'did not match with expectations. Deleting and creating a new one.'.format(h5_new_dset.shape,
+                                                                                                source_dset.shape,
+                                                                                                h5_new_dset.dtype,
+                                                                                                dtype))
+                del h5_new_dset, h5_group[dset_name]
+                h5_new_dset = h5_group.create_dataset(dset_name, shape=source_dset.shape, dtype=dtype,
+                                                      chunks=source_dset.chunks)
+        else:
+            raise KeyError('{} is already a {} in group: {}'.format(dset_name, type(h5_group[dset_name]),
+                                                                    h5_group.name))
+
+    else:
+        h5_new_dset = h5_group.create_dataset(dset_name, shape=source_dset.shape, dtype=dtype,
+                                              chunks=source_dset.chunks)
+
+    # This should link the ancillary datasets correctly
+    h5_new_dset = copy_attributes(source_dset, h5_new_dset, skip_refs=skip_refs)
+    h5_new_dset.attrs.update(new_attrs)
+
+    if check_if_main(h5_new_dset):
+        h5_new_dset = USIDataset(h5_new_dset)
+        # update book keeping attributes
+        write_book_keeping_attrs(h5_new_dset)
+
+    return h5_new_dset
+
 
 
 class SignalFilter(Process):
@@ -25,7 +120,6 @@ class SignalFilter(Process):
                  write_condensed=False, num_pix=1, phase_rad=0,  **kwargs):
         """
         Filters the entire h5 dataset with the given filtering parameters.
-
         Parameters
         ----------
         h5_main : h5py.Dataset object
@@ -94,7 +188,7 @@ class SignalFilter(Process):
         scaling_factor = 1 + 2 * self.write_filtered + 0.25 * self.write_condensed
         self._max_pos_per_read = int(self._max_pos_per_read / scaling_factor)
 
-        if self.verbose:
+        if self.verbose and self.mpi_rank == 0:
             print('Allowed to read {} pixels per chunk'.format(self._max_pos_per_read))
 
         self.parms_dict = dict()
@@ -119,7 +213,6 @@ class SignalFilter(Process):
     def test(self, pix_ind=None, excit_wfm=None, **kwargs):
         """
         Tests the signal filter on a single pixel (randomly chosen unless manually specified) worth of data.
-
         Parameters
         ----------
         pix_ind : int, optional. default = random
@@ -129,11 +222,12 @@ class SignalFilter(Process):
             length of a single pixel's data. For example, in the case of G-mode, where a single scan line is yet to be
             broken down into pixels, the excitation waveform for a single pixel can br provided to automatically
             break the raw and filtered responses also into chunks of the same size.
-
         Returns
         -------
         fig, axes
         """
+        if self.mpi_rank > 0:
+            return
         if pix_ind is None:
             pix_ind = np.random.randint(0, high=self.h5_main.shape[0])
         return test_filter(self.h5_main[pix_ind], frequency_filters=self.frequency_filters, excit_wfm=excit_wfm,
@@ -148,13 +242,18 @@ class SignalFilter(Process):
         self.h5_results_grp = create_results_group(self.h5_main, self.process_name)
 
         self.parms_dict.update({'last_pixel': 0, 'algorithm': 'pycroscopy_SignalFilter'})
-        write_simple_attrs(self.h5_results_grp, self.parms_dict)
+
+        if self.mpi_rank == 0:
+            write_simple_attrs(self.h5_results_grp, self.parms_dict)
 
         assert isinstance(self.h5_results_grp, h5py.Group)
 
         if isinstance(self.composite_filter, np.ndarray):
             h5_comp_filt = self.h5_results_grp.create_dataset('Composite_Filter',
                                                               data=np.float32(self.composite_filter))
+
+            if self.verbose and self.mpi_rank==0:
+                print('Rank {} - Finished creating the Composite_Filter dataset'.format(self.mpi_rank))
 
         # First create the position datsets if the new indices are smaller...
         if self.num_effective_pix != self.h5_main.shape[0]:
@@ -169,26 +268,35 @@ class SignalFilter(Process):
                     pos_descriptor.append(Dimension(name, units, np.arange(leng)))
                 ds_pos_inds, ds_pos_vals = build_ind_val_dsets(pos_descriptor, is_spectral=False, verbose=self.verbose)
                 h5_pos_vals.data = np.atleast_2d(new_pos_vals)  # The data generated above varies linearly. Override.
-                
+
             """
             h5_pos_inds_new, h5_pos_vals_new = write_ind_val_dsets(self.h5_results_grp,
                                                                    Dimension('pixel', 'a.u.', self.num_effective_pix),
-                                                                   is_spectral=False, verbose=self.verbose)
+                                                                   is_spectral=False, verbose=self.verbose and self.mpi_rank==0)
+            if self.verbose and self.mpi_rank==0:
+                print('Rank {} - Created the new position ancillary dataset'.format(self.mpi_rank))
         else:
             h5_pos_inds_new = self.h5_main.h5_pos_inds
             h5_pos_vals_new = self.h5_main.h5_pos_vals
+
+            if self.verbose and self.mpi_rank==0:
+                print('Rank {} - Reusing source datasets position datasets'.format(self.mpi_rank))
 
         if self.noise_threshold is not None:
             self.h5_noise_floors = write_main_dataset(self.h5_results_grp, (self.num_effective_pix, 1), 'Noise_Floors',
                                                       'Noise', 'a.u.', None, Dimension('arb', '', [1]),
                                                       dtype=np.float32, aux_spec_prefix='Noise_Spec_',
                                                       h5_pos_inds=h5_pos_inds_new, h5_pos_vals=h5_pos_vals_new,
-                                                      verbose=self.verbose)
+                                                      verbose=self.verbose and self.mpi_rank==0)
+            if self.verbose and self.mpi_rank==0:
+                print('Rank {} - Finished creating the Noise_Floors dataset'.format(self.mpi_rank))
 
         if self.write_filtered:
             # Filtered data is identical to Main_Data in every way - just a duplicate
             self.h5_filtered = create_empty_dataset(self.h5_main, self.h5_main.dtype, 'Filtered_Data',
                                                     h5_group=self.h5_results_grp)
+            if self.verbose and self.mpi_rank==0:
+                print('Rank {} - Finished creating the Filtered dataset'.format(self.mpi_rank))
 
         self.hot_inds = None
 
@@ -199,7 +307,9 @@ class SignalFilter(Process):
             self.h5_condensed = write_main_dataset(self.h5_results_grp, (self.num_effective_pix, len(self.hot_inds)),
                                                    'Condensed_Data', 'Complex', 'a. u.', None, condensed_spec,
                                                    h5_pos_inds=h5_pos_inds_new, h5_pos_vals=h5_pos_vals_new,
-                                                   dtype=np.complex, verbose=self.verbose)
+                                                   dtype=np.complex, verbose=self.verbose and self.mpi_rank==0)
+            if self.verbose and self.mpi_rank==0:
+                print('Rank {} - Finished creating the Condensed dataset'.format(self.mpi_rank))
 
     def _get_existing_datasets(self):
         """
@@ -227,11 +337,14 @@ class SignalFilter(Process):
             self.h5_filtered[pos_slice] = self.filtered_data
 
         # Leaving in this provision that will allow restarting of processes
+        #TODO: I don't know how this part will work - need to shift to a 1 bit dataset?
         self.h5_results_grp.attrs['last_pixel'] = self._end_pos
 
-        self.h5_main.file.flush()
+        # RuntimeError: Unable to flush file's cached information (MPI_ERR_ARG: invalid argument of some other kind)
+        # self.h5_main.file.flush()
 
-        print('Finished processing upto pixel ' + str(self._end_pos) + ' of ' + str(self.h5_main.shape[0]))
+        # Almost NO change here at all! users will only be responsible for start and _end_pos only
+        print('Rank {} - Finished processing upto pixel {} of {}'.format(self.mpi_rank, self._end_pos, self._rank_end_pos))
 
         # Now update the start position
         self._start_pos = self._end_pos
@@ -239,7 +352,6 @@ class SignalFilter(Process):
     def _unit_computation(self, *args, **kwargs):
         """
         Processing per chunk of the dataset
-
         Parameters
         ----------
         args : list
