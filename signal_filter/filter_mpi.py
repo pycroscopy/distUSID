@@ -1,7 +1,7 @@
 import h5py
 from mpi4py import MPI
-from fft import LowPassFilter
-from mpi_signal_filter import SignalFilter
+from signal_filter.fft import LowPassFilter
+from signal_filter.mpi_signal_filter import SignalFilter
 
 h5_path = 'giv_raw.h5'
 h5_f = h5py.File(h5_path, mode='r+', driver='mpio', comm=MPI.COMM_WORLD)

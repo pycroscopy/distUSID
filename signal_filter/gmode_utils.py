@@ -5,7 +5,7 @@ from warnings import warn
 from numbers import Number
 import matplotlib.pyplot as plt
 import numpy as np
-from fft import get_noise_floor, are_compatible_filters, build_composite_freq_filter
+from signal_filter.fft import get_noise_floor, are_compatible_filters, build_composite_freq_filter
 from pyUSID import USIDataset
 from pyUSID.io.hdf_utils import check_if_main, get_attr, write_main_dataset, create_results_group
 from pyUSID.viz.plot_utils import set_tick_font_size, plot_curves

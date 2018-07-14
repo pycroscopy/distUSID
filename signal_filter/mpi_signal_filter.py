@@ -11,8 +11,8 @@ from collections import Iterable
 from pyUSID.io.hdf_utils import create_results_group, write_main_dataset, write_simple_attrs, \
     write_ind_val_dsets
 from pyUSID.io.write_utils import Dimension
-from fft import get_noise_floor, are_compatible_filters, build_composite_freq_filter
-from gmode_utils import test_filter
+from signal_filter.fft import get_noise_floor, are_compatible_filters, build_composite_freq_filter
+from signal_filter.gmode_utils import test_filter
 
 try:
     from mpi4py import MPI
