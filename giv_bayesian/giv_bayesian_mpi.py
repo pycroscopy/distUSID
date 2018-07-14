@@ -15,8 +15,17 @@ from pyUSID.io.hdf_utils import write_main_dataset, create_results_group, write_
 from pyUSID.io.write_utils import Dimension
 from pyUSID import USIDataset
 
-from pyUSID.processing.process import Process, parallel_compute
-from .utils.giv_utils import do_bayesian_inference, bayesian_inference_on_period
+try:
+    from mpi4py import MPI
+    if MPI.COMM_WORLD.Get_size() == 1:
+        # mpi4py available but NOT called via mpirun or mpiexec => single node
+        MPI = None
+except ImportError:
+    # mpi4py not even present! Single node by default:
+    MPI = None
+
+from mpi_process import Process, parallel_compute
+from giv_utils import do_bayesian_inference, bayesian_inference_on_period
 
 cap_dtype = np.dtype({'names': ['Forward', 'Reverse'],
                       'formats': [np.float32, np.float32]})
@@ -185,6 +194,9 @@ class GIVBayesian(Process):
         -------
         fig, axes
         """
+        if self.mpi_rank > 0:
+            return
+
         if pix_ind is None:
             pix_ind = np.random.randint(0, high=self.h5_main.shape[0])
         other_params = self.parms_dict.copy()
@@ -215,7 +227,7 @@ class GIVBayesian(Process):
         self._max_pos_per_read = self._max_pos_per_read // 4  # Integer division
         # Since these computations take far longer than functional fitting, do in smaller batches:
         self._max_pos_per_read = min(100, self._max_pos_per_read)
-        if self.verbose:
+        if self.verbose and self.mpi_rank == 0:
             print('Max positions per read set to {}'.format(self._max_pos_per_read))
 
     def _create_results_datasets(self):
@@ -225,32 +237,34 @@ class GIVBayesian(Process):
         # create all h5 datasets here:
         num_pos = self.h5_main.shape[0]
 
-        if self.verbose:
+        if self.verbose and self.mpi_rank == 0:
             print('Now creating the datasets')
 
         h5_group = create_results_group(self.h5_main, self.process_name)
-        write_simple_attrs(h5_group, {'algorithm_author': 'Kody J. Law', 'last_pixel': 0})
-        write_simple_attrs(h5_group, self.parms_dict)
 
-        if self.verbose:
+        if self.mpi_rank == 0:
+            write_simple_attrs(h5_group, {'algorithm_author': 'Kody J. Law', 'last_pixel': 0})
+            write_simple_attrs(h5_group, self.parms_dict)
+
+        if self.verbose and self.mpi_rank == 0:
             print('created group: {}'.format(h5_group.name))
             print(get_attributes(h5_group))
 
         # One of those rare instances when the result is exactly the same as the source
         self.h5_i_corrected = create_empty_dataset(self.h5_main, np.float32, 'Corrected_Current', h5_group=h5_group)
 
-        if self.verbose:
+        if self.verbose and self.mpi_rank == 0:
             print('Created I Corrected')
             print_tree(h5_group)
 
         # The resistance dataset requires the creation of a new spectroscopic dimension
         self.h5_resistance = write_main_dataset(h5_group, (num_pos, self.num_x_steps), 'Resistance', 'Resistance',
                                                 'GOhms', None, Dimension('Bias', 'V', self.num_x_steps),
-                                                dtype=np.float32, chunks=(1, self.num_x_steps), compression='gzip',
+                                                dtype=np.float32, chunks=(1, self.num_x_steps), #compression='gzip',
                                                 h5_pos_inds=self.h5_main.h5_pos_inds,
                                                 h5_pos_vals=self.h5_main.h5_pos_vals)
 
-        if self.verbose:
+        if self.verbose and self.mpi_rank == 0:
             print('Created Resistance')
             print_tree(h5_group)
 
@@ -260,20 +274,20 @@ class GIVBayesian(Process):
         # The variance is identical to the resistance dataset
         self.h5_variance = create_empty_dataset(self.h5_resistance, np.float32, 'R_variance')
 
-        if self.verbose:
+        if self.verbose and self.mpi_rank == 0:
             print('Created Variance')
             print_tree(h5_group)
 
         # The capacitance dataset requires new spectroscopic dimensions as well
         self.h5_cap = write_main_dataset(h5_group, (num_pos, 1), 'Capacitance', 'Capacitance', 'pF', None,
                                          Dimension('Direction', '', [1]),  h5_pos_inds=self.h5_main.h5_pos_inds,
-                                         h5_pos_vals=self.h5_main.h5_pos_vals, dtype=cap_dtype, compression='gzip',
+                                         h5_pos_vals=self.h5_main.h5_pos_vals, dtype=cap_dtype, #compression='gzip',
                                          aux_spec_prefix='Cap_Spec_')
 
-        if self.verbose:
+        if self.verbose and self.mpi_rank == 0:
             print('Created Capacitance')
             print_tree(h5_group)
-            print('Done!')
+            print('Done creating all results datasets!')
 
         self.h5_main.file.flush()
 
@@ -293,7 +307,8 @@ class GIVBayesian(Process):
         """
 
         if self.verbose:
-            print('Started accumulating all results')
+            print('Rank {} - Started accumulating results for this chunk'.format(self.mpi_rank))
+
         num_pixels = len(self.forward_results)
         cap_mat = np.zeros((num_pixels, 2), dtype=np.float32)
         r_inf_mat = np.zeros((num_pixels, self.num_x_steps), dtype=np.float32)
@@ -334,7 +349,7 @@ class GIVBayesian(Process):
 
         # Now write to h5 files:
         if self.verbose:
-            print('Finished accumulating results. Writing to h5')
+            print('Rank {} - Finished accumulating results. Writing results of chunk to h5'.format(self.mpi_rank))
 
         if self._start_pos == 0:
             self.h5_new_spec_vals[0, :] = full_results['x']  # Technically this needs to only be done once
@@ -350,7 +365,8 @@ class GIVBayesian(Process):
 
         self.h5_main.file.flush()
 
-        print('Finished processing up to pixel ' + str(self._end_pos) + ' of ' + str(self.h5_main.shape[0]))
+        print('Rank {} - Finished processing up to pixel {} of {}'
+              '.'.format(self.mpi_rank, self._end_pos, self._rank_end_pos))
 
         # Now update the start position
         self._start_pos = self._end_pos
