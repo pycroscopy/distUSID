@@ -10,7 +10,7 @@ from __future__ import division, print_function, absolute_import, unicode_litera
 
 import numpy as np
 from pyUSID.io.dtype_utils import stack_real_to_compound
-from pyUSID.io.hdf_utils import write_main_dataset, create_results_group, create_empty_dataset, write_simple_attrs, \
+from pyUSID.io.hdf_utils import write_main_dataset, create_results_group, write_simple_attrs, \
     print_tree, get_attributes
 from pyUSID.io.write_utils import Dimension
 from pyUSID import USIDataset
@@ -21,6 +21,95 @@ from .utils.giv_utils import do_bayesian_inference, bayesian_inference_on_period
 cap_dtype = np.dtype({'names': ['Forward', 'Reverse'],
                       'formats': [np.float32, np.float32]})
 # TODO : Take lesser used bayesian inference params from kwargs if provided
+
+
+def create_empty_dataset(source_dset, dtype, dset_name, h5_group=None, new_attrs=None, skip_refs=False):
+    """
+    Creates an empty dataset in the h5 file based on the provided dataset in the same or specified group
+    Parameters
+    ----------
+    source_dset : h5py.Dataset object
+        Source object that provides information on the group and shape of the dataset
+    dtype : dtype
+        Data type of the fit / guess datasets
+    dset_name : String / Unicode
+        Name of the dataset
+    h5_group : h5py.Group object, optional. Default = None
+        Group within which this dataset will be created
+    new_attrs : dictionary (Optional)
+        Any new attributes that need to be written to the dataset
+    skip_refs : boolean, optional
+        Should ObjectReferences and RegionReferences be skipped when copying attributes from the
+        `source_dset`
+    Returns
+    -------
+    h5_new_dset : h5py.Dataset object
+        Newly created dataset
+    """
+    from pyUSID.io.dtype_utils import validate_dtype
+    from pyUSID.io.hdf_utils import copy_attributes, check_if_main, write_book_keeping_attrs
+    from pyUSID import USIDataset
+    import sys
+    if sys.version_info.major == 3:
+        unicode = str
+
+    if not isinstance(source_dset, h5py.Dataset):
+        raise TypeError('source_deset should be a h5py.Dataset object')
+    _ = validate_dtype(dtype)
+    if new_attrs is not None:
+        if not isinstance(new_attrs, dict):
+            raise TypeError('new_attrs should be a dictionary')
+    else:
+        new_attrs = dict()
+
+    if h5_group is None:
+        h5_group = source_dset.parent
+    else:
+        if not isinstance(h5_group, (h5py.Group, h5py.File)):
+            raise TypeError('h5_group should be a h5py.Group or h5py.File object')
+
+    if not isinstance(dset_name, (str, unicode)):
+        raise TypeError('dset_name should be a string')
+    dset_name = dset_name.strip()
+    if len(dset_name) == 0:
+        raise ValueError('dset_name cannot be empty!')
+    if '-' in dset_name:
+        warn('dset_name should not contain the "-" character. Reformatted name from:{} to '
+             '{}'.format(dset_name, dset_name.replace('-', '_')))
+    dset_name = dset_name.replace('-', '_')
+
+    if dset_name in h5_group.keys():
+        if isinstance(h5_group[dset_name], h5py.Dataset):
+            warn('A dataset named: {} already exists in group: {}'.format(dset_name, h5_group.name))
+            h5_new_dset = h5_group[dset_name]
+            # Make sure it has the correct shape and dtype
+            if any((source_dset.shape != h5_new_dset.shape, dtype != h5_new_dset.dtype)):
+                warn('Either the shape (existing: {} desired: {}) or dtype (existing: {} desired: {}) of the dataset '
+                     'did not match with expectations. Deleting and creating a new one.'.format(h5_new_dset.shape,
+                                                                                                source_dset.shape,
+                                                                                                h5_new_dset.dtype,
+                                                                                                dtype))
+                del h5_new_dset, h5_group[dset_name]
+                h5_new_dset = h5_group.create_dataset(dset_name, shape=source_dset.shape, dtype=dtype,
+                                                      chunks=source_dset.chunks)
+        else:
+            raise KeyError('{} is already a {} in group: {}'.format(dset_name, type(h5_group[dset_name]),
+                                                                    h5_group.name))
+
+    else:
+        h5_new_dset = h5_group.create_dataset(dset_name, shape=source_dset.shape, dtype=dtype,
+                                              chunks=source_dset.chunks)
+
+    # This should link the ancillary datasets correctly
+    h5_new_dset = copy_attributes(source_dset, h5_new_dset, skip_refs=skip_refs)
+    h5_new_dset.attrs.update(new_attrs)
+
+    if check_if_main(h5_new_dset):
+        h5_new_dset = USIDataset(h5_new_dset)
+        # update book keeping attributes
+        write_book_keeping_attrs(h5_new_dset)
+
+    return h5_new_dset
 
 
 class GIVBayesian(Process):
