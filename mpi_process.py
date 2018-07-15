@@ -413,7 +413,8 @@ class Process(object):
 
 def parallel_compute(data, func, cores=1, lengthy_computation=False, func_args=None, func_kwargs=None, verbose=False):
     """
-    Computes the guess function using multiple cores
+    Computes the provided function using multiple cores using the joblib library
+
     Parameters
     ----------
     data : numpy.ndarray
@@ -466,6 +467,109 @@ def parallel_compute(data, func, cores=1, lengthy_computation=False, func_args=N
     if cores > 1:
         values = [joblib.delayed(func)(x, *func_args, **func_kwargs) for x in data]
         results = joblib.Parallel(n_jobs=cores)(values)
+
+        # Finished reading the entire data set
+        print('Finished parallel computation')
+
+    else:
+        print("Computing serially ...")
+        results = [func(vector, *func_args, **func_kwargs) for vector in data]
+
+    return results
+
+
+def parallel_compute_mp(data, func, cores=1, lengthy_computation=False, func_args=None, func_kwargs=None,
+                        map_arg_pos_first=True, verbose=False):
+    """
+    Computes the provided function using multiple cores using the multiprocessing library
+
+    Parameters
+    ----------
+    data : numpy.ndarray
+        Data to map function to. Function will be mapped to the first axis of data
+    func : callable
+        Function to map to data
+    cores : uint, optional
+        Number of logical cores to use to compute
+        Default - 1 (serial computation)
+    lengthy_computation : bool, optional
+        Whether or not each computation is expected to take substantial time.
+        Sometimes the time for adding more cores can outweigh the time per core
+        Default - False
+    func_args : list, optional
+        arguments to be passed to the function
+    func_kwargs : dict, optional
+        keyword arguments to be passed onto function
+    map_arg_pos_first : bool, optional, default = True
+        Whether the function accepts the data to be mapped as its first argument or its last argument.
+        No other positions will be accepted at this point due to complications in implementation
+        E.g. - set to True if func is defined as: func(data, arg1, arg2, ... kwarg1, kwarg2, ...)
+        e.g. - set to False if func is define as: func(arg1, arg2, ..., data, kwarg1, kwarg2, ...)
+    verbose : bool, optional. default = False
+        Whether or not to print statements that aid in debugging
+    Returns
+    -------
+    results : list
+        List of computational results
+    """
+
+    if not callable(func):
+        raise TypeError('Function argument is not callable')
+    if not isinstance(data, np.ndarray):
+        raise TypeError('data must be a numpy array')
+    if func_args is None:
+        func_args = list()
+    else:
+        if isinstance(func_args, tuple):
+            func_args = list(func_args)
+        if not isinstance(func_args, list):
+            raise TypeError('Arguments to the mapped function should be specified as a list')
+    if func_kwargs is None:
+        func_kwargs = dict()
+    else:
+        if not isinstance(func_kwargs, dict):
+            raise TypeError('Keyword arguments to the mapped function should be specified via a dictionary')
+    req_cores = cores
+    cores = recommend_cpu_cores(data.shape[0],
+                                requested_cores=cores,
+                                lengthy_computation=lengthy_computation,
+                                verbose=verbose)
+
+    print('Starting computing on {} cores (requested {} cores)'.format(cores, req_cores))
+
+    if cores > 1:
+        # Step 1 - simplify the function:
+        if map_arg_pos_first:
+
+            # https://stackoverflow.com/questions/11173660/can-one-partially-apply-the-second-argument-of-a-function-that-takes-no-keyword
+            import itertools
+            # One the problems is that only ONE ellipsis can be provided!
+
+            def partial_custom(func, *args, **keywords):
+                def newfunc(*fargs, **fkeywords):
+                    newkeywords = keywords.copy()
+                    newkeywords.update(fkeywords)
+                    return func(*(newfunc.leftmost_args + fargs + newfunc.rightmost_args), **newkeywords)
+
+                newfunc.func = func
+                args = iter(args)
+                newfunc.leftmost_args = tuple(itertools.takewhile(lambda v: v != Ellipsis, args))
+                newfunc.rightmost_args = tuple(args)
+                newfunc.keywords = keywords
+                return newfunc
+
+            # Now the function can be configured such that the first argument is left as is
+            preconf_func = partial_custom(func, ..., *func_args, **func_kwargs)
+        else:
+            from functools import partial
+            # This will assume that the mapping argument is the last argument NOT the first!
+            # The easiest work-around would be to specify even the args as kwargs
+            preconf_func = partial(func, *func_args, **func_kwargs)
+
+        # Step 2 - map the simplified function - single argument (data) to the data
+        from multiprocessing import Pool
+        pool = Pool(processes=cores)
+        results = pool.map(preconf_func, data)
 
         # Finished reading the entire data set
         print('Finished parallel computation')
