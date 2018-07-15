@@ -1,10 +1,13 @@
 mpiUSID
 =======
 
-MPI versions of popular classes in pycroscopy and pyUSID. 
-The emphasis is to develop the ``pyUSID.Process`` class such that it continues to work for laptops but also works on HPC with minimal modifications to children classes.
-Once certified to work well for a handful of examples, the changes in the class(es) will be rolled back into ``pyUSID`` and even ``pycroscopy``.
-Code here is tested and developed on CADES SHPC Condo only for the time being.
+MPI versions of the embarrassingly-parallel ``Process`` classes in pycroscopy and pyUSID.
+
+* The emphasis is to develop the ``pyUSID.Process`` class such that it continues to work for laptops but also works on HPC with minimal modifications to children classes.
+  Once certified to work well for a handful of examples, the changes in the class(es) will be rolled back into ``pyUSID`` and even ``pycroscopy``.
+* Current strategy is to use an MPI + OpenMP paradigm instead of a pure MPI paradigm - We don't want too many ranks writing to the HDF5 file.
+  Ideally, limit to **1 rank / node**. Each rank is in charge of one node and computes via ``joblib`` within the node just as in pyUSID / pycroscopy.
+* Code here is developed and tested on ORNL CADES SHPC OR Condo only for the time being. The code should, in theory, be portable to OLCF or other machines.
 
 Observations
 ------------
