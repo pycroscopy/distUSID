@@ -55,6 +55,7 @@ def create_empty_dataset(source_dset, dtype, dset_name, h5_group=None, new_attrs
     h5_new_dset : h5py.Dataset object
         Newly created dataset
     """
+    import h5py
     from pyUSID.io.dtype_utils import validate_dtype
     from pyUSID.io.hdf_utils import copy_attributes, check_if_main, write_book_keeping_attrs
     from pyUSID import USIDataset
@@ -206,7 +207,7 @@ class GIVBayesian(Process):
         return bayesian_inference_on_period(self.h5_main[pix_ind], self.single_ao, self.parms_dict['freq'],
                                             show_plots=show_plots, **other_params)
 
-    def _set_memory_and_cores(self, cores=1, mem=1024):
+    def _set_memory_and_cores(self, cores=None, mem=None):
         """
         Checks hardware limitations such as memory, # cpus and sets the recommended datachunk sizes and the
         number of cores to be used by analysis methods.
@@ -226,7 +227,12 @@ class GIVBayesian(Process):
         # raw, compensated current, resistance, variance
         self._max_pos_per_read = self._max_pos_per_read // 4  # Integer division
         # Since these computations take far longer than functional fitting, do in smaller batches:
-        self._max_pos_per_read = min(100, self._max_pos_per_read)
+        self._max_pos_per_read = min(10, self._max_pos_per_read)
+
+        # Forcing serial for debugging purposes
+        # self._cores = 1
+        self._cores = 2
+
         if self.verbose and self.mpi_rank == 0:
             print('Max positions per read set to {}'.format(self._max_pos_per_read))
 
@@ -240,33 +246,34 @@ class GIVBayesian(Process):
         if self.verbose and self.mpi_rank == 0:
             print('Now creating the datasets')
 
-        h5_group = create_results_group(self.h5_main, self.process_name)
+        self.h5_results_grp = create_results_group(self.h5_main, self.process_name)
 
         if self.mpi_rank == 0:
-            write_simple_attrs(h5_group, {'algorithm_author': 'Kody J. Law', 'last_pixel': 0})
-            write_simple_attrs(h5_group, self.parms_dict)
+            write_simple_attrs(self.h5_results_grp, {'algorithm_author': 'Kody J. Law', 'last_pixel': 0})
+            write_simple_attrs(self.h5_results_grp, self.parms_dict)
 
         if self.verbose and self.mpi_rank == 0:
-            print('created group: {}'.format(h5_group.name))
-            print(get_attributes(h5_group))
+            print('created group: {} with attributes:'.format(self.h5_results_grp.name))
+            print(get_attributes(self.h5_results_grp))
 
         # One of those rare instances when the result is exactly the same as the source
-        self.h5_i_corrected = create_empty_dataset(self.h5_main, np.float32, 'Corrected_Current', h5_group=h5_group)
+        self.h5_i_corrected = create_empty_dataset(self.h5_main, np.float32, 'Corrected_Current', h5_group=self.h5_results_grp)
 
         if self.verbose and self.mpi_rank == 0:
             print('Created I Corrected')
-            print_tree(h5_group)
+            # print_tree(self.h5_results_grp)
 
+        # For some reason, we cannot specify chunks or compression!
         # The resistance dataset requires the creation of a new spectroscopic dimension
-        self.h5_resistance = write_main_dataset(h5_group, (num_pos, self.num_x_steps), 'Resistance', 'Resistance',
+        self.h5_resistance = write_main_dataset(self.h5_results_grp, (num_pos, self.num_x_steps), 'Resistance', 'Resistance',
                                                 'GOhms', None, Dimension('Bias', 'V', self.num_x_steps),
-                                                dtype=np.float32, chunks=(1, self.num_x_steps), #compression='gzip',
+                                                dtype=np.float32, # chunks=(1, self.num_x_steps), #compression='gzip',
                                                 h5_pos_inds=self.h5_main.h5_pos_inds,
                                                 h5_pos_vals=self.h5_main.h5_pos_vals)
 
         if self.verbose and self.mpi_rank == 0:
             print('Created Resistance')
-            print_tree(h5_group)
+            # print_tree(self.h5_results_grp)
 
         assert isinstance(self.h5_resistance, USIDataset)  # only here for PyCharm
         self.h5_new_spec_vals = self.h5_resistance.h5_spec_vals
@@ -276,20 +283,21 @@ class GIVBayesian(Process):
 
         if self.verbose and self.mpi_rank == 0:
             print('Created Variance')
-            print_tree(h5_group)
+            # print_tree(self.h5_results_grp)
 
         # The capacitance dataset requires new spectroscopic dimensions as well
-        self.h5_cap = write_main_dataset(h5_group, (num_pos, 1), 'Capacitance', 'Capacitance', 'pF', None,
+        self.h5_cap = write_main_dataset(self.h5_results_grp, (num_pos, 1), 'Capacitance', 'Capacitance', 'pF', None,
                                          Dimension('Direction', '', [1]),  h5_pos_inds=self.h5_main.h5_pos_inds,
                                          h5_pos_vals=self.h5_main.h5_pos_vals, dtype=cap_dtype, #compression='gzip',
                                          aux_spec_prefix='Cap_Spec_')
 
         if self.verbose and self.mpi_rank == 0:
             print('Created Capacitance')
-            print_tree(h5_group)
+            # print_tree(self.h5_results_grp)
             print('Done creating all results datasets!')
 
-        self.h5_main.file.flush()
+        # Still don't know why we cannot flush!
+        # self.h5_main.file.flush()
 
     def _get_existing_datasets(self):
         """
@@ -363,7 +371,8 @@ class GIVBayesian(Process):
         # Leaving in this provision that will allow restarting of processes
         self.h5_results_grp.attrs['last_pixel'] = self._end_pos
 
-        self.h5_main.file.flush()
+        # Disabling flush because h5py-parallel doesn't like it
+        # self.h5_main.file.flush()
 
         print('Rank {} - Finished processing up to pixel {} of {}'
               '.'.format(self.mpi_rank, self._end_pos, self._rank_end_pos))
@@ -387,6 +396,8 @@ class GIVBayesian(Process):
         # first roll the data
         rolled_raw_data = np.roll(self.data, self.roll_pts, axis=1)
         # Ensure that the bias has a positive slope. Multiply current by -1 accordingly
+        if self.verbose:
+            print('Rank {} beginning parallel compute for Forward'.format(self.mpi_rank))
         self.reverse_results = parallel_compute(rolled_raw_data[:, :half_v_steps] * -1, do_bayesian_inference,
                                                 cores=self._cores,
                                                 func_args=[self.rolled_bias[:half_v_steps] * -1, self.ex_freq],
@@ -394,7 +405,7 @@ class GIVBayesian(Process):
                                                 verbose=self.verbose)
 
         if self.verbose:
-            print('Finished processing forward sections. Now working on reverse sections....')
+            print('Rank {} finished processing forward sections. Now working on reverse sections....'.format(self.mpi_rank))
 
         self.forward_results = parallel_compute(rolled_raw_data[:, half_v_steps:], do_bayesian_inference,
                                                 cores=self._cores,
@@ -402,7 +413,7 @@ class GIVBayesian(Process):
                                                 func_kwargs=self._bayes_parms, lengthy_computation=True,
                                                 verbose=self.verbose)
         if self.verbose:
-            print('Finished processing reverse loops')
+            print('Rank {} Finished processing reverse loops (and this chunk)'.format(self.mpi_rank))
 
     def compute(self, override=False, *args, **kwargs):
         """
