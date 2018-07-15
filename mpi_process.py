@@ -222,7 +222,7 @@ class Process(object):
 
         self.h5_results_grp = h5_partial_group
 
-    def _set_memory_and_cores(self, cores=1, mem=None):
+    def _set_memory_and_cores(self, cores=None, mem=None):
         """
         Checks hardware limitations such as memory, # cpus and sets the recommended datachunk sizes and the
         number of cores to be used by analysis methods.
@@ -371,14 +371,19 @@ class Process(object):
                 print('Resuming computation')
             self._get_existing_datasets()
 
+        # Not sure if this is necessary but I don't think it would hurt either
+        if self.mpi_comm is not None:
+            self.mpi_comm.barrier()
+
         time_per_pix = 0
         num_pos = self._rank_end_pos - self._start_pos
         orig_start_pos = self._start_pos
 
         # TODO: Need to find a nice way of figuring out if a process has implemented the partial feature.
-        print('You maybe able to abort this computation at any time and resume at a later time!\n'
-              '\tIf you are operating in a python console, press Ctrl+C or Cmd+C to abort\n'
-              '\tIf you are in a Jupyter notebook, click on "Kernel">>"Interrupt"')
+        if self.mpi_rank == 0:
+            print('You maybe able to abort this computation at any time and resume at a later time!\n'
+                  '\tIf you are operating in a python console, press Ctrl+C or Cmd+C to abort\n'
+                  '\tIf you are in a Jupyter notebook, click on "Kernel">>"Interrupt"')
 
         self._read_data_chunk()
         while self.data is not None:
