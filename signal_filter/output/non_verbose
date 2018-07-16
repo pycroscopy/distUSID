@@ -1,0 +1,106 @@
+Currently Loaded Modulefiles:
+  1) gcc/5.3.0        3) xalt/0.7.5       5) python/3.6.3
+  2) openmpi/1.10.3   4) PE-gnu/1.0
+[or-condo-c45.ornl.gov:191331] 1 more process has sent help message help-mpi-runtime.txt / mpi_init:warn-fork
+[or-condo-c45.ornl.gov:191331] Set MCA parameter "orte_base_help_aggregate" to 0 to see all help / error messages
+Traceback (most recent call last):
+  File "filter_mpi.py", line 25, in <module>
+    h5_f.close()
+  File "/home/syz/.local/lib/python3.6/site-packages/h5py-2.8.0.post0-py3.6-linux-x86_64.egg/h5py/_hl/files.py", line 378, in close
+    h5i.dec_ref(id_)
+  File "h5py/_objects.pyx", line 54, in h5py._objects.with_phil.wrapper
+  File "h5py/_objects.pyx", line 55, in h5py._objects.with_phil.wrapper
+  File "h5py/h5i.pyx", line 150, in h5py.h5i.dec_ref
+RuntimeError: Can't decrement id ref count (MPI_ERR_ARG: invalid argument of some other kind)
+Traceback (most recent call last):
+  File "filter_mpi.py", line 25, in <module>
+    h5_f.close()
+  File "/home/syz/.local/lib/python3.6/site-packages/h5py-2.8.0.post0-py3.6-linux-x86_64.egg/h5py/_hl/files.py", line 378, in close
+    h5i.dec_ref(id_)
+  File "h5py/_objects.pyx", line 54, in h5py._objects.with_phil.wrapper
+  File "h5py/_objects.pyx", line 55, in h5py._objects.with_phil.wrapper
+  File "h5py/h5i.pyx", line 150, in h5py.h5i.dec_ref
+RuntimeError: Can't decrement id ref count (MPI_ERR_ARG: invalid argument of some other kind)
+[or-condo-c237:88447] *** Process received signal ***
+[or-condo-c237:88447] Signal: Segmentation fault (11)
+[or-condo-c237:88447] Signal code: Address not mapped (1)
+[or-condo-c237:88447] Failing at address: 0x52c
+[or-condo-c237:88447] [ 0] /lib64/libpthread.so.0(+0xf100)[0x2b095b8e4100]
+[or-condo-c237:88447] [ 1] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/hdf5-parallel/1.8.17/centos7.2_gnu5.3.0/lib/libhdf5.so.10(H5F_close+0xc)[0x2b09631a723c]
+[or-condo-c237:88447] [ 2] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/hdf5-parallel/1.8.17/centos7.2_gnu5.3.0/lib/libhdf5.so.10(H5I_dec_ref+0xee)[0x2b096321235e]
+[or-condo-c237:88447] [ 3] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/hdf5-parallel/1.8.17/centos7.2_gnu5.3.0/lib/libhdf5.so.10(H5I_dec_app_ref+0x22)[0x2b0963212572]
+[or-condo-c237:88447] [ 4] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/hdf5-parallel/1.8.17/centos7.2_gnu5.3.0/lib/libhdf5.so.10(H5Idec_ref+0x30)[0x2b0963212680]
+[or-condo-c237:88447] [ 5] /home/syz/.local/lib/python3.6/site-packages/h5py-2.8.0.post0-py3.6-linux-x86_64.egg/h5py/defs.cpython-36m-x86_64-linux-gnu.so(+0x21ffd)[0x2b0970f41ffd]
+[or-condo-c237:88447] [ 6] /home/syz/.local/lib/python3.6/site-packages/h5py-2.8.0.post0-py3.6-linux-x86_64.egg/h5py/_objects.cpython-36m-x86_64-linux-gnu.so(+0x14ccc)[0x2b0970d12ccc]
+[or-condo-c237:88447] [ 7] python[0x47fcc2]
+[or-condo-c237:88447] [ 8] python[0x433e27]
+[or-condo-c237:88447] [ 9] python[0x433e37]
+[or-condo-c237:88447] [10] [or-condo-c45:191350] *** Process received signal ***
+[or-condo-c45:191350] Signal: Segmentation fault (11)
+[or-condo-c45:191350] Signal code: Address not mapped (1)
+[or-condo-c45:191350] Failing at address: 0x52c
+[or-condo-c45:191350] [ 0] /lib64/libpthread.so.0(+0xf100)[0x2aaf1c42f100]
+[or-condo-c45:191350] [ 1] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/hdf5-parallel/1.8.17/centos7.2_gnu5.3.0/lib/libhdf5.so.10(H5F_close+0xc)[0x2aaf23cf223c]
+[or-condo-c45:191350] [ 2] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/hdf5-parallel/1.8.17/centos7.2_gnu5.3.0/lib/libhdf5.so.10(H5I_dec_ref+0xee)[0x2aaf23d5d35e]
+[or-condo-c45:191350] [ 3] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/hdf5-parallel/1.8.17/centos7.2_gnu5.3.0/lib/libhdf5.so.10(H5I_dec_app_ref+0x22)[0x2aaf23d5d572]
+[or-condo-c45:191350] [ 4] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/hdf5-parallel/1.8.17/centos7.2_gnu5.3.0/lib/libhdf5.so.10(H5Idec_ref+0x30)[0x2aaf23d5d680]
+[or-condo-c45:191350] [ 5] /home/syz/.local/lib/python3.6/site-packages/h5py-2.8.0.post0-py3.6-linux-x86_64.egg/h5py/defs.cpython-36m-x86_64-linux-gnu.so(+0x21ffd)[0x2aaf31b4dffd]
+[or-condo-c45:191350] [ 6] /home/syz/.local/lib/python3.6/site-packages/h5py-2.8.0.post0-py3.6-linux-x86_64.egg/h5py/_objects.cpython-36m-x86_64-linux-gnu.so(+0x14ccc)[0x2aaf3191eccc]
+[or-condo-c45:191350] [ 7] python[0x47fcc2]
+[or-condo-c45:191350] [ 8] python[0x433e27]
+[or-condo-c45:191350] [ 9] python[0x433e37]
+[or-condo-c45:191350] [10] python(PyDict_SetItemString+0x3c7)[0x4a1347]
+[or-condo-c45:191350] [11] python(PyImport_Cleanup+0x6d)[0x564acd]
+[or-condo-c45:191350] [12] python[0x421b58]
+[or-condo-c45:191350] [13] python(Py_Main+0x6f5)[0x43a755]
+[or-condo-c45:191350] [14] python(main+0x162)[0x41d8d2]
+[or-condo-c45:191350] [15] /lib64/libc.so.6(__libc_start_main+0xf5)[0x2aaf1cd66b15]
+[or-condo-c45:191350] [16] python[0x41d991]
+[or-condo-c45:191350] *** End of error message ***
+python(PyDict_SetItemString+0x3c7)[0x4a1347]
+[or-condo-c237:88447] [11] python(PyImport_Cleanup+0x6d)[0x564acd]
+[or-condo-c237:88447] [12] python[0x421b58]
+[or-condo-c237:88447] [13] python(Py_Main+0x6f5)[0x43a755]
+[or-condo-c237:88447] [14] python(main+0x162)[0x41d8d2]
+[or-condo-c237:88447] [15] /lib64/libc.so.6(__libc_start_main+0xf5)[0x2b095c21bb15]
+[or-condo-c237:88447] [16] python[0x41d991]
+[or-condo-c237:88447] *** End of error message ***
+/home/syz/mpi_tutorials/signal_filter
+--------------------------------------------------------------------------
+An MPI process has executed an operation involving a call to the
+"fork()" system call to create a child process.  Open MPI is currently
+operating in a condition that could result in memory corruption or
+other system errors; your MPI job may hang, crash, or produce silent
+data corruption.  The use of fork() (or system() or other calls that
+create child processes) is strongly discouraged.
+
+The process that invoked fork was:
+
+  Local host:          or-condo-c237 (PID 88447)
+  MPI_COMM_WORLD rank: 1
+
+If you are *absolutely sure* that your application will successfully
+and correctly survive a call to fork(), you may disable this warning
+by setting the mpi_warn_on_fork MCA parameter to 0.
+--------------------------------------------------------------------------
+Rank 1 of 2 on or-condo-c237.ornl.gov sees 36 logical cores on the socket
+Rank 0 of 2 on or-condo-c45.ornl.gov sees 36 logical cores on the socket
+Consider calling test() to check results before calling compute() which computes on the entire dataset and writes back to the HDF5 file
+Consider calling test() to check results before calling compute() which computes on the entire dataset and writes back to the HDF5 file
+You maybe able to abort this computation at any time and resume at a later time!
+	If you are operating in a python console, press Ctrl+C or Cmd+C to abort
+	If you are in a Jupyter notebook, click on "Kernel">>"Interrupt"
+You maybe able to abort this computation at any time and resume at a later time!
+	If you are operating in a python console, press Ctrl+C or Cmd+C to abort
+	If you are in a Jupyter notebook, click on "Kernel">>"Interrupt"
+Starting computing on 3 cores (requested 36 cores)
+Starting computing on 3 cores (requested 36 cores)
+Finished parallel computation
+Finished parallel computation
+Rank 1 - Finished processing upto pixel 256 of 256
+Rank 1 - Finished computing all jobs!
+Rank 0 - Finished processing upto pixel 128 of 128
+Rank 0 - Finished computing all jobs!
+--------------------------------------------------------------------------
+mpiexec noticed that process rank 1 with PID 0 on node or-pbs-c237.ornl.gov exited on signal 11 (Segmentation fault).
+--------------------------------------------------------------------------

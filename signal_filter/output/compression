@@ -1,0 +1,157 @@
+Traceback (most recent call last):
+  File "filter_mpi.py", line 21, in <module>
+    h5_filt_grp = sig_filt.compute()
+  File "/home/syz/mpi_tutorials/signal_filter/mpi_process.py", line 367, in compute
+    self._create_results_datasets()
+  File "/home/syz/mpi_tutorials/signal_filter/mpi_signal_filter.py", line 208, in _create_results_datasets
+    h5_group=self.h5_results_grp)
+  File "/home/syz/.local/lib/python3.6/site-packages/pyUSID/io/hdf_utils.py", line 1259, in create_empty_dataset
+    compression=source_dset.compression, chunks=source_dset.chunks)
+  File "/home/syz/.local/lib/python3.6/site-packages/h5py-2.8.0.post0-py3.6-linux-x86_64.egg/h5py/_hl/group.py", line 122, in create_dataset
+    dsid = dataset.make_new_dset(self, shape, dtype, data, **kwds)
+  File "/home/syz/.local/lib/python3.6/site-packages/h5py-2.8.0.post0-py3.6-linux-x86_64.egg/h5py/_hl/dataset.py", line 142, in make_new_dset
+    dset_id = h5d.create(parent.id, None, tid, sid, dcpl=dcpl)
+  File "h5py/_objects.pyx", line 54, in h5py._objects.with_phil.wrapper
+  File "h5py/_objects.pyx", line 55, in h5py._objects.with_phil.wrapper
+  File "h5py/h5d.pyx", line 79, in h5py.h5d.create
+ValueError: Unable to create dataset (Parallel I/O does not support filters yet)
+Traceback (most recent call last):
+  File "filter_mpi.py", line 21, in <module>
+    h5_filt_grp = sig_filt.compute()
+  File "/home/syz/mpi_tutorials/signal_filter/mpi_process.py", line 367, in compute
+    self._create_results_datasets()
+  File "/home/syz/mpi_tutorials/signal_filter/mpi_signal_filter.py", line 208, in _create_results_datasets
+    h5_group=self.h5_results_grp)
+  File "/home/syz/.local/lib/python3.6/site-packages/pyUSID/io/hdf_utils.py", line 1259, in create_empty_dataset
+    compression=source_dset.compression, chunks=source_dset.chunks)
+  File "/home/syz/.local/lib/python3.6/site-packages/h5py-2.8.0.post0-py3.6-linux-x86_64.egg/h5py/_hl/group.py", line 122, in create_dataset
+    dsid = dataset.make_new_dset(self, shape, dtype, data, **kwds)
+  File "/home/syz/.local/lib/python3.6/site-packages/h5py-2.8.0.post0-py3.6-linux-x86_64.egg/h5py/_hl/dataset.py", line 142, in make_new_dset
+    dset_id = h5d.create(parent.id, None, tid, sid, dcpl=dcpl)
+  File "h5py/_objects.pyx", line 54, in h5py._objects.with_phil.wrapper
+  File "h5py/_objects.pyx", line 55, in h5py._objects.with_phil.wrapper
+  File "h5py/h5d.pyx", line 79, in h5py.h5d.create
+ValueError: Unable to create dataset (Parallel I/O does not support filters yet)
+Traceback (most recent call last):
+  File "h5py/_objects.pyx", line 193, in h5py._objects.ObjectID.__dealloc__
+RuntimeError: Can't decrement id ref count (can't close file, there are objects still open)
+Exception ignored in: 'h5py._objects.ObjectID.__dealloc__'
+Traceback (most recent call last):
+  File "h5py/_objects.pyx", line 193, in h5py._objects.ObjectID.__dealloc__
+RuntimeError: Can't decrement id ref count (can't close file, there are objects still open)
+Traceback (most recent call last):
+  File "h5py/_objects.pyx", line 193, in h5py._objects.ObjectID.__dealloc__
+RuntimeError: Can't decrement id ref count (can't close file, there are objects still open)
+Exception ignored in: 'h5py._objects.ObjectID.__dealloc__'
+Traceback (most recent call last):
+  File "h5py/_objects.pyx", line 193, in h5py._objects.ObjectID.__dealloc__
+RuntimeError: Can't decrement id ref count (can't close file, there are objects still open)
+[or-condo-c198:156350] *** Process received signal ***
+[or-condo-c198:156350] Signal: Segmentation fault (11)
+[or-condo-c198:156350] Signal code: Address not mapped (1)
+[or-condo-c198:156350] Failing at address: 0x52c
+[or-condo-c198:156350] [ 0] /lib64/libpthread.so.0(+0xf100)[0x2b7afbaa8100]
+[or-condo-c198:156350] [ 1] [or-condo-c232:43506] *** Process received signal ***
+[or-condo-c232:43506] Signal: Segmentation fault (11)
+[or-condo-c232:43506] Signal code: Address not mapped (1)
+[or-condo-c232:43506] Failing at address: 0x52c
+/software/dev_tools/swtree/cs400_centos7.2_pe2016-08/hdf5-parallel/1.8.17/centos7.2_gnu5.3.0/lib/libhdf5.so.10(H5F_close+0xc)[0x2b7b0336b23c]
+[or-condo-c198:156350] [ 2] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/hdf5-parallel/1.8.17/centos7.2_gnu5.3.0/lib/libhdf5.so.10(+0x11b8ab)[0x2b7b033d48ab]
+[or-condo-c198:156350] [ 3] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/hdf5-parallel/1.8.17/centos7.2_gnu5.3.0/lib/libhdf5.so.10(H5SL_try_free_safe+0x5a)[0x2b7b034636aa]
+[or-condo-c198:156350] [ 4] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/hdf5-parallel/1.8.17/centos7.2_gnu5.3.0/lib/libhdf5.so.10(H5I_clear_type+0x68)[0x2b7b033d5138]
+[or-condo-c198:156350] [ 5] [or-condo-c232:43506] [ 0] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/hdf5-parallel/1.8.17/centos7.2_gnu5.3.0/lib/libhdf5.so.10(H5F_term_interface+0x30)[0x2b7b03364400]
+[or-condo-c198:156350] [ 6] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/hdf5-parallel/1.8.17/centos7.2_gnu5.3.0/lib/libhdf5.so.10(+0x3972e)[0x2b7b032f272e]
+[or-condo-c198:156350] [ 7] /lib64/libpthread.so.0(+0xf100)[0x2b7dc14c8100]
+[or-condo-c232:43506] [ 1] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/hdf5-parallel/1.8.17/centos7.2_gnu5.3.0/lib/libhdf5.so.10(H5F_close+0xc)[0x2b7dc8d8b23c]
+[or-condo-c232:43506] [ 2] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/hdf5-parallel/1.8.17/centos7.2_gnu5.3.0/lib/libhdf5.so.10(+0x39e59)[0x2b7b032f2e59]
+[or-condo-c198:156350] [ 8] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/openmpi/1.10.3/centos7.2_gnu5.3.0/lib/libmpi.so.12(ompi_attr_delete_all+0x303)[0x2b7b03c36543]
+[or-condo-c198:156350] [ 9] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/openmpi/1.10.3/centos7.2_gnu5.3.0/lib/libmpi.so.12(ompi_mpi_finalize+0xa6)[0x2b7b03c4de96]
+[or-condo-c198:156350] [10] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/python/3.6.3/centos7.2_gnu5.3.0/lib/python3.6/site-packages/mpi4py/MPI.cpython-36m-x86_64-linux-gnu.so(+0x34594)[0x2b7b04a9f594]
+[or-condo-c198:156350] [11] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/hdf5-parallel/1.8.17/centos7.2_gnu5.3.0/lib/libhdf5.so.10(+0x11b8ab)[0x2b7dc8df48ab]
+[or-condo-c232:43506] [ 3] python[0x421c83]
+[or-condo-c198:156350] [12] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/hdf5-parallel/1.8.17/centos7.2_gnu5.3.0/lib/libhdf5.so.10(H5SL_try_free_safe+0x5a)[0x2b7dc8e836aa]
+[or-condo-c232:43506] [ 4] python(Py_Main+0x6f5)[0x43a755]
+[or-condo-c198:156350] [13] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/hdf5-parallel/1.8.17/centos7.2_gnu5.3.0/lib/libhdf5.so.10(H5I_clear_type+0x68)[0x2b7dc8df5138]
+[or-condo-c232:43506] [ 5] python(main+0x162)[0x41d8d2]
+[or-condo-c198:156350] [14] /lib64/libc.so.6(__libc_start_main+0xf5)[0x2b7afc3dfb15]
+[or-condo-c198:156350] [15] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/hdf5-parallel/1.8.17/centos7.2_gnu5.3.0/lib/libhdf5.so.10(H5F_term_interface+0x30)[0x2b7dc8d84400]
+[or-condo-c232:43506] [ 6] python[0x41d991]
+[or-condo-c198:156350] *** End of error message ***
+/software/dev_tools/swtree/cs400_centos7.2_pe2016-08/hdf5-parallel/1.8.17/centos7.2_gnu5.3.0/lib/libhdf5.so.10(+0x3972e)[0x2b7dc8d1272e]
+[or-condo-c232:43506] [ 7] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/hdf5-parallel/1.8.17/centos7.2_gnu5.3.0/lib/libhdf5.so.10(+0x39e59)[0x2b7dc8d12e59]
+[or-condo-c232:43506] [ 8] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/openmpi/1.10.3/centos7.2_gnu5.3.0/lib/libmpi.so.12(ompi_attr_delete_all+0x303)[0x2b7dc9656543]
+[or-condo-c232:43506] [ 9] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/openmpi/1.10.3/centos7.2_gnu5.3.0/lib/libmpi.so.12(ompi_mpi_finalize+0xa6)[0x2b7dc966de96]
+[or-condo-c232:43506] [10] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/python/3.6.3/centos7.2_gnu5.3.0/lib/python3.6/site-packages/mpi4py/MPI.cpython-36m-x86_64-linux-gnu.so(+0x34594)[0x2b7dca4bf594]
+[or-condo-c232:43506] [11] python[0x421c83]
+[or-condo-c232:43506] [12] python(Py_Main+0x6f5)[0x43a755]
+[or-condo-c232:43506] [13] python(main+0x162)[0x41d8d2]
+[or-condo-c232:43506] [14] /lib64/libc.so.6(__libc_start_main+0xf5)[0x2b7dc1dffb15]
+[or-condo-c232:43506] [15] python[0x41d991]
+[or-condo-c232:43506] *** End of error message ***
+[or-condo-c198.ornl.gov:156331] 1 more process has sent help message help-mpi-runtime.txt / mpi_init:warn-fork
+[or-condo-c198.ornl.gov:156331] Set MCA parameter "orte_base_help_aggregate" to 0 to see all help / error messages
+/home/syz/mpi_tutorials/signal_filter
+--------------------------------------------------------------------------
+An MPI process has executed an operation involving a call to the
+"fork()" system call to create a child process.  Open MPI is currently
+operating in a condition that could result in memory corruption or
+other system errors; your MPI job may hang, crash, or produce silent
+data corruption.  The use of fork() (or system() or other calls that
+create child processes) is strongly discouraged.
+
+The process that invoked fork was:
+
+  Local host:          or-condo-c232 (PID 43506)
+  MPI_COMM_WORLD rank: 1
+
+If you are *absolutely sure* that your application will successfully
+and correctly survive a call to fork(), you may disable this warning
+by setting the mpi_warn_on_fork MCA parameter to 0.
+--------------------------------------------------------------------------
+Rank 1 of 2 on or-condo-c232.ornl.gov sees 36 logical cores on the socket
+Rank 0 of 2 on or-condo-c198.ornl.gov sees 36 logical cores on the socket
+Working on 2 nodes via MPI
+Each rank is required to work on 128 of the 256 positions in this dataset
+Rank 0 will read positions 0 to 128 of 256
+Allowed to read 427 pixels per chunk
+Allowed to use up to 36 cores and 4096 MB of memory
+Consider calling test() to check results before calling compute() which computes on the entire dataset and writes back to the HDF5 file
+Allowed to read 142 pixels per chunk
+Checking for duplicates:
+Creating datagroup and datasets
+Rank 0 - Finished creating the Composite_Filter dataset
+Rank 0 - Reusing source datasets position datasets
+h5 group and file OK
+quantity, units, main_data_name all OK
+Selected empty dataset creation. OK so far
+Provided h5 position indices and values OK
+Passed all pre-tests for creating spectroscopic datasets
+Indices:
+[[0]]
+Values:
+[[1.]]
+Starting to write Region References to Dataset /Measurement_000/Channel_000/Raw_Data-FFT_Filtering_000/Noise_Spec_Indices of shape: (1, 1)
+About to write region reference: arb : (slice(0, 1, None), slice(None, None, None))
+Comparing (slice(0, 1, None), slice(None, None, None)) with h5 dataset maxshape of (1, 1)
+Region reference tuple now: [slice(0, 1, None), slice(None, None, None)]
+Wrote Region Reference:arb
+Writing header attributes: labels
+Wrote Region References of Dataset Noise_Spec_Indices
+Starting to write Region References to Dataset /Measurement_000/Channel_000/Raw_Data-FFT_Filtering_000/Noise_Spec_Values of shape: (1, 1)
+About to write region reference: arb : (slice(0, 1, None), slice(None, None, None))
+Comparing (slice(0, 1, None), slice(None, None, None)) with h5 dataset maxshape of (1, 1)
+Region reference tuple now: [slice(0, 1, None), slice(None, None, None)]
+Wrote Region Reference:arb
+Writing header attributes: labels
+Wrote Region References of Dataset Noise_Spec_Values
+Created Spectroscopic datasets
+Created empty dataset for Main
+Wrote quantity and units attributes to main dataset
+Successfully linked datasets - dataset should be main now
+Rank 0 - Finished creating the Noise_Floors dataset
+Rank 1 will read positions 128 to 256 of 256
+Consider calling test() to check results before calling compute() which computes on the entire dataset and writes back to the HDF5 file
+Creating datagroup and datasets
+--------------------------------------------------------------------------
+mpirun noticed that process rank 1 with PID 0 on node or-pbs-c232.ornl.gov exited on signal 11 (Segmentation fault).
+--------------------------------------------------------------------------

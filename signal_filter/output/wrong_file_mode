@@ -1,0 +1,50 @@
+Traceback (most recent call last):
+  File "filter_mpi.py", line 24, in <module>
+    write_condensed=False, num_pix=1, verbose=True)
+  File "/home/syz/mpi_tutorials/signal_filter/mpi_signal_filter.py", line 58, in __init__
+    super(SignalFilter, self).__init__(h5_main, **kwargs)
+  File "/home/syz/mpi_tutorials/signal_filter/mpi_process.py", line 71, in __init__
+    raise TypeError('The HDF5 file should have been opened with driver="mpio". Current driver = "{}"'.format(h5_main.file.driver))
+TypeError: The HDF5 file should have been opened with driver="mpio". Current driver = "sec2"
+Traceback (most recent call last):
+  File "filter_mpi.py", line 24, in <module>
+    write_condensed=False, num_pix=1, verbose=True)
+  File "/home/syz/mpi_tutorials/signal_filter/mpi_signal_filter.py", line 58, in __init__
+    super(SignalFilter, self).__init__(h5_main, **kwargs)
+  File "/home/syz/mpi_tutorials/signal_filter/mpi_process.py", line 71, in __init__
+    raise TypeError('The HDF5 file should have been opened with driver="mpio". Current driver = "{}"'.format(h5_main.file.driver))
+TypeError: The HDF5 file should have been opened with driver="mpio". Current driver = "sec2"
+[or-condo-c186.ornl.gov:84359] 1 more process has sent help message help-mpi-runtime.txt / mpi_init:warn-fork
+[or-condo-c186.ornl.gov:84359] Set MCA parameter "orte_base_help_aggregate" to 0 to see all help / error messages
+/home/syz/mpi_tutorials/signal_filter
+--------------------------------------------------------------------------
+An MPI process has executed an operation involving a call to the
+"fork()" system call to create a child process.  Open MPI is currently
+operating in a condition that could result in memory corruption or
+other system errors; your MPI job may hang, crash, or produce silent
+data corruption.  The use of fork() (or system() or other calls that
+create child processes) is strongly discouraged.
+
+The process that invoked fork was:
+
+  Local host:          or-condo-c189 (PID 107220)
+  MPI_COMM_WORLD rank: 1
+
+If you are *absolutely sure* that your application will successfully
+and correctly survive a call to fork(), you may disable this warning
+by setting the mpi_warn_on_fork MCA parameter to 0.
+--------------------------------------------------------------------------
+Rank 1 of 2 on or-condo-c189.ornl.gov sees 36 logical cores on the socket
+Rank 0 of 2 on or-condo-c186.ornl.gov sees 36 logical cores on the socket
+Working on 2 nodes via MPI
+-------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code.. Per user-direction, the job has been aborted.
+-------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun detected that one or more processes exited with non-zero status, thus causing
+the job to be terminated. The first process to do so was:
+
+  Process name: [[49026,1],0]
+  Exit code:    1
+--------------------------------------------------------------------------
