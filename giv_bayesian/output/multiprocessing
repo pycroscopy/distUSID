@@ -1,0 +1,162 @@
+[or-condo-c172.ornl.gov:110602] 1 more process has sent help message help-mpi-runtime.txt / mpi_init:warn-fork
+[or-condo-c172.ornl.gov:110602] Set MCA parameter "orte_base_help_aggregate" to 0 to see all help / error messages
+Traceback (most recent call last):
+  File "bayesian_script_mpi.py", line 16, in <module>
+    h5_bayes_grp = i_cleaner.compute()
+  File "/home/syz/mpi_tutorials/giv_bayesian/giv_bayesian_mpi.py", line 447, in compute
+    return super(GIVBayesian, self).compute(override=override, *args, **kwargs)
+  File "/home/syz/mpi_tutorials/giv_bayesian/mpi_process.py", line 393, in compute
+    self._unit_computation(*args, **kwargs)
+  File "/home/syz/mpi_tutorials/giv_bayesian/giv_bayesian_mpi.py", line 407, in _unit_computation
+    verbose=self.verbose)
+  File "/home/syz/mpi_tutorials/giv_bayesian/mpi_process.py", line 572, in parallel_compute_mp
+    results = pool.map(preconf_func, data)
+  File "/software/dev_tools/swtree/cs400_centos7.2_pe2016-08/python/3.6.3/centos7.2_gnu5.3.0/lib/python3.6/multiprocessing/pool.py", line 266, in map
+    return self._map_async(func, iterable, mapstar, chunksize).get()
+  File "/software/dev_tools/swtree/cs400_centos7.2_pe2016-08/python/3.6.3/centos7.2_gnu5.3.0/lib/python3.6/multiprocessing/pool.py", line 644, in get
+    raise self._value
+  File "/software/dev_tools/swtree/cs400_centos7.2_pe2016-08/python/3.6.3/centos7.2_gnu5.3.0/lib/python3.6/multiprocessing/pool.py", line 424, in _handle_tasks
+    put(task)
+  File "/software/dev_tools/swtree/cs400_centos7.2_pe2016-08/python/3.6.3/centos7.2_gnu5.3.0/lib/python3.6/multiprocessing/connection.py", line 206, in send
+    self._send_bytes(_ForkingPickler.dumps(obj))
+  File "/software/dev_tools/swtree/cs400_centos7.2_pe2016-08/python/3.6.3/centos7.2_gnu5.3.0/lib/python3.6/multiprocessing/reduction.py", line 51, in dumps
+    cls(buf, protocol).dump(obj)
+AttributeError: Can't pickle local object 'parallel_compute_mp.<locals>.partial_custom.<locals>.newfunc'
+Traceback (most recent call last):
+  File "bayesian_script_mpi.py", line 16, in <module>
+    h5_bayes_grp = i_cleaner.compute()
+  File "/home/syz/mpi_tutorials/giv_bayesian/giv_bayesian_mpi.py", line 447, in compute
+    return super(GIVBayesian, self).compute(override=override, *args, **kwargs)
+  File "/home/syz/mpi_tutorials/giv_bayesian/mpi_process.py", line 393, in compute
+    self._unit_computation(*args, **kwargs)
+  File "/home/syz/mpi_tutorials/giv_bayesian/giv_bayesian_mpi.py", line 407, in _unit_computation
+    verbose=self.verbose)
+  File "/home/syz/mpi_tutorials/giv_bayesian/mpi_process.py", line 572, in parallel_compute_mp
+    results = pool.map(preconf_func, data)
+  File "/software/dev_tools/swtree/cs400_centos7.2_pe2016-08/python/3.6.3/centos7.2_gnu5.3.0/lib/python3.6/multiprocessing/pool.py", line 266, in map
+    return self._map_async(func, iterable, mapstar, chunksize).get()
+  File "/software/dev_tools/swtree/cs400_centos7.2_pe2016-08/python/3.6.3/centos7.2_gnu5.3.0/lib/python3.6/multiprocessing/pool.py", line 644, in get
+    raise self._value
+  File "/software/dev_tools/swtree/cs400_centos7.2_pe2016-08/python/3.6.3/centos7.2_gnu5.3.0/lib/python3.6/multiprocessing/pool.py", line 424, in _handle_tasks
+    put(task)
+  File "/software/dev_tools/swtree/cs400_centos7.2_pe2016-08/python/3.6.3/centos7.2_gnu5.3.0/lib/python3.6/multiprocessing/connection.py", line 206, in send
+    self._send_bytes(_ForkingPickler.dumps(obj))
+  File "/software/dev_tools/swtree/cs400_centos7.2_pe2016-08/python/3.6.3/centos7.2_gnu5.3.0/lib/python3.6/multiprocessing/reduction.py", line 51, in dumps
+    cls(buf, protocol).dump(obj)
+AttributeError: Can't pickle local object 'parallel_compute_mp.<locals>.partial_custom.<locals>.newfunc'
+Traceback (most recent call last):
+  File "h5py/_objects.pyx", line 193, in h5py._objects.ObjectID.__dealloc__
+RuntimeError: Can't decrement id ref count (can't close file, there are objects still open)
+Exception ignored in: 'h5py._objects.ObjectID.__dealloc__'
+Traceback (most recent call last):
+  File "h5py/_objects.pyx", line 193, in h5py._objects.ObjectID.__dealloc__
+RuntimeError: Can't decrement id ref count (can't close file, there are objects still open)
+Traceback (most recent call last):
+  File "h5py/_objects.pyx", line 193, in h5py._objects.ObjectID.__dealloc__
+RuntimeError: Can't decrement id ref count (can't close file, there are objects still open)
+Exception ignored in: 'h5py._objects.ObjectID.__dealloc__'
+Traceback (most recent call last):
+  File "h5py/_objects.pyx", line 193, in h5py._objects.ObjectID.__dealloc__
+RuntimeError: Can't decrement id ref count (can't close file, there are objects still open)
+[or-condo-c172:110620] *** Process received signal ***
+[or-condo-c172:110620] Signal: Segmentation fault (11)
+[or-condo-c172:110620] Signal code: Address not mapped (1)
+[or-condo-c172:110620] Failing at address: 0x52c
+[or-condo-c172:110620] [ 0] /lib64/libpthread.so.0(+0xf100)[0x2ba70b0a3100]
+[or-condo-c172:110620] [ 1] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/hdf5-parallel/1.8.17/centos7.2_gnu5.3.0/lib/libhdf5.so.10(H5F_close+0xc)[0x2ba7129a623c]
+[or-condo-c172:110620] [ 2] [or-condo-c173:110752] *** Process received signal ***
+[or-condo-c173:110752] Signal: Segmentation fault (11)
+[or-condo-c173:110752] Signal code: Address not mapped (1)
+[or-condo-c173:110752] Failing at address: 0x52c
+/software/dev_tools/swtree/cs400_centos7.2_pe2016-08/hdf5-parallel/1.8.17/centos7.2_gnu5.3.0/lib/libhdf5.so.10(+0x11b8ab)[0x2ba712a0f8ab]
+[or-condo-c172:110620] [ 3] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/hdf5-parallel/1.8.17/centos7.2_gnu5.3.0/lib/libhdf5.so.10(H5SL_try_free_safe+0x5a)[0x2ba712a9e6aa]
+[or-condo-c172:110620] [ 4] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/hdf5-parallel/1.8.17/centos7.2_gnu5.3.0/lib/libhdf5.so.10(H5I_clear_type+0x68)[0x2ba712a10138]
+[or-condo-c172:110620] [ 5] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/hdf5-parallel/1.8.17/centos7.2_gnu5.3.0/lib/libhdf5.so.10(H5F_term_interface+0x30)[0x2ba71299f400]
+[or-condo-c172:110620] [ 6] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/hdf5-parallel/1.8.17/centos7.2_gnu5.3.0/lib/libhdf5.so.10(+0x3972e)[0x2ba71292d72e]
+[or-condo-c172:110620] [ 7] [or-condo-c173:110752] [ 0] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/hdf5-parallel/1.8.17/centos7.2_gnu5.3.0/lib/libhdf5.so.10(+0x39e59)[0x2ba71292de59]
+[or-condo-c172:110620] [ 8] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/openmpi/1.10.3/centos7.2_gnu5.3.0/lib/libmpi.so.12(ompi_attr_delete_all+0x303)[0x2ba713272543]
+[or-condo-c172:110620] [ 9] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/openmpi/1.10.3/centos7.2_gnu5.3.0/lib/libmpi.so.12(ompi_mpi_finalize+0xa6)[0x2ba713289e96]
+[or-condo-c172:110620] [10] /lib64/libpthread.so.0(+0xf100)[0x2b38cd090100]
+[or-condo-c173:110752] [ 1] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/python/3.6.3/centos7.2_gnu5.3.0/lib/python3.6/site-packages/mpi4py/MPI.cpython-36m-x86_64-linux-gnu.so(+0x34594)[0x2ba7140db594]
+[or-condo-c172:110620] [11] python[0x421c83]
+[or-condo-c172:110620] [12] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/hdf5-parallel/1.8.17/centos7.2_gnu5.3.0/lib/libhdf5.so.10(H5F_close+0xc)[0x2b38d495323c]
+[or-condo-c173:110752] [ 2] python(Py_Main+0x6f5)[0x43a755]
+[or-condo-c172:110620] [13] python(main+0x162)[0x41d8d2]
+[or-condo-c172:110620] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/hdf5-parallel/1.8.17/centos7.2_gnu5.3.0/lib/libhdf5.so.10(+0x11b8ab)[0x2b38d49bc8ab]
+[or-condo-c173:110752] [ 3] [14] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/hdf5-parallel/1.8.17/centos7.2_gnu5.3.0/lib/libhdf5.so.10(H5SL_try_free_safe+0x5a)[0x2b38d4a4b6aa]
+[or-condo-c173:110752] [ 4] /lib64/libc.so.6(__libc_start_main+0xf5)[0x2ba70b9dab15]
+[or-condo-c172:110620] [15] python[0x41d991]
+[or-condo-c172:110620] *** End of error message ***
+/software/dev_tools/swtree/cs400_centos7.2_pe2016-08/hdf5-parallel/1.8.17/centos7.2_gnu5.3.0/lib/libhdf5.so.10(H5I_clear_type+0x68)[0x2b38d49bd138]
+[or-condo-c173:110752] [ 5] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/hdf5-parallel/1.8.17/centos7.2_gnu5.3.0/lib/libhdf5.so.10(H5F_term_interface+0x30)[0x2b38d494c400]
+[or-condo-c173:110752] [ 6] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/hdf5-parallel/1.8.17/centos7.2_gnu5.3.0/lib/libhdf5.so.10(+0x3972e)[0x2b38d48da72e]
+[or-condo-c173:110752] [ 7] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/hdf5-parallel/1.8.17/centos7.2_gnu5.3.0/lib/libhdf5.so.10(+0x39e59)[0x2b38d48dae59]
+[or-condo-c173:110752] [ 8] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/openmpi/1.10.3/centos7.2_gnu5.3.0/lib/libmpi.so.12(ompi_attr_delete_all+0x303)[0x2b38d521f543]
+[or-condo-c173:110752] [ 9] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/openmpi/1.10.3/centos7.2_gnu5.3.0/lib/libmpi.so.12(ompi_mpi_finalize+0xa6)[0x2b38d5236e96]
+[or-condo-c173:110752] [10] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/python/3.6.3/centos7.2_gnu5.3.0/lib/python3.6/site-packages/mpi4py/MPI.cpython-36m-x86_64-linux-gnu.so(+0x34594)[0x2b38d6088594]
+[or-condo-c173:110752] [11] python[0x421c83]
+[or-condo-c173:110752] [12] python(Py_Main+0x6f5)[0x43a755]
+[or-condo-c173:110752] [13] python(main+0x162)[0x41d8d2]
+[or-condo-c173:110752] [14] /lib64/libc.so.6(__libc_start_main+0xf5)[0x2b38cd9c7b15]
+[or-condo-c173:110752] [15] python[0x41d991]
+[or-condo-c173:110752] *** End of error message ***
+/home/syz/mpi_tutorials/giv_bayesian
+--------------------------------------------------------------------------
+An MPI process has executed an operation involving a call to the
+"fork()" system call to create a child process.  Open MPI is currently
+operating in a condition that could result in memory corruption or
+other system errors; your MPI job may hang, crash, or produce silent
+data corruption.  The use of fork() (or system() or other calls that
+create child processes) is strongly discouraged.  
+
+The process that invoked fork was:
+
+  Local host:          or-condo-c173 (PID 110752)
+  MPI_COMM_WORLD rank: 1
+
+If you are *absolutely sure* that your application will successfully
+and correctly survive a call to fork(), you may disable this warning
+by setting the mpi_warn_on_fork MCA parameter to 0.
+--------------------------------------------------------------------------
+Rank 1 of 2 on or-condo-c173.ornl.gov sees 36 logical cores on the socket
+Rank 0 of 2 on or-condo-c172.ornl.gov sees 36 logical cores on the socket
+Working on 2 nodes via MPI
+Each rank is required to work on 34048 of the 68096 positions in this dataset
+Rank 0 will read positions 0 to 34048 of 68096
+Allowed to read 142222 pixels per chunk
+Allowed to use up to 36 cores and 10240 MB of memory
+Max positions per read set to 10
+Consider calling test() to check results before calling compute() which computes on the entire dataset and writes back to the HDF5 file
+ensuring that half steps should be odd, num_x_steps is now 250
+Rank 1 will read positions 34048 to 68096 of 68096
+Consider calling test() to check results before calling compute() which computes on the entire dataset and writes back to the HDF5 file
+ensuring that half steps should be odd, num_x_steps is now 250
+Checking for duplicates:
+Creating datagroup and datasets
+Now creating the datasets
+Creating datagroup and datasets
+created group: /Measurement_000/Channel_000/Raw_Data-FFT_Filtering_000/Filtered_Data-Reshape_000/Reshaped_Data-Bayesian_Inference_000 with attributes:
+{'machine_id': 'or-condo-c172.ornl.gov', 'timestamp': '2018_07_15-14_16_53', 'pyUSID_version': '0.0.4', 'platform': 'Linux-3.10.0-327.4.4.el7.x86_64-x86_64-with-centos-7.2.1511-Core', 'tool': 'Bayesian_Inference', 'num_source_dsets': 1, 'source_000': <HDF5 object reference>, 'algorithm_author': 'Kody J. Law', 'last_pixel': 0, 'freq': 200.0, 'num_x_steps': 250, 'r_extra': 110, 'gam': 0.03, 'e': 10.0, 'sigma': 10.0, 'sigmaC': 1.0, 'num_samples': 2000.0}
+Created I Corrected
+Created Resistance
+Created Variance
+Created Capacitance
+Done creating all results datasets!
+You maybe able to abort this computation at any time and resume at a later time!
+	If you are operating in a python console, press Ctrl+C or Cmd+C to abort
+	If you are in a Jupyter notebook, click on "Kernel">>"Interrupt"
+Rank 0 - Read positions 0 to 10. Need to read till 34048
+Rank 0 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+2 cores requested.
+computational jobs per core = 5. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 2 cores (requested 2 cores)
+Rank 1 - Read positions 34048 to 34058. Need to read till 68096
+Rank 1 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+2 cores requested.
+computational jobs per core = 5. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 2 cores (requested 2 cores)
+--------------------------------------------------------------------------
+mpiexec noticed that process rank 1 with PID 0 on node or-pbs-c173.ornl.gov exited on signal 11 (Segmentation fault).
+--------------------------------------------------------------------------

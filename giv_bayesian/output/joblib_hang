@@ -1,0 +1,64 @@
+[or-condo-c46.ornl.gov:69260] Local abort before MPI_INIT completed successfully; not able to aggregate error messages, and not able to guarantee that all other processes were killed!
+[or-condo-c170.ornl.gov:93235] Local abort before MPI_INIT completed successfully; not able to aggregate error messages, and not able to guarantee that all other processes were killed!
+[or-condo-c46.ornl.gov:69190] 1 more process has sent help message help-mpi-runtime.txt / mpi_init:warn-fork
+[or-condo-c46.ornl.gov:69190] Set MCA parameter "orte_base_help_aggregate" to 0 to see all help / error messages
+mpiexec: abort is already in progress...hit ctrl-c again to forcibly terminate
+
+=>> PBS: job killed: walltime 636 exceeded limit 600
+/home/syz/mpi_tutorials/giv_bayesian
+--------------------------------------------------------------------------
+An MPI process has executed an operation involving a call to the
+"fork()" system call to create a child process.  Open MPI is currently
+operating in a condition that could result in memory corruption or
+other system errors; your MPI job may hang, crash, or produce silent
+data corruption.  The use of fork() (or system() or other calls that
+create child processes) is strongly discouraged.
+
+The process that invoked fork was:
+
+  Local host:          or-condo-c170 (PID 93185)
+  MPI_COMM_WORLD rank: 1
+
+If you are *absolutely sure* that your application will successfully
+and correctly survive a call to fork(), you may disable this warning
+by setting the mpi_warn_on_fork MCA parameter to 0.
+--------------------------------------------------------------------------
+Rank 1 of 2 on or-condo-c170.ornl.gov sees 36 logical cores on the socket
+Rank 0 of 2 on or-condo-c46.ornl.gov sees 36 logical cores on the socket
+Working on 2 nodes via MPI
+Rank 1 will read positions 34048 to 68096 of 68096
+Consider calling test() to check results before calling compute() which computes on the entire dataset and writes back to the HDF5 file
+ensuring that half steps should be odd, num_x_steps is now 250
+Each rank is required to work on 34048 of the 68096 positions in this dataset
+Rank 0 will read positions 0 to 34048 of 68096
+Allowed to read 142222 pixels per chunk
+Allowed to use up to 36 cores and 10240 MB of memory
+Max positions per read set to 10
+Consider calling test() to check results before calling compute() which computes on the entire dataset and writes back to the HDF5 file
+ensuring that half steps should be odd, num_x_steps is now 250
+Creating datagroup and datasets
+Checking for duplicates:
+Creating datagroup and datasets
+Now creating the datasets
+created group: /Measurement_000/Channel_000/Raw_Data-FFT_Filtering_000/Filtered_Data-Reshape_000/Reshaped_Data-Bayesian_Inference_000 with attributes:
+{'machine_id': 'or-condo-c46.ornl.gov', 'timestamp': '2018_07_14-20_25_45', 'pyUSID_version': '0.0.4', 'platform': 'Linux-3.10.0-327.4.4.el7.x86_64-x86_64-with-centos-7.2.1511-Core', 'tool': 'Bayesian_Inference', 'num_source_dsets': 1, 'source_000': <HDF5 object reference>, 'algorithm_author': 'Kody J. Law', 'last_pixel': 0, 'freq': 200.0, 'num_x_steps': 250, 'r_extra': 110, 'gam': 0.03, 'e': 10.0, 'sigma': 10.0, 'sigmaC': 1.0, 'num_samples': 2000.0}
+Created I Corrected
+Created Resistance
+Created Variance
+Created Capacitance
+Done creating all results datasets!
+You maybe able to abort this computation at any time and resume at a later time!
+	If you are operating in a python console, press Ctrl+C or Cmd+C to abort
+	If you are in a Jupyter notebook, click on "Kernel">>"Interrupt"
+Rank 0 - Read positions 0 to 10. Need to read till 34048
+Rank 0 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+2 cores requested.
+computational jobs per core = 5. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 2 cores (requested 2 cores)
+Rank 1 - Read positions 34048 to 34058. Need to read till 68096
+Rank 1 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+2 cores requested.
+computational jobs per core = 5. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 2 cores (requested 2 cores)

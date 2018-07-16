@@ -1,0 +1,1831 @@
+Currently Loaded Modulefiles:
+  1) gcc/5.3.0        3) xalt/0.7.6       5) python/3.6.3
+  2) openmpi/1.10.3   4) PE-gnu/1.0
+[or-condo-c46.ornl.gov:64399] 1 more process has sent help message help-mpi-runtime.txt / mpi_init:warn-fork
+[or-condo-c46.ornl.gov:64399] Set MCA parameter "orte_base_help_aggregate" to 0 to see all help / error messages
+[or-condo-c170.ornl.gov:88539] Local abort before MPI_INIT completed successfully; not able to aggregate error messages, and not able to guarantee that all other processes were killed!
+[or-condo-c170.ornl.gov:88525] Local abort before MPI_INIT completed successfully; not able to aggregate error messages, and not able to guarantee that all other processes were killed!
+[or-condo-c170.ornl.gov:88523] Local abort before MPI_INIT completed successfully; not able to aggregate error messages, and not able to guarantee that all other processes were killed!
+[or-condo-c170.ornl.gov:88521] Local abort before MPI_INIT completed successfully; not able to aggregate error messages, and not able to guarantee that all other processes were killed!
+[or-condo-c170.ornl.gov:88553] Local abort before MPI_INIT completed successfully; not able to aggregate error messages, and not able to guarantee that all other processes were killed!
+[or-condo-c170.ornl.gov:88577] Local abort before MPI_INIT completed successfully; not able to aggregate error messages, and not able to guarantee that all other processes were killed!
+[or-condo-c170.ornl.gov:88589] Local abort before MPI_INIT completed successfully; not able to aggregate error messages, and not able to guarantee that all other processes were killed!
+[or-condo-c170.ornl.gov:88565] Local abort before MPI_INIT completed successfully; not able to aggregate error messages, and not able to guarantee that all other processes were killed!
+[or-condo-c170.ornl.gov:88591] Local abort before MPI_INIT completed successfully; not able to aggregate error messages, and not able to guarantee that all other processes were killed!
+[or-condo-c170.ornl.gov:88581] Local abort before MPI_INIT completed successfully; not able to aggregate error messages, and not able to guarantee that all other processes were killed!
+[or-condo-c170.ornl.gov:88587] Local abort before MPI_INIT completed successfully; not able to aggregate error messages, and not able to guarantee that all other processes were killed!
+[or-condo-c46.ornl.gov:64475] Local abort before MPI_INIT completed successfully; not able to aggregate error messages, and not able to guarantee that all other processes were killed!
+[or-condo-c46.ornl.gov:64485] Local abort before MPI_INIT completed successfully; not able to aggregate error messages, and not able to guarantee that all other processes were killed!
+[or-condo-c46.ornl.gov:64473] Local abort before MPI_INIT completed successfully; not able to aggregate error messages, and not able to guarantee that all other processes were killed!
+[or-condo-c46.ornl.gov:64481] Local abort before MPI_INIT completed successfully; not able to aggregate error messages, and not able to guarantee that all other processes were killed!
+[or-condo-c46.ornl.gov:64489] Local abort before MPI_INIT completed successfully; not able to aggregate error messages, and not able to guarantee that all other processes were killed!
+[or-condo-c46.ornl.gov:64483] Local abort before MPI_INIT completed successfully; not able to aggregate error messages, and not able to guarantee that all other processes were killed!
+[or-condo-c46.ornl.gov:64463] Local abort before MPI_INIT completed successfully; not able to aggregate error messages, and not able to guarantee that all other processes were killed!
+[or-condo-c46.ornl.gov:64471] Local abort before MPI_INIT completed successfully; not able to aggregate error messages, and not able to guarantee that all other processes were killed!
+[or-condo-c46.ornl.gov:64497] Local abort before MPI_INIT completed successfully; not able to aggregate error messages, and not able to guarantee that all other processes were killed!
+[or-condo-c46.ornl.gov:64503] Local abort before MPI_INIT completed successfully; not able to aggregate error messages, and not able to guarantee that all other processes were killed!
+[or-condo-c46.ornl.gov:64501] Local abort before MPI_INIT completed successfully; not able to aggregate error messages, and not able to guarantee that all other processes were killed!
+[or-condo-c46.ornl.gov:64505] Local abort before MPI_INIT completed successfully; not able to aggregate error messages, and not able to guarantee that all other processes were killed!
+[or-condo-c46.ornl.gov:64509] Local abort before MPI_INIT completed successfully; not able to aggregate error messages, and not able to guarantee that all other processes were killed!
+[or-condo-c46.ornl.gov:64519] Local abort before MPI_INIT completed successfully; not able to aggregate error messages, and not able to guarantee that all other processes were killed!
+[or-condo-c46.ornl.gov:64511] Local abort before MPI_INIT completed successfully; not able to aggregate error messages, and not able to guarantee that all other processes were killed!
+[or-condo-c46.ornl.gov:64528] Local abort before MPI_INIT completed successfully; not able to aggregate error messages, and not able to guarantee that all other processes were killed!
+[or-condo-c46.ornl.gov:64530] Local abort before MPI_INIT completed successfully; not able to aggregate error messages, and not able to guarantee that all other processes were killed!
+[or-condo-c46.ornl.gov:64523] Local abort before MPI_INIT completed successfully; not able to aggregate error messages, and not able to guarantee that all other processes were killed!
+[or-condo-c46.ornl.gov:64521] Local abort before MPI_INIT completed successfully; not able to aggregate error messages, and not able to guarantee that all other processes were killed!
+mpiexec: abort is already in progress...hit ctrl-c again to forcibly terminate
+
+=>> PBS: job killed: walltime 610 exceeded limit 600
+/home/syz/mpi_tutorials/giv_bayesian
+--------------------------------------------------------------------------
+An MPI process has executed an operation involving a call to the
+"fork()" system call to create a child process.  Open MPI is currently
+operating in a condition that could result in memory corruption or
+other system errors; your MPI job may hang, crash, or produce silent
+data corruption.  The use of fork() (or system() or other calls that
+create child processes) is strongly discouraged.
+
+The process that invoked fork was:
+
+  Local host:          or-condo-c170 (PID 88476)
+  MPI_COMM_WORLD rank: 1
+
+If you are *absolutely sure* that your application will successfully
+and correctly survive a call to fork(), you may disable this warning
+by setting the mpi_warn_on_fork MCA parameter to 0.
+--------------------------------------------------------------------------
+Rank 1 of 2 on or-condo-c170.ornl.gov sees 36 logical cores on the socket
+Rank 0 of 2 on or-condo-c46.ornl.gov sees 36 logical cores on the socket
+Working on 2 nodes via MPI
+Rank 1 will read positions 34048 to 68096 of 68096
+Consider calling test() to check results before calling compute() which computes on the entire dataset and writes back to the HDF5 file
+ensuring that half steps should be odd, num_x_steps is now 250
+Each rank is required to work on 34048 of the 68096 positions in this dataset
+Rank 0 will read positions 0 to 34048 of 68096
+Allowed to read 142222 pixels per chunk
+Allowed to use up to 36 cores and 10240 MB of memory
+Max positions per read set to 36
+Consider calling test() to check results before calling compute() which computes on the entire dataset and writes back to the HDF5 file
+ensuring that half steps should be odd, num_x_steps is now 250
+Creating datagroup and datasets
+Checking for duplicates:
+Creating datagroup and datasets
+Now creating the datasets
+created group: /Measurement_000/Channel_000/Raw_Data-FFT_Filtering_000/Filtered_Data-Reshape_000/Reshaped_Data-Bayesian_Inference_000 with attributes:
+{'machine_id': 'or-condo-c46.ornl.gov', 'timestamp': '2018_07_14-20_08_11', 'pyUSID_version': '0.0.4', 'platform': 'Linux-3.10.0-327.4.4.el7.x86_64-x86_64-with-centos-7.2.1511-Core', 'tool': 'Bayesian_Inference', 'num_source_dsets': 1, 'source_000': <HDF5 object reference>, 'algorithm_author': 'Kody J. Law', 'last_pixel': 0, 'freq': 200.0, 'num_x_steps': 250, 'r_extra': 110, 'gam': 0.03, 'e': 10.0, 'sigma': 10.0, 'sigmaC': 1.0, 'num_samples': 2000.0}
+Created I Corrected
+Created Resistance
+Created Variance
+Created Capacitance
+Done creating all results datasets!
+You maybe able to abort this computation at any time and resume at a later time!
+	If you are operating in a python console, press Ctrl+C or Cmd+C to abort
+	If you are in a Jupyter notebook, click on "Kernel">>"Interrupt"
+Rank 0 - Read positions 0 to 36. Need to read till 34048
+Rank 0 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+36 cores requested.
+computational jobs per core = 1. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 36 cores (requested 36 cores)
+Rank 1 - Read positions 34048 to 34084. Need to read till 68096
+Rank 1 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+36 cores requested.
+computational jobs per core = 1. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 36 cores (requested 36 cores)
+[syz@or-condo-login02 giv_bayesian]$ rm *44
+[syz@or-condo-login02 giv_bayesian]$ cat *43
+Currently Loaded Modulefiles:
+  1) gcc/5.3.0        3) xalt/0.7.6       5) python/3.6.3
+  2) openmpi/1.10.3   4) PE-gnu/1.0
+[or-condo-c46.ornl.gov:62694] 1 more process has sent help message help-mpi-runtime.txt / mpi_init:warn-fork
+[or-condo-c46.ornl.gov:62694] Set MCA parameter "orte_base_help_aggregate" to 0 to see all help / error messages
+mpiexec: abort is already in progress...hit ctrl-c again to forcibly terminate
+
+/home/syz/mpi_tutorials/giv_bayesian
+--------------------------------------------------------------------------
+An MPI process has executed an operation involving a call to the
+"fork()" system call to create a child process.  Open MPI is currently
+operating in a condition that could result in memory corruption or
+other system errors; your MPI job may hang, crash, or produce silent
+data corruption.  The use of fork() (or system() or other calls that
+create child processes) is strongly discouraged.
+
+The process that invoked fork was:
+
+  Local host:          or-condo-c170 (PID 86851)
+  MPI_COMM_WORLD rank: 1
+
+If you are *absolutely sure* that your application will successfully
+and correctly survive a call to fork(), you may disable this warning
+by setting the mpi_warn_on_fork MCA parameter to 0.
+--------------------------------------------------------------------------
+Rank 1 of 2 on or-condo-c170.ornl.gov sees 36 logical cores on the socket
+Rank 0 of 2 on or-condo-c46.ornl.gov sees 36 logical cores on the socket
+Working on 2 nodes via MPI
+Rank 1 will read positions 34048 to 68096 of 68096
+Consider calling test() to check results before calling compute() which computes on the entire dataset and writes back to the HDF5 file
+ensuring that half steps should be odd, num_x_steps is now 250
+Each rank is required to work on 34048 of the 68096 positions in this dataset
+Rank 0 will read positions 0 to 34048 of 68096
+Allowed to read 142222 pixels per chunk
+Allowed to use up to 36 cores and 10240 MB of memory
+Max positions per read set to 10
+Consider calling test() to check results before calling compute() which computes on the entire dataset and writes back to the HDF5 file
+ensuring that half steps should be odd, num_x_steps is now 250
+Creating datagroup and datasets
+Checking for duplicates:
+Creating datagroup and datasets
+Now creating the datasets
+created group: /Measurement_000/Channel_000/Raw_Data-FFT_Filtering_000/Filtered_Data-Reshape_000/Reshaped_Data-Bayesian_Inference_000 with attributes:
+{'machine_id': 'or-condo-c46.ornl.gov', 'timestamp': '2018_07_14-20_00_25', 'pyUSID_version': '0.0.4', 'platform': 'Linux-3.10.0-327.4.4.el7.x86_64-x86_64-with-centos-7.2.1511-Core', 'tool': 'Bayesian_Inference', 'num_source_dsets': 1, 'source_000': <HDF5 object reference>, 'algorithm_author': 'Kody J. Law', 'last_pixel': 0, 'freq': 200.0, 'num_x_steps': 250, 'r_extra': 110, 'gam': 0.03, 'e': 10.0, 'sigma': 10.0, 'sigmaC': 1.0, 'num_samples': 2000.0}
+Created I Corrected
+Created Resistance
+Created Variance
+Created Capacitance
+Done creating all results datasets!
+You maybe able to abort this computation at any time and resume at a later time!
+	If you are operating in a python console, press Ctrl+C or Cmd+C to abort
+	If you are in a Jupyter notebook, click on "Kernel">>"Interrupt"
+Rank 0 - Read positions 0 to 10. Need to read till 34048
+Rank 0 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 - Read positions 34048 to 34058. Need to read till 68096
+Rank 1 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 Finished processing reverse loops (and this chunk)
+Rank 1 - parallel computed chunk in 6.76 sec or 676.0 msec per pixel
+Rank 1 - Started accumulating results for this chunk
+Rank 1 - Finished accumulating results. Writing results of chunk to h5
+Rank 1 - Finished processing up to pixel 34058 of 68096.
+Rank 1 - Read positions 34058 to 34068. Need to read till 68096
+Rank 1 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 Finished processing reverse loops (and this chunk)
+Rank 0 - parallel computed chunk in 7.89 sec or 789.0 msec per pixel
+Rank 0 - Started accumulating results for this chunk
+Rank 0 - Finished accumulating results. Writing results of chunk to h5
+Rank 0 - Finished processing up to pixel 10 of 34048.
+Rank 0 - Read positions 10 to 20. Need to read till 34048
+Rank 0 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 Finished processing reverse loops (and this chunk)
+Rank 1 - parallel computed chunk in 7.27 sec or 727.0 msec per pixel
+Rank 1 - Time remaining: 1.99 msec
+Rank 1 - Started accumulating results for this chunk
+Rank 1 - Finished accumulating results. Writing results of chunk to h5
+Rank 1 - Finished processing up to pixel 34068 of 68096.
+Rank 1 - Read positions 34068 to 34078. Need to read till 68096
+Rank 1 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 Finished processing reverse loops (and this chunk)
+Rank 0 - parallel computed chunk in 7.73 sec or 773.0 msec per pixel
+Rank 0 - Time remaining: 2.32 msec
+Rank 0 - Started accumulating results for this chunk
+Rank 0 - Finished accumulating results. Writing results of chunk to h5
+Rank 0 - Finished processing up to pixel 20 of 34048.
+Rank 0 - Read positions 20 to 30. Need to read till 34048
+Rank 0 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 Finished processing reverse loops (and this chunk)
+Rank 1 - parallel computed chunk in 6.99 sec or 699.0 msec per pixel
+Rank 1 - Time remaining: 3.97 msec
+Rank 1 - Started accumulating results for this chunk
+Rank 1 - Finished accumulating results. Writing results of chunk to h5
+Rank 1 - Finished processing up to pixel 34078 of 68096.
+Rank 1 - Read positions 34078 to 34088. Need to read till 68096
+Rank 1 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 Finished processing reverse loops (and this chunk)
+Rank 0 - parallel computed chunk in 8.4 sec or 840.0 msec per pixel
+Rank 0 - Time remaining: 4.63 msec
+Rank 0 - Started accumulating results for this chunk
+Rank 0 - Finished accumulating results. Writing results of chunk to h5
+Rank 0 - Finished processing up to pixel 30 of 34048.
+Rank 0 - Read positions 30 to 40. Need to read till 34048
+Rank 0 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 Finished processing reverse loops (and this chunk)
+Rank 1 - parallel computed chunk in 7.01 sec or 701.0 msec per pixel
+Rank 1 - Time remaining: 5.96 msec
+Rank 1 - Started accumulating results for this chunk
+Rank 1 - Finished accumulating results. Writing results of chunk to h5
+Rank 1 - Finished processing up to pixel 34088 of 68096.
+Rank 1 - Read positions 34088 to 34098. Need to read till 68096
+Rank 1 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 Finished processing reverse loops (and this chunk)
+Rank 0 - parallel computed chunk in 8.43 sec or 843.0 msec per pixel
+Rank 0 - Time remaining: 6.95 msec
+Rank 0 - Started accumulating results for this chunk
+Rank 0 - Finished accumulating results. Writing results of chunk to h5
+Rank 0 - Finished processing up to pixel 40 of 34048.
+Rank 0 - Read positions 40 to 50. Need to read till 34048
+Rank 0 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 Finished processing reverse loops (and this chunk)
+Rank 1 - parallel computed chunk in 6.87 sec or 687.0 msec per pixel
+Rank 1 - Time remaining: 7.94 msec
+Rank 1 - Started accumulating results for this chunk
+Rank 1 - Finished accumulating results. Writing results of chunk to h5
+Rank 1 - Finished processing up to pixel 34098 of 68096.
+Rank 1 - Read positions 34098 to 34108. Need to read till 68096
+Rank 1 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 Finished processing reverse loops (and this chunk)
+Rank 0 - parallel computed chunk in 8.4 sec or 840.0 msec per pixel
+Rank 0 - Time remaining: 9.27 msec
+Rank 0 - Started accumulating results for this chunk
+Rank 0 - Finished accumulating results. Writing results of chunk to h5
+Rank 0 - Finished processing up to pixel 50 of 34048.
+Rank 0 - Read positions 50 to 60. Need to read till 34048
+Rank 0 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 Finished processing reverse loops (and this chunk)
+Rank 1 - parallel computed chunk in 7.32 sec or 732.0 msec per pixel
+Rank 1 - Time remaining: 9.93 msec
+Rank 1 - Started accumulating results for this chunk
+Rank 1 - Finished accumulating results. Writing results of chunk to h5
+Rank 1 - Finished processing up to pixel 34108 of 68096.
+Rank 1 - Read positions 34108 to 34118. Need to read till 68096
+Rank 1 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 Finished processing reverse loops (and this chunk)
+Rank 0 - parallel computed chunk in 8.58 sec or 858.0 msec per pixel
+Rank 0 - Time remaining: 11.59 msec
+Rank 0 - Started accumulating results for this chunk
+Rank 0 - Finished accumulating results. Writing results of chunk to h5
+Rank 0 - Finished processing up to pixel 60 of 34048.
+Rank 0 - Read positions 60 to 70. Need to read till 34048
+Rank 0 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 Finished processing reverse loops (and this chunk)
+Rank 1 - parallel computed chunk in 7.37 sec or 737.0 msec per pixel
+Rank 1 - Time remaining: 11.91 msec
+Rank 1 - Started accumulating results for this chunk
+Rank 1 - Finished accumulating results. Writing results of chunk to h5
+Rank 1 - Finished processing up to pixel 34118 of 68096.
+Rank 1 - Read positions 34118 to 34128. Need to read till 68096
+Rank 1 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 Finished processing reverse loops (and this chunk)
+Rank 1 - parallel computed chunk in 7.04 sec or 704.0 msec per pixel
+Rank 1 - Time remaining: 13.9 msec
+Rank 1 - Started accumulating results for this chunk
+Rank 1 - Finished accumulating results. Writing results of chunk to h5
+Rank 1 - Finished processing up to pixel 34128 of 68096.
+Rank 1 - Read positions 34128 to 34138. Need to read till 68096
+Rank 1 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 Finished processing reverse loops (and this chunk)
+Rank 0 - parallel computed chunk in 8.59 sec or 859.0 msec per pixel
+Rank 0 - Time remaining: 13.9 msec
+Rank 0 - Started accumulating results for this chunk
+Rank 0 - Finished accumulating results. Writing results of chunk to h5
+Rank 0 - Finished processing up to pixel 70 of 34048.
+Rank 0 - Read positions 70 to 80. Need to read till 34048
+Rank 0 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 Finished processing reverse loops (and this chunk)
+Rank 1 - parallel computed chunk in 7.39 sec or 739.0 msec per pixel
+Rank 1 - Time remaining: 15.88 msec
+Rank 1 - Started accumulating results for this chunk
+Rank 1 - Finished accumulating results. Writing results of chunk to h5
+Rank 1 - Finished processing up to pixel 34138 of 68096.
+Rank 1 - Read positions 34138 to 34148. Need to read till 68096
+Rank 1 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 Finished processing reverse loops (and this chunk)
+Rank 0 - parallel computed chunk in 8.05 sec or 805.0 msec per pixel
+Rank 0 - Time remaining: 16.22 msec
+Rank 0 - Started accumulating results for this chunk
+Rank 0 - Finished accumulating results. Writing results of chunk to h5
+Rank 0 - Finished processing up to pixel 80 of 34048.
+Rank 0 - Read positions 80 to 90. Need to read till 34048
+Rank 0 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 Finished processing reverse loops (and this chunk)
+Rank 1 - parallel computed chunk in 7.17 sec or 717.0 msec per pixel
+Rank 1 - Time remaining: 17.87 msec
+Rank 1 - Started accumulating results for this chunk
+Rank 1 - Finished accumulating results. Writing results of chunk to h5
+Rank 1 - Finished processing up to pixel 34148 of 68096.
+Rank 1 - Read positions 34148 to 34158. Need to read till 68096
+Rank 1 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 Finished processing reverse loops (and this chunk)
+Rank 0 - parallel computed chunk in 8.81 sec or 881.0 msec per pixel
+Rank 0 - Time remaining: 18.54 msec
+Rank 0 - Started accumulating results for this chunk
+Rank 0 - Finished accumulating results. Writing results of chunk to h5
+Rank 0 - Finished processing up to pixel 90 of 34048.
+Rank 0 - Read positions 90 to 100. Need to read till 34048
+Rank 0 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 Finished processing reverse loops (and this chunk)
+Rank 1 - parallel computed chunk in 7.18 sec or 718.0 msec per pixel
+Rank 1 - Time remaining: 19.85 msec
+Rank 1 - Started accumulating results for this chunk
+Rank 1 - Finished accumulating results. Writing results of chunk to h5
+Rank 1 - Finished processing up to pixel 34158 of 68096.
+Rank 1 - Read positions 34158 to 34168. Need to read till 68096
+Rank 1 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 Finished processing reverse loops (and this chunk)
+Rank 0 - parallel computed chunk in 8.59 sec or 859.0 msec per pixel
+Rank 0 - Time remaining: 20.86 msec
+Rank 0 - Started accumulating results for this chunk
+Rank 0 - Finished accumulating results. Writing results of chunk to h5
+Rank 0 - Finished processing up to pixel 100 of 34048.
+Rank 0 - Read positions 100 to 110. Need to read till 34048
+Rank 0 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 Finished processing reverse loops (and this chunk)
+Rank 1 - parallel computed chunk in 6.91 sec or 691.0 msec per pixel
+Rank 1 - Time remaining: 21.84 msec
+Rank 1 - Started accumulating results for this chunk
+Rank 1 - Finished accumulating results. Writing results of chunk to h5
+Rank 1 - Finished processing up to pixel 34168 of 68096.
+Rank 1 - Read positions 34168 to 34178. Need to read till 68096
+Rank 1 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 Finished processing reverse loops (and this chunk)
+Rank 0 - parallel computed chunk in 8.23 sec or 823.0 msec per pixel
+Rank 0 - Time remaining: 23.17 msec
+Rank 0 - Started accumulating results for this chunk
+Rank 0 - Finished accumulating results. Writing results of chunk to h5
+Rank 0 - Finished processing up to pixel 110 of 34048.
+Rank 0 - Read positions 110 to 120. Need to read till 34048
+Rank 0 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 Finished processing reverse loops (and this chunk)
+Rank 1 - parallel computed chunk in 6.98 sec or 698.0 msec per pixel
+Rank 1 - Time remaining: 23.83 msec
+Rank 1 - Started accumulating results for this chunk
+Rank 1 - Finished accumulating results. Writing results of chunk to h5
+Rank 1 - Finished processing up to pixel 34178 of 68096.
+Rank 1 - Read positions 34178 to 34188. Need to read till 68096
+Rank 1 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 Finished processing reverse loops (and this chunk)
+Rank 1 - parallel computed chunk in 6.68 sec or 668.0 msec per pixel
+Rank 1 - Time remaining: 25.81 msec
+Rank 1 - Started accumulating results for this chunk
+Rank 1 - Finished accumulating results. Writing results of chunk to h5
+Rank 1 - Finished processing up to pixel 34188 of 68096.
+Rank 1 - Read positions 34188 to 34198. Need to read till 68096
+Rank 1 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 Finished processing reverse loops (and this chunk)
+Rank 0 - parallel computed chunk in 8.08 sec or 808.0 msec per pixel
+Rank 0 - Time remaining: 25.49 msec
+Rank 0 - Started accumulating results for this chunk
+Rank 0 - Finished accumulating results. Writing results of chunk to h5
+Rank 0 - Finished processing up to pixel 120 of 34048.
+Rank 0 - Read positions 120 to 130. Need to read till 34048
+Rank 0 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 Finished processing reverse loops (and this chunk)
+Rank 1 - parallel computed chunk in 6.96 sec or 696.0 msec per pixel
+Rank 1 - Time remaining: 27.8 msec
+Rank 1 - Started accumulating results for this chunk
+Rank 1 - Finished accumulating results. Writing results of chunk to h5
+Rank 1 - Finished processing up to pixel 34198 of 68096.
+Rank 1 - Read positions 34198 to 34208. Need to read till 68096
+Rank 1 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 Finished processing reverse loops (and this chunk)
+Rank 0 - parallel computed chunk in 8.14 sec or 814.0 msec per pixel
+Rank 0 - Time remaining: 27.81 msec
+Rank 0 - Started accumulating results for this chunk
+Rank 0 - Finished accumulating results. Writing results of chunk to h5
+Rank 0 - Finished processing up to pixel 130 of 34048.
+Rank 0 - Read positions 130 to 140. Need to read till 34048
+Rank 0 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 Finished processing reverse loops (and this chunk)
+Rank 1 - parallel computed chunk in 6.71 sec or 671.0 msec per pixel
+Rank 1 - Time remaining: 29.78 msec
+Rank 1 - Started accumulating results for this chunk
+Rank 1 - Finished accumulating results. Writing results of chunk to h5
+Rank 1 - Finished processing up to pixel 34208 of 68096.
+Rank 1 - Read positions 34208 to 34218. Need to read till 68096
+Rank 1 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 Finished processing reverse loops (and this chunk)
+Rank 0 - parallel computed chunk in 8.1 sec or 810.0 msec per pixel
+Rank 0 - Time remaining: 30.13 msec
+Rank 0 - Started accumulating results for this chunk
+Rank 0 - Finished accumulating results. Writing results of chunk to h5
+Rank 0 - Finished processing up to pixel 140 of 34048.
+Rank 0 - Read positions 140 to 150. Need to read till 34048
+Rank 0 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 Finished processing reverse loops (and this chunk)
+Rank 1 - parallel computed chunk in 7.16 sec or 716.0 msec per pixel
+Rank 1 - Time remaining: 31.77 msec
+Rank 1 - Started accumulating results for this chunk
+Rank 1 - Finished accumulating results. Writing results of chunk to h5
+Rank 1 - Finished processing up to pixel 34218 of 68096.
+Rank 1 - Read positions 34218 to 34228. Need to read till 68096
+Rank 1 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 Finished processing reverse loops (and this chunk)
+Rank 0 - parallel computed chunk in 8.52 sec or 852.0 msec per pixel
+Rank 0 - Time remaining: 32.44 msec
+Rank 0 - Started accumulating results for this chunk
+Rank 0 - Finished accumulating results. Writing results of chunk to h5
+Rank 0 - Finished processing up to pixel 150 of 34048.
+Rank 0 - Read positions 150 to 160. Need to read till 34048
+Rank 0 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 Finished processing reverse loops (and this chunk)
+Rank 1 - parallel computed chunk in 7.01 sec or 701.0 msec per pixel
+Rank 1 - Time remaining: 33.75 msec
+Rank 1 - Started accumulating results for this chunk
+Rank 1 - Finished accumulating results. Writing results of chunk to h5
+Rank 1 - Finished processing up to pixel 34228 of 68096.
+Rank 1 - Read positions 34228 to 34238. Need to read till 68096
+Rank 1 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 Finished processing reverse loops (and this chunk)
+Rank 0 - parallel computed chunk in 8.74 sec or 874.0 msec per pixel
+Rank 0 - Time remaining: 34.76 msec
+Rank 0 - Started accumulating results for this chunk
+Rank 0 - Finished accumulating results. Writing results of chunk to h5
+Rank 0 - Finished processing up to pixel 160 of 34048.
+Rank 0 - Read positions 160 to 170. Need to read till 34048
+Rank 0 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 Finished processing reverse loops (and this chunk)
+Rank 1 - parallel computed chunk in 6.88 sec or 688.0 msec per pixel
+Rank 1 - Time remaining: 35.74 msec
+Rank 1 - Started accumulating results for this chunk
+Rank 1 - Finished accumulating results. Writing results of chunk to h5
+Rank 1 - Finished processing up to pixel 34238 of 68096.
+Rank 1 - Read positions 34238 to 34248. Need to read till 68096
+Rank 1 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 Finished processing reverse loops (and this chunk)
+Rank 1 - parallel computed chunk in 7.67 sec or 767.0 msec per pixel
+Rank 1 - Time remaining: 37.72 msec
+Rank 1 - Started accumulating results for this chunk
+Rank 1 - Finished accumulating results. Writing results of chunk to h5
+Rank 1 - Finished processing up to pixel 34248 of 68096.
+Rank 1 - Read positions 34248 to 34258. Need to read till 68096
+Rank 1 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 Finished processing reverse loops (and this chunk)
+Rank 0 - parallel computed chunk in 8.71 sec or 871.0 msec per pixel
+Rank 0 - Time remaining: 37.08 msec
+Rank 0 - Started accumulating results for this chunk
+Rank 0 - Finished accumulating results. Writing results of chunk to h5
+Rank 0 - Finished processing up to pixel 170 of 34048.
+Rank 0 - Read positions 170 to 180. Need to read till 34048
+Rank 0 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 Finished processing reverse loops (and this chunk)
+Rank 1 - parallel computed chunk in 7.35 sec or 735.0 msec per pixel
+Rank 1 - Time remaining: 39.71 msec
+Rank 1 - Started accumulating results for this chunk
+Rank 1 - Finished accumulating results. Writing results of chunk to h5
+Rank 1 - Finished processing up to pixel 34258 of 68096.
+Rank 1 - Read positions 34258 to 34268. Need to read till 68096
+Rank 1 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 Finished processing reverse loops (and this chunk)
+Rank 0 - parallel computed chunk in 7.92 sec or 792.0 msec per pixel
+Rank 0 - Time remaining: 39.39 msec
+Rank 0 - Started accumulating results for this chunk
+Rank 0 - Finished accumulating results. Writing results of chunk to h5
+Rank 0 - Finished processing up to pixel 180 of 34048.
+Rank 0 - Read positions 180 to 190. Need to read till 34048
+Rank 0 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 Finished processing reverse loops (and this chunk)
+Rank 1 - parallel computed chunk in 7.5 sec or 750.0 msec per pixel
+Rank 1 - Time remaining: 41.69 msec
+Rank 1 - Started accumulating results for this chunk
+Rank 1 - Finished accumulating results. Writing results of chunk to h5
+Rank 1 - Finished processing up to pixel 34268 of 68096.
+Rank 1 - Read positions 34268 to 34278. Need to read till 68096
+Rank 1 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 Finished processing reverse loops (and this chunk)
+Rank 0 - parallel computed chunk in 8.57 sec or 857.0 msec per pixel
+Rank 0 - Time remaining: 41.71 msec
+Rank 0 - Started accumulating results for this chunk
+Rank 0 - Finished accumulating results. Writing results of chunk to h5
+Rank 0 - Finished processing up to pixel 190 of 34048.
+Rank 0 - Read positions 190 to 200. Need to read till 34048
+Rank 0 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 Finished processing reverse loops (and this chunk)
+Rank 1 - parallel computed chunk in 7.33 sec or 733.0 msec per pixel
+Rank 1 - Time remaining: 43.68 msec
+Rank 1 - Started accumulating results for this chunk
+Rank 1 - Finished accumulating results. Writing results of chunk to h5
+Rank 1 - Finished processing up to pixel 34278 of 68096.
+Rank 1 - Read positions 34278 to 34288. Need to read till 68096
+Rank 1 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 Finished processing reverse loops (and this chunk)
+Rank 0 - parallel computed chunk in 8.51 sec or 851.0 msec per pixel
+Rank 0 - Time remaining: 44.03 msec
+Rank 0 - Started accumulating results for this chunk
+Rank 0 - Finished accumulating results. Writing results of chunk to h5
+Rank 0 - Finished processing up to pixel 200 of 34048.
+Rank 0 - Read positions 200 to 210. Need to read till 34048
+Rank 0 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 Finished processing reverse loops (and this chunk)
+Rank 1 - parallel computed chunk in 7.07 sec or 707.0 msec per pixel
+Rank 1 - Time remaining: 45.66 msec
+Rank 1 - Started accumulating results for this chunk
+Rank 1 - Finished accumulating results. Writing results of chunk to h5
+Rank 1 - Finished processing up to pixel 34288 of 68096.
+Rank 1 - Read positions 34288 to 34298. Need to read till 68096
+Rank 1 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 Finished processing reverse loops (and this chunk)
+Rank 0 - parallel computed chunk in 7.86 sec or 786.0 msec per pixel
+Rank 0 - Time remaining: 46.35 msec
+Rank 0 - Started accumulating results for this chunk
+Rank 0 - Finished accumulating results. Writing results of chunk to h5
+Rank 0 - Finished processing up to pixel 210 of 34048.
+Rank 0 - Read positions 210 to 220. Need to read till 34048
+Rank 0 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 Finished processing reverse loops (and this chunk)
+Rank 1 - parallel computed chunk in 6.87 sec or 687.0 msec per pixel
+Rank 1 - Time remaining: 47.65 msec
+Rank 1 - Started accumulating results for this chunk
+Rank 1 - Finished accumulating results. Writing results of chunk to h5
+Rank 1 - Finished processing up to pixel 34298 of 68096.
+Rank 1 - Read positions 34298 to 34308. Need to read till 68096
+Rank 1 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 Finished processing reverse loops (and this chunk)
+Rank 0 - parallel computed chunk in 8.59 sec or 859.0 msec per pixel
+Rank 0 - Time remaining: 48.66 msec
+Rank 0 - Started accumulating results for this chunk
+Rank 0 - Finished accumulating results. Writing results of chunk to h5
+Rank 0 - Finished processing up to pixel 220 of 34048.
+Rank 0 - Read positions 220 to 230. Need to read till 34048
+Rank 0 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 Finished processing reverse loops (and this chunk)
+Rank 1 - parallel computed chunk in 7.25 sec or 725.0 msec per pixel
+Rank 1 - Time remaining: 49.64 msec
+Rank 1 - Started accumulating results for this chunk
+Rank 1 - Finished accumulating results. Writing results of chunk to h5
+Rank 1 - Finished processing up to pixel 34308 of 68096.
+Rank 1 - Read positions 34308 to 34318. Need to read till 68096
+Rank 1 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 Finished processing reverse loops (and this chunk)
+Rank 1 - parallel computed chunk in 7.42 sec or 742.0 msec per pixel
+Rank 1 - Time remaining: 51.62 msec
+Rank 1 - Started accumulating results for this chunk
+Rank 1 - Finished accumulating results. Writing results of chunk to h5
+Rank 1 - Finished processing up to pixel 34318 of 68096.
+Rank 1 - Read positions 34318 to 34328. Need to read till 68096
+Rank 1 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 Finished processing reverse loops (and this chunk)
+Rank 0 - parallel computed chunk in 8.76 sec or 876.0 msec per pixel
+Rank 0 - Time remaining: 50.98 msec
+Rank 0 - Started accumulating results for this chunk
+Rank 0 - Finished accumulating results. Writing results of chunk to h5
+Rank 0 - Finished processing up to pixel 230 of 34048.
+Rank 0 - Read positions 230 to 240. Need to read till 34048
+Rank 0 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 Finished processing reverse loops (and this chunk)
+Rank 1 - parallel computed chunk in 7.2 sec or 720.0 msec per pixel
+Rank 1 - Time remaining: 53.61 msec
+Rank 1 - Started accumulating results for this chunk
+Rank 1 - Finished accumulating results. Writing results of chunk to h5
+Rank 1 - Finished processing up to pixel 34328 of 68096.
+Rank 1 - Read positions 34328 to 34338. Need to read till 68096
+Rank 1 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 Finished processing reverse loops (and this chunk)
+Rank 0 - parallel computed chunk in 8.79 sec or 879.0 msec per pixel
+Rank 0 - Time remaining: 53.3 msec
+Rank 0 - Started accumulating results for this chunk
+Rank 0 - Finished accumulating results. Writing results of chunk to h5
+Rank 0 - Finished processing up to pixel 240 of 34048.
+Rank 0 - Read positions 240 to 250. Need to read till 34048
+Rank 0 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 Finished processing reverse loops (and this chunk)
+Rank 1 - parallel computed chunk in 7.59 sec or 759.0 msec per pixel
+Rank 1 - Time remaining: 55.59 msec
+Rank 1 - Started accumulating results for this chunk
+Rank 1 - Finished accumulating results. Writing results of chunk to h5
+Rank 1 - Finished processing up to pixel 34338 of 68096.
+Rank 1 - Read positions 34338 to 34348. Need to read till 68096
+Rank 1 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 Finished processing reverse loops (and this chunk)
+Rank 0 - parallel computed chunk in 8.61 sec or 861.0 msec per pixel
+Rank 0 - Time remaining: 55.62 msec
+Rank 0 - Started accumulating results for this chunk
+Rank 0 - Finished accumulating results. Writing results of chunk to h5
+Rank 0 - Finished processing up to pixel 250 of 34048.
+Rank 0 - Read positions 250 to 260. Need to read till 34048
+Rank 0 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 Finished processing reverse loops (and this chunk)
+Rank 1 - parallel computed chunk in 7.34 sec or 734.0 msec per pixel
+Rank 1 - Time remaining: 57.58 msec
+Rank 1 - Started accumulating results for this chunk
+Rank 1 - Finished accumulating results. Writing results of chunk to h5
+Rank 1 - Finished processing up to pixel 34348 of 68096.
+Rank 1 - Read positions 34348 to 34358. Need to read till 68096
+Rank 1 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 Finished processing reverse loops (and this chunk)
+Rank 0 - parallel computed chunk in 8.18 sec or 818.0 msec per pixel
+Rank 0 - Time remaining: 57.93 msec
+Rank 0 - Started accumulating results for this chunk
+Rank 0 - Finished accumulating results. Writing results of chunk to h5
+Rank 0 - Finished processing up to pixel 260 of 34048.
+Rank 0 - Read positions 260 to 270. Need to read till 34048
+Rank 0 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 Finished processing reverse loops (and this chunk)
+Rank 1 - parallel computed chunk in 6.79 sec or 679.0 msec per pixel
+Rank 1 - Time remaining: 59.56 msec
+Rank 1 - Started accumulating results for this chunk
+Rank 1 - Finished accumulating results. Writing results of chunk to h5
+Rank 1 - Finished processing up to pixel 34358 of 68096.
+Rank 1 - Read positions 34358 to 34368. Need to read till 68096
+Rank 1 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 Finished processing reverse loops (and this chunk)
+Rank 0 - parallel computed chunk in 8.36 sec or 836.0 msec per pixel
+Rank 0 - Time remaining: 60.25 msec
+Rank 0 - Started accumulating results for this chunk
+Rank 0 - Finished accumulating results. Writing results of chunk to h5
+Rank 0 - Finished processing up to pixel 270 of 34048.
+Rank 0 - Read positions 270 to 280. Need to read till 34048
+Rank 0 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 Finished processing reverse loops (and this chunk)
+Rank 1 - parallel computed chunk in 7.47 sec or 747.0 msec per pixel
+Rank 1 - Time remaining: 61.55 msec
+Rank 1 - Started accumulating results for this chunk
+Rank 1 - Finished accumulating results. Writing results of chunk to h5
+Rank 1 - Finished processing up to pixel 34368 of 68096.
+Rank 1 - Read positions 34368 to 34378. Need to read till 68096
+Rank 1 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 Finished processing reverse loops (and this chunk)
+Rank 0 - parallel computed chunk in 8.18 sec or 818.0 msec per pixel
+Rank 0 - Time remaining: 62.57 msec
+Rank 0 - Started accumulating results for this chunk
+Rank 0 - Finished accumulating results. Writing results of chunk to h5
+Rank 0 - Finished processing up to pixel 280 of 34048.
+Rank 0 - Read positions 280 to 290. Need to read till 34048
+Rank 0 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 Finished processing reverse loops (and this chunk)
+Rank 1 - parallel computed chunk in 7.03 sec or 703.0 msec per pixel
+Rank 1 - Time remaining: 63.53 msec
+Rank 1 - Started accumulating results for this chunk
+Rank 1 - Finished accumulating results. Writing results of chunk to h5
+Rank 1 - Finished processing up to pixel 34378 of 68096.
+Rank 1 - Read positions 34378 to 34388. Need to read till 68096
+Rank 1 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 Finished processing reverse loops (and this chunk)
+Rank 0 - parallel computed chunk in 8.3 sec or 830.0 msec per pixel
+Rank 0 - Time remaining: 64.88 msec
+Rank 0 - Started accumulating results for this chunk
+Rank 0 - Finished accumulating results. Writing results of chunk to h5
+Rank 0 - Finished processing up to pixel 290 of 34048.
+Rank 0 - Read positions 290 to 300. Need to read till 34048
+Rank 0 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 Finished processing reverse loops (and this chunk)
+Rank 1 - parallel computed chunk in 7.35 sec or 735.0 msec per pixel
+Rank 1 - Time remaining: 65.52 msec
+Rank 1 - Started accumulating results for this chunk
+Rank 1 - Finished accumulating results. Writing results of chunk to h5
+Rank 1 - Finished processing up to pixel 34388 of 68096.
+Rank 1 - Read positions 34388 to 34398. Need to read till 68096
+Rank 1 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 Finished processing reverse loops (and this chunk)
+Rank 1 - parallel computed chunk in 7.44 sec or 744.0 msec per pixel
+Rank 1 - Time remaining: 67.5 msec
+Rank 1 - Started accumulating results for this chunk
+Rank 1 - Finished accumulating results. Writing results of chunk to h5
+Rank 1 - Finished processing up to pixel 34398 of 68096.
+Rank 1 - Read positions 34398 to 34408. Need to read till 68096
+Rank 1 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 Finished processing reverse loops (and this chunk)
+Rank 0 - parallel computed chunk in 8.44 sec or 844.0 msec per pixel
+Rank 0 - Time remaining: 67.2 msec
+Rank 0 - Started accumulating results for this chunk
+Rank 0 - Finished accumulating results. Writing results of chunk to h5
+Rank 0 - Finished processing up to pixel 300 of 34048.
+Rank 0 - Read positions 300 to 310. Need to read till 34048
+Rank 0 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 Finished processing reverse loops (and this chunk)
+Rank 1 - parallel computed chunk in 7.08 sec or 708.0 msec per pixel
+Rank 1 - Time remaining: 69.49 msec
+Rank 1 - Started accumulating results for this chunk
+Rank 1 - Finished accumulating results. Writing results of chunk to h5
+Rank 1 - Finished processing up to pixel 34408 of 68096.
+Rank 1 - Read positions 34408 to 34418. Need to read till 68096
+Rank 1 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 Finished processing reverse loops (and this chunk)
+Rank 0 - parallel computed chunk in 8.44 sec or 844.0 msec per pixel
+Rank 0 - Time remaining: 69.52 msec
+Rank 0 - Started accumulating results for this chunk
+Rank 0 - Finished accumulating results. Writing results of chunk to h5
+Rank 0 - Finished processing up to pixel 310 of 34048.
+Rank 0 - Read positions 310 to 320. Need to read till 34048
+Rank 0 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 Finished processing reverse loops (and this chunk)
+Rank 1 - parallel computed chunk in 7.14 sec or 714.0 msec per pixel
+Rank 1 - Time remaining: 71.48 msec
+Rank 1 - Started accumulating results for this chunk
+Rank 1 - Finished accumulating results. Writing results of chunk to h5
+Rank 1 - Finished processing up to pixel 34418 of 68096.
+Rank 1 - Read positions 34418 to 34428. Need to read till 68096
+Rank 1 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 Finished processing reverse loops (and this chunk)
+Rank 0 - parallel computed chunk in 8.76 sec or 876.0 msec per pixel
+Rank 0 - Time remaining: 71.84 msec
+Rank 0 - Started accumulating results for this chunk
+Rank 0 - Finished accumulating results. Writing results of chunk to h5
+Rank 0 - Finished processing up to pixel 320 of 34048.
+Rank 0 - Read positions 320 to 330. Need to read till 34048
+Rank 0 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 Finished processing reverse loops (and this chunk)
+Rank 1 - parallel computed chunk in 6.97 sec or 697.0 msec per pixel
+Rank 1 - Time remaining: 73.46 msec
+Rank 1 - Started accumulating results for this chunk
+Rank 1 - Finished accumulating results. Writing results of chunk to h5
+Rank 1 - Finished processing up to pixel 34428 of 68096.
+Rank 1 - Read positions 34428 to 34438. Need to read till 68096
+Rank 1 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 Finished processing reverse loops (and this chunk)
+Rank 0 - parallel computed chunk in 8.11 sec or 811.0 msec per pixel
+Rank 0 - Time remaining: 74.15 msec
+Rank 0 - Started accumulating results for this chunk
+Rank 0 - Finished accumulating results. Writing results of chunk to h5
+Rank 0 - Finished processing up to pixel 330 of 34048.
+Rank 0 - Read positions 330 to 340. Need to read till 34048
+Rank 0 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 Finished processing reverse loops (and this chunk)
+Rank 1 - parallel computed chunk in 7.39 sec or 739.0 msec per pixel
+Rank 1 - Time remaining: 75.45 msec
+Rank 1 - Started accumulating results for this chunk
+Rank 1 - Finished accumulating results. Writing results of chunk to h5
+Rank 1 - Finished processing up to pixel 34438 of 68096.
+Rank 1 - Read positions 34438 to 34448. Need to read till 68096
+Rank 1 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 Finished processing reverse loops (and this chunk)
+Rank 0 - parallel computed chunk in 7.88 sec or 788.0 msec per pixel
+Rank 0 - Time remaining: 76.47 msec
+Rank 0 - Started accumulating results for this chunk
+Rank 0 - Finished accumulating results. Writing results of chunk to h5
+Rank 0 - Finished processing up to pixel 340 of 34048.
+Rank 0 - Read positions 340 to 350. Need to read till 34048
+Rank 0 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 Finished processing reverse loops (and this chunk)
+Rank 1 - parallel computed chunk in 7.11 sec or 711.0 msec per pixel
+Rank 1 - Time remaining: 77.43 msec
+Rank 1 - Started accumulating results for this chunk
+Rank 1 - Finished accumulating results. Writing results of chunk to h5
+Rank 1 - Finished processing up to pixel 34448 of 68096.
+Rank 1 - Read positions 34448 to 34458. Need to read till 68096
+Rank 1 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 Finished processing reverse loops (and this chunk)
+Rank 0 - parallel computed chunk in 8.59 sec or 859.0 msec per pixel
+Rank 0 - Time remaining: 78.79 msec
+Rank 0 - Started accumulating results for this chunk
+Rank 0 - Finished accumulating results. Writing results of chunk to h5
+Rank 0 - Finished processing up to pixel 350 of 34048.
+Rank 0 - Read positions 350 to 360. Need to read till 34048
+Rank 0 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 Finished processing reverse loops (and this chunk)
+Rank 1 - parallel computed chunk in 7.04 sec or 704.0 msec per pixel
+Rank 1 - Time remaining: 79.42 msec
+Rank 1 - Started accumulating results for this chunk
+Rank 1 - Finished accumulating results. Writing results of chunk to h5
+Rank 1 - Finished processing up to pixel 34458 of 68096.
+Rank 1 - Read positions 34458 to 34468. Need to read till 68096
+Rank 1 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 Finished processing reverse loops (and this chunk)
+Rank 1 - parallel computed chunk in 6.9 sec or 690.0 msec per pixel
+Rank 1 - Time remaining: 81.4 msec
+Rank 1 - Started accumulating results for this chunk
+Rank 1 - Finished accumulating results. Writing results of chunk to h5
+Rank 1 - Finished processing up to pixel 34468 of 68096.
+Rank 1 - Read positions 34468 to 34478. Need to read till 68096
+Rank 1 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 Finished processing reverse loops (and this chunk)
+Rank 0 - parallel computed chunk in 8.3 sec or 830.0 msec per pixel
+Rank 0 - Time remaining: 81.11 msec
+Rank 0 - Started accumulating results for this chunk
+Rank 0 - Finished accumulating results. Writing results of chunk to h5
+Rank 0 - Finished processing up to pixel 360 of 34048.
+Rank 0 - Read positions 360 to 370. Need to read till 34048
+Rank 0 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 Finished processing reverse loops (and this chunk)
+Rank 1 - parallel computed chunk in 7.19 sec or 719.0 msec per pixel
+Rank 1 - Time remaining: 83.39 msec
+Rank 1 - Started accumulating results for this chunk
+Rank 1 - Finished accumulating results. Writing results of chunk to h5
+Rank 1 - Finished processing up to pixel 34478 of 68096.
+Rank 1 - Read positions 34478 to 34488. Need to read till 68096
+Rank 1 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 Finished processing reverse loops (and this chunk)
+Rank 0 - parallel computed chunk in 8.19 sec or 819.0 msec per pixel
+Rank 0 - Time remaining: 83.42 msec
+Rank 0 - Started accumulating results for this chunk
+Rank 0 - Finished accumulating results. Writing results of chunk to h5
+Rank 0 - Finished processing up to pixel 370 of 34048.
+Rank 0 - Read positions 370 to 380. Need to read till 34048
+Rank 0 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 Finished processing reverse loops (and this chunk)
+Rank 1 - parallel computed chunk in 6.93 sec or 693.0 msec per pixel
+Rank 1 - Time remaining: 85.37 msec
+Rank 1 - Started accumulating results for this chunk
+Rank 1 - Finished accumulating results. Writing results of chunk to h5
+Rank 1 - Finished processing up to pixel 34488 of 68096.
+Rank 1 - Read positions 34488 to 34498. Need to read till 68096
+Rank 1 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 Finished processing reverse loops (and this chunk)
+Rank 0 - parallel computed chunk in 8.22 sec or 822.0 msec per pixel
+Rank 0 - Time remaining: 85.74 msec
+Rank 0 - Started accumulating results for this chunk
+Rank 0 - Finished accumulating results. Writing results of chunk to h5
+Rank 0 - Finished processing up to pixel 380 of 34048.
+Rank 0 - Read positions 380 to 390. Need to read till 34048
+Rank 0 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 Finished processing reverse loops (and this chunk)
+Rank 1 - parallel computed chunk in 7.58 sec or 758.0 msec per pixel
+Rank 1 - Time remaining: 87.36 msec
+Rank 1 - Started accumulating results for this chunk
+Rank 1 - Finished accumulating results. Writing results of chunk to h5
+Rank 1 - Finished processing up to pixel 34498 of 68096.
+Rank 1 - Read positions 34498 to 34508. Need to read till 68096
+Rank 1 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 Finished processing reverse loops (and this chunk)
+Rank 0 - parallel computed chunk in 7.87 sec or 787.0 msec per pixel
+Rank 0 - Time remaining: 88.06 msec
+Rank 0 - Started accumulating results for this chunk
+Rank 0 - Finished accumulating results. Writing results of chunk to h5
+Rank 0 - Finished processing up to pixel 390 of 34048.
+Rank 0 - Read positions 390 to 400. Need to read till 34048
+Rank 0 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 Finished processing reverse loops (and this chunk)
+Rank 1 - parallel computed chunk in 7.65 sec or 765.0 msec per pixel
+Rank 1 - Time remaining: 89.34 msec
+Rank 1 - Started accumulating results for this chunk
+Rank 1 - Finished accumulating results. Writing results of chunk to h5
+Rank 1 - Finished processing up to pixel 34508 of 68096.
+Rank 1 - Read positions 34508 to 34518. Need to read till 68096
+Rank 1 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 Finished processing reverse loops (and this chunk)
+Rank 0 - parallel computed chunk in 8.39 sec or 839.0 msec per pixel
+Rank 0 - Time remaining: 90.38 msec
+Rank 0 - Started accumulating results for this chunk
+Rank 0 - Finished accumulating results. Writing results of chunk to h5
+Rank 0 - Finished processing up to pixel 400 of 34048.
+Rank 0 - Read positions 400 to 410. Need to read till 34048
+Rank 0 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 1 Finished processing reverse loops (and this chunk)
+Rank 1 - parallel computed chunk in 7.54 sec or 754.0 msec per pixel
+Rank 1 - Time remaining: 91.33 msec
+Rank 1 - Started accumulating results for this chunk
+Rank 1 - Finished accumulating results. Writing results of chunk to h5
+Rank 1 - Finished processing up to pixel 34518 of 68096.
+Rank 1 - Read positions 34518 to 34528. Need to read till 68096
+Rank 1 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+Rank 0 finished processing forward sections. Now working on reverse sections....
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+1 cores requested.
+computational jobs per core = 10. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 1 cores (requested 1 cores)
+Computing serially ...
+--------------------------------------------------------------------------
+ORTE has lost communication with its daemon located on node:
+
+  hostname:  or-pbs-c170.ornl.gov
+
+This is usually due to either a failure of the TCP network
+connection to the node, or possibly an internal failure of
+the daemon itself. We cannot recover from this failure, and
+therefore will terminate the job.
+
+--------------------------------------------------------------------------
