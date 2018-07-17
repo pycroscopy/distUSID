@@ -1,0 +1,55 @@
+#! /bin/bash
+#PBS -A MAT134
+#PBS -l walltime=2:00:00
+#PBS -j oe
+#PBS -l nodes=4
+
+source $MODULESHOME/init/bash
+
+module load python
+
+module load python_numpy/1.9.2
+
+module load python_mpi4py/2.0.0
+
+module load python_h5py/2.6.0_parallel
+
+module load python_scipy/0.12.0
+
+module load python_matplotlib
+
+START_DIR=$HOME/BEAM
+
+WORK_DIR=$MEMBERWORK/mat134
+
+DATA_NAME=elisabeth_01.h5
+
+SCRIPT_NAME=p_clean_windows.py
+
+SOURCE_DATA=$START_DIR/$DATA_NAME
+
+SOURCE_SCRIPT=$START_DIR/$SCRIPT_NAME
+
+DATA_PATH=$WORK_DIR/$DATA_NAME
+
+SCRIPT_PATH=$WORK_DIR/$SCRIPT_NAME
+
+echo $SOURCE_DATA
+echo $SOURCE_SCRIPT
+
+cp $SOURCE_DATA $DATA_PATH
+
+cp $SOURCE_SCRIPT $SCRIPT_PATH
+
+cd $WORK_DIR
+
+pwd
+
+ls -la
+
+DATASET_PATH=//Measurement_000/Channel_000/Raw_Data-Windowing_000/Image_Windows-SVD_000
+
+aprun -n 16 -S 2 python $SCRIPT_PATH -i $DATA_PATH -d $DATASET_PATH -c 128
+#aprun -n 4 -N 1 python $SCRIPT_PATH -i $DATA_PATH -d $DATASET_PATH -c 128
+
+cp $DATA_PATH $START_DIR/test_out.h5
