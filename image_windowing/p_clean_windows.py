@@ -3,6 +3,8 @@ Created on Oct 14, 2016
 
 @author: Chris Smith -- csmith55@utk.edu
 """
+from __future__ import division, print_function, absolute_import
+
 import sys
 import os
 import getopt
@@ -10,6 +12,7 @@ import h5py
 import numpy as np
 from mpi4py import MPI
 # import matplotlib.pyplot as plt
+
 
 def gen_batches(n, batch_size, start=0):
     """
@@ -207,35 +210,35 @@ def clean_and_build_components(h5_svd, comm, comp_slice=None):
     '''
     Create slice object from the positions
     '''
-    # Get batches of positions for each process
+    # Get batches of positions for each rank
     n_pos = h5_pos.shape[0]
     win_batches = gen_batches_mpi(n_pos, mpi_size)
 
-    # Create array of windows for each process
+    # Create array of windows for each rank
     if mpi_rank == 0:
-        print '# of positions:  {}'.format(n_pos)
+        print('# of positions:  {}'.format(n_pos))
 
         windows = [h5_pos[my_batch] for my_batch in win_batches]
 
         for rank in range(mpi_size):
-            print 'Process {} has {} windows.'.format(rank, windows[rank].shape[0])
+            print('Rank {} has {} windows.'.format(rank, windows[rank].shape[0]))
 
-        # print 'Shape of windows: {}'.format(windows.shape)
+        # print('Shape of windows: {}'.format(windows.shape))
 
     else:
-        # Only need to do this on one process
+        # Only need to do this on one rank
         windows = None
 
     comm.Barrier()
-    # Initialize the windows for a specific process
+    # Initialize the windows for a specific rank
     # my_wins = np.zeros(shape=[windows[mpi_rank].shape[0], h5_pos.shape[1]], dtype=h5_pos.dtype)
 
-    # print "Pre-Scatter \t my rank: {},\tmy_wins: {}".format(mpi_rank, my_wins)
+    # print("Pre-Scatter \t my rank: {},\tmy_wins: {}".format(mpi_rank, my_wins))
 
-    # Send each process it's set of windows
+    # Send each rank it's set of windows
     my_wins = comm.scatter(windows, root=0)
 
-    # print "Post-scatter \t my rank: {},\tmy_wins: {}".format(mpi_rank, my_wins)
+    # print("Post-scatter \t my rank: {},\tmy_wins: {}".format(mpi_rank, my_wins))
 
     # Turn array of starting positions into a list of slices
     my_slices = [[slice(x, x + win_x), slice(y, y + win_y)] for x, y in my_wins]
@@ -272,10 +275,10 @@ def clean_and_build_components(h5_svd, comm, comp_slice=None):
 
     if mpi_size > 1:
         if mpi_rank == 0:
-            # print 'max memory', max_memory
-            # print 'memory used per window', mem_per_win
-            # print 'free memory', free_mem
-            # print 'batch size per process', my_batch_size
+            # print('max memory', max_memory)
+            # print('memory used per window', mem_per_win)
+            # print('free memory', free_mem)
+            # print('batch size per rank', my_batch_size)
     
             comm.isend(n_my_wins, dest=1)
     
@@ -290,7 +293,7 @@ def clean_and_build_components(h5_svd, comm, comp_slice=None):
     
     comm.Barrier()
 
-    print "my rank: {}\tmy start: {}".format(mpi_rank, my_start)
+    print("my rank: {}\tmy start: {}".format(mpi_rank, my_start))
 
     if my_batch_size < 1:
         raise MemoryError('Not enough memory to perform Image Cleaning.')
@@ -304,26 +307,26 @@ def clean_and_build_components(h5_svd, comm, comp_slice=None):
     add current window to total.
     '''
     for ibatch, (my_batch, my_win_batch) in enumerate(zip(batch_slices, batch_win_slices)):
-        # print "my rank: {}\tmy batch: {}\tmy win batch: {}".format(mpi_rank, my_batch, my_win_batch)
+        # print("my rank: {}\tmy batch: {}\tmy win batch: {}".format(mpi_rank, my_batch, my_win_batch))
         batch_wins = np.reshape(h5_U[my_batch, comp_slice][:, None, :] * ds_V[None, :, :], [-1, win_x, win_y, num_comps])
-        # print mpi_rank, batch_wins.shape, len(my_slices)
+        # print(mpi_rank, batch_wins.shape, len(my_slices))
         for islice, this_slice in enumerate(my_slices[my_win_batch]):
             iwin = ibatch * my_batch_size + islice + my_start
             if iwin % np.rint(n_my_wins / 10) == 0:
                 per_done = np.rint(100 * iwin / n_my_wins)
-                print('Process {} Reconstructing Image...{}% -- step # {} -- window {} -- slice {}'.format(mpi_rank,
+                print('Rank {} Reconstructing Image...{}% -- step # {} -- window {} -- slice {}'.format(mpi_rank,
                                                                                                            per_done,
                                                                                                            islice,
                                                                                                            iwin,
                                                                                                            this_slice))
             # if mpi_rank == 1:
-            #     print "my rank: {}\tislice: {}\tthis_slice: {}\t iwin: {}".format(mpi_rank, islice, this_slice, iwin)
+            #     print("my rank: {}\tislice: {}\tthis_slice: {}\t iwin: {}".format(mpi_rank, islice, this_slice, iwin))
             my_counts[this_slice] += ones
-            # print "my rank: {}\tthis_slice: {}\tislice: {}\tmy_start: {}".format(mpi_rank,
+            # print("my rank: {}\tthis_slice: {}\tislice: {}\tmy_start: {}".format(mpi_rank,
             #                                                                      this_slice,
             #                                                                      islice,
-            #                                                                      my_start)
-            # print "my image: {}\tbatch_wins: {}".format(my_clean_image.shape, batch_wins.shape)
+            #                                                                      my_start))
+            # print("my image: {}\tbatch_wins: {}".format(my_clean_image.shape, batch_wins.shape))
             my_clean_image[this_slice] += batch_wins[islice]
 
         del batch_wins
@@ -331,7 +334,7 @@ def clean_and_build_components(h5_svd, comm, comp_slice=None):
     comm.Barrier()
 
     if mpi_rank == 0:
-        print 'Finished summing chunks of windows on all processors.  Combining them with Allreduce.'
+        print('Finished summing chunks of windows on all ranks.  Combining them with All-reduce.')
 
 
     comm.Allreduce(my_counts, counts, op=MPI.SUM)
@@ -351,14 +354,14 @@ def clean_and_build_components(h5_svd, comm, comp_slice=None):
     #         pass
     #     comm.Barrier()
 
-    # print 'my rank: {},\t my_counts=0: {}'.format(mpi_rank, np.argwhere(my_counts==0))
-    # print 'my rank: {},\t counts=0: {}'.format(mpi_rank, np.argwhere(counts==0))
+    # print('my rank: {},\t my_counts=0: {}'.format(mpi_rank, np.argwhere(my_counts==0)))
+    # print('my rank: {},\t counts=0: {}'.format(mpi_rank, np.argwhere(counts==0)))
     #
-    # print 'my rank: {},\t my_counts: {}'.format(mpi_rank, my_counts)
-    # print 'my rank: {},\t counts: {}'.format(mpi_rank, counts)
+    # print('my rank: {},\t my_counts: {}'.format(mpi_rank, my_counts))
+    # print('my rank: {},\t counts: {}'.format(mpi_rank, counts))
     #
-    # print 'my rank: {},\t my_clean_image: {}'.format(mpi_rank, my_clean_image)
-    # print 'my rank: {},\t clean_image: {}'.format(mpi_rank, clean_image)
+    # print('my rank: {},\t my_clean_image: {}'.format(mpi_rank, my_clean_image))
+    # print('my rank: {},\t clean_image: {}'.format(mpi_rank, clean_image))
 
     del my_counts, my_clean_image, ds_V
 
@@ -370,7 +373,7 @@ def clean_and_build_components(h5_svd, comm, comp_slice=None):
     clean_image[np.isnan(clean_image)] = 0
 
     # if mpi_rank == 0:
-    #     print 'Plotting final image.'
+    #     print('Plotting final image.')
     #     clean_image.dump('image_array_final')
     #     plt.imsave('image_total.png', np.sum(clean_image, axis=2))
 
@@ -380,7 +383,7 @@ def clean_and_build_components(h5_svd, comm, comp_slice=None):
     Write the results to the file
     '''
     if mpi_rank == 0:
-        print 'Creating new group'
+        print('Creating new group')
 
     try:
         h5_clean_grp = h5_svd.create_group('PCA-Cleaned_Image_000')
@@ -393,15 +396,15 @@ def clean_and_build_components(h5_svd, comm, comp_slice=None):
     clean_chunking = calc_chunks([im_x * im_y, num_comps],
                                  clean_image.dtype.itemsize)
     if mpi_rank == 0:
-        print im_x * im_y, num_comps
-        print 'Image chunking {}'.format(clean_chunking)
+        print(im_x * im_y, num_comps)
+        print('Image chunking {}'.format(clean_chunking))
     comm.Barrier()
 
     '''
     Create the datasets
     '''
     if mpi_rank == 0:
-        print 'Creating Cleaned_Image dataset.'
+        print('Creating Cleaned_Image dataset.')
 
     h5_clean = h5_clean_grp.create_dataset('Cleaned_Image',
                                            shape=(im_x * im_y, num_comps),
@@ -428,16 +431,16 @@ def clean_and_build_components(h5_svd, comm, comp_slice=None):
     write_batches = [batch for batch in gen_batches_mpi(im_x*im_y, mpi_size)]
 
     if mpi_rank == 0:
-        print 'Writing image to dataset'
+        print('Writing image to dataset')
 
     clean_image = clean_image.reshape(h5_clean.shape)
 
     comm.Barrier()
-    print 'my rank: {}, I write: {}'.format(mpi_rank, write_batches[mpi_rank])
+    print('my rank: {}, I write: {}'.format(mpi_rank, write_batches[mpi_rank]))
     h5_clean[write_batches[mpi_rank], :] = clean_image[write_batches[mpi_rank], :]
 
     if mpi_rank == 0:
-        print 'image written'
+        print('image written')
 
     comm.Barrier()
     h5_file.flush()
@@ -474,7 +477,7 @@ def get_component_slice(components):
             # If only 2 numbers are given, use them as the start and stop of a slice
             comp_slice = slice(int(components[0]), int(components[1]))
         else:
-            #Convert components to an unsigned integer array
+            # Convert components to an unsigned integer array
             comp_slice = np.uint(np.round(components))
     elif isinstance(components, slice):
         # Components is already a slice
@@ -483,6 +486,7 @@ def get_component_slice(components):
         raise TypeError('Unsupported component type supplied to clean_and_build.  Allowed types are integer, numpy array, list, tuple, and slice.')
 
     return comp_slice
+
 
 if __name__ == '__main__':
     
@@ -498,11 +502,12 @@ if __name__ == '__main__':
         '''
         Print a simple help
         '''
-        print 'arg:',arg,
-        print 'argval:',argval
+        if comm.rank == 0:
+            print('arg:',arg)
+            print('argval:', argval)
         
         if arg == '-h':
-            print 'clean_windows.py -i <inputfile> -d <path-to-svd-group> [-c <components-to-keep>]'
+            print('clean_windows.py -i <inputfile> -d <path-to-svd-group> [-c <components-to-keep>]')
             sys.exit()
         elif arg == '-i':
             h5_path = argval
@@ -511,8 +516,8 @@ if __name__ == '__main__':
         elif arg == '-c':
             retained_components = np.int(argval)
         else:
-            print 'Unknown argument, value pair returned.'
-            print 'This should never happen.'
+            print('Unknown argument, value pair returned.')
+            print('This should never happen.')
             raise NotImplementedError('Unknown argument, value pair.')        
     
     '''
@@ -543,11 +548,11 @@ if __name__ == '__main__':
     comm.Barrier()
 
     if comm.rank == 0:
-        print 'Image has been successfully cleaned and rebuilt.'
-        print 'Cleaned Image dataset located at {}'.format(h5_clean.name)
+        print('Image has been successfully cleaned and rebuilt.')
+        print('Cleaned Image dataset located at {}'.format(h5_clean.name))
 
     comm.Barrier()
     h5_file.close()
     comm.Barrier()
     if comm.rank == 0:
-        print 'File closed'
+        print('File closed')
