@@ -9,7 +9,7 @@ import getopt
 import h5py
 import numpy as np
 from mpi4py import MPI
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 def gen_batches(n, batch_size, start=0):
     """
