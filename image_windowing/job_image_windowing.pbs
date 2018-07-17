@@ -1,0 +1,47 @@
+#!/bin/bash
+
+### Set the job name. Your output files will share this name.
+#PBS -N mpiImageCleaning
+### Enter your email address. Errors will be emailed to this address.
+#PBS -M somnaths@ornl.gov
+### Node spec, number of nodes and processors per node that you desire.
+### One node and 16 cores per node in this case.
+#PBS -l nodes=2:ppn=36
+### Tell PBS the anticipated runtime for your job, where walltime=HH:MM:S.
+#PBS -l walltime=0:00:5:0
+### The LDAP group list they need; cades-birthright in this case.
+#PBS -W group_list=cades-ccsd
+### Your account type. Birthright in this case.
+#PBS -A ccsd
+### Quality of service set to burst.
+#PBS -l qos=std
+
+
+## main program ##
+
+### Remove old modules to ensure a clean state.
+module purge
+
+### Load modules (your programming environment)
+module load PE-gnu
+### Load custom python virtual environment
+module load python/3.6.3
+
+### Check loaded modules
+module list
+
+### Switch to the working directory (path of your PBS script).
+cd $HOME/mpi_tutorials/image_cleaning
+
+### Show current directory.
+pwd
+
+### MPI run followed by the name/path of the binary.
+SOURCEH5FILE=image_02_windows_svd.h5
+H5PATH=image_02.h5
+SVDPATH=/Measurement_000/Channel_000/Raw_Data-Windowing_000/Image_Windows-SVD_000
+NUMCOMPS=24
+SCRIPT=p_clean_windows.py
+cp $SOURCEH5FILE $H5PATH
+### clean_windows.py -i <inputfile> -d <path-to-svd-group> [-c <components-to-keep>]
+mpiexec --map-by ppr:1:node python $SCRIPT -i $H5PATH -d $SVDPATH -c $NUMCOMPS
