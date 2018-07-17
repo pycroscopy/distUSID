@@ -186,7 +186,8 @@ def clean_and_build_components(h5_svd, comm, comp_slice=None):
         h5_U = h5_svd['U']
         h5_V = h5_svd['V']
 
-        print('Cleaning the image by removing unwanted components.')
+        if mpi_rank == 0:
+            print('Cleaning the image by removing unwanted components.')
     except:
         raise
 
