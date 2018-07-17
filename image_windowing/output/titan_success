@@ -1,0 +1,293 @@
+/ccs/home/somnaths/mpi_tutorials/image_cleaning/image_02_windows_svd.h5
+/ccs/home/somnaths/mpi_tutorials/image_cleaning/p_clean_windows.py
+/lustre/atlas/scratch/somnaths/stf011/testing/image_cleaning
+total 172068
+drwxr-xr-x 2 somnaths somnaths      4096 Jul 17 15:16 .
+drwxr-xr-x 6 somnaths somnaths      4096 Jul 17 15:07 ..
+-rw------- 1 somnaths somnaths 176502380 Jul 17 15:33 image_02_windows_svd.h5
+-rw------- 1 somnaths somnaths     18235 Jul 17 15:33 p_clean_windows.py
+arg: -i argval: /lustre/atlas/scratch/somnaths/stf011/testing/image_cleaning/image_02_windows_svd.h5
+arg: -i argval: /lustre/atlas/scratch/somnaths/stf011/testing/image_cleaning/image_02_windows_svd.h5
+arg: -i argval: /lustre/atlas/scratch/somnaths/stf011/testing/image_cleaning/image_02_windows_svd.h5
+arg: -d argval: //Measurement_000/Channel_000/Raw_Data-Windowing_000/Image_Windows-SVD_000
+arg: -d argval: //Measurement_000/Channel_000/Raw_Data-Windowing_000/Image_Windows-SVD_000
+arg: -c argval: 24
+arg: -c argval: 24
+arg: -d argval: //Measurement_000/Channel_000/Raw_Data-Windowing_000/Image_Windows-SVD_000
+arg: -c argval: 24
+arg: -i argval: /lustre/atlas/scratch/somnaths/stf011/testing/image_cleaning/image_02_windows_svd.h5
+arg: -d argval: //Measurement_000/Channel_000/Raw_Data-Windowing_000/Image_Windows-SVD_000
+arg: -c argval: 24
+arg: -i argval: /lustre/atlas/scratch/somnaths/stf011/testing/image_cleaning/image_02_windows_svd.h5
+arg: -i argval: /lustre/atlas/scratch/somnaths/stf011/testing/image_cleaning/image_02_windows_svd.h5
+arg: -i argval: /lustre/atlas/scratch/somnaths/stf011/testing/image_cleaning/image_02_windows_svd.h5
+arg: -d argval: //Measurement_000/Channel_000/Raw_Data-Windowing_000/Image_Windows-SVD_000
+arg: -d argval: //Measurement_000/Channel_000/Raw_Data-Windowing_000/Image_Windows-SVD_000
+arg: -d argval: //Measurement_000/Channel_000/Raw_Data-Windowing_000/Image_Windows-SVD_000
+arg: -c argval: 24
+arg: -c argval: 24
+arg: -c argval: 24
+arg: -i argval: /lustre/atlas/scratch/somnaths/stf011/testing/image_cleaning/image_02_windows_svd.h5
+arg: -d argval: //Measurement_000/Channel_000/Raw_Data-Windowing_000/Image_Windows-SVD_000
+arg: -c argval: 24
+arg: -i argval: /lustre/atlas/scratch/somnaths/stf011/testing/image_cleaning/image_02_windows_svd.h5
+arg: -i argval: /lustre/atlas/scratch/somnaths/stf011/testing/image_cleaning/image_02_windows_svd.h5
+arg: -i argval: /lustre/atlas/scratch/somnaths/stf011/testing/image_cleaning/image_02_windows_svd.h5
+arg: -d argval: //Measurement_000/Channel_000/Raw_Data-Windowing_000/Image_Windows-SVD_000
+arg: -d argval: //Measurement_000/Channel_000/Raw_Data-Windowing_000/Image_Windows-SVD_000
+arg: -c argval: 24
+arg: -c argval: 24
+arg: -d argval: //Measurement_000/Channel_000/Raw_Data-Windowing_000/Image_Windows-SVD_000
+arg: -c argval: 24
+arg: -i argval: /lustre/atlas/scratch/somnaths/stf011/testing/image_cleaning/image_02_windows_svd.h5
+arg: -d argval: //Measurement_000/Channel_000/Raw_Data-Windowing_000/Image_Windows-SVD_000
+arg: -c argval: 24
+arg: -i argval: /lustre/atlas/scratch/somnaths/stf011/testing/image_cleaning/image_02_windows_svd.h5
+arg: -d argval: //Measurement_000/Channel_000/Raw_Data-Windowing_000/Image_Windows-SVD_000
+arg: -c argval: 24
+arg: -i argval: /lustre/atlas/scratch/somnaths/stf011/testing/image_cleaning/image_02_windows_svd.h5
+arg: -d argval: //Measurement_000/Channel_000/Raw_Data-Windowing_000/Image_Windows-SVD_000
+arg: -i argval: /lustre/atlas/scratch/somnaths/stf011/testing/image_cleaning/image_02_windows_svd.h5
+arg: -c argval: 24
+arg: -d argval: //Measurement_000/Channel_000/Raw_Data-Windowing_000/Image_Windows-SVD_000
+arg: -c argval: 24
+arg: -i argval: /lustre/atlas/scratch/somnaths/stf011/testing/image_cleaning/image_02_windows_svd.h5
+arg: -d argval: //Measurement_000/Channel_000/Raw_Data-Windowing_000/Image_Windows-SVD_000
+arg: -c argval: 24
+Cleaning the image by removing unwanted components.
+Cleaning the image by removing unwanted components.
+Cleaning the image by removing unwanted components.
+Cleaning the image by removing unwanted components.
+Cleaning the image by removing unwanted components.
+Cleaning the image by removing unwanted components.
+Cleaning the image by removing unwanted components.
+Cleaning the image by removing unwanted components.
+Cleaning the image by removing unwanted components.
+Cleaning the image by removing unwanted components.
+Cleaning the image by removing unwanted components.
+Cleaning the image by removing unwanted components.
+Cleaning the image by removing unwanted components.
+Cleaning the image by removing unwanted components.
+Cleaning the image by removing unwanted components.
+Cleaning the image by removing unwanted components.
+# of positions:  53361
+Process 0 has 3336 windows.
+Process 1 has 3335 windows.
+Process 2 has 3335 windows.
+Process 3 has 3335 windows.
+Process 4 has 3335 windows.
+Process 5 has 3335 windows.
+Process 6 has 3335 windows.
+Process 7 has 3335 windows.
+Process 8 has 3335 windows.
+Process 9 has 3335 windows.
+Process 10 has 3335 windows.
+Process 11 has 3335 windows.
+Process 12 has 3335 windows.
+Process 13 has 3335 windows.
+Process 14 has 3335 windows.
+Process 15 has 3335 windows.
+my rank: 3	my start: 10006
+my rank: 1	my start: 3336
+my rank: 0	my start: 0
+my rank: 2	my start: 6671
+my rank: 12	my start: 40021
+my rank: 15	my start: 50026
+my rank: 14	my start: 46691
+my rank: 13	my start: 43356
+my rank: 9	my start: 30016
+my rank: 11	my start: 36686
+my rank: 10	my start: 33351
+my rank: 8	my start: 26681
+my rank: 4	my start: 13341
+my rank: 5	my start: 16676
+my rank: 6	my start: 20011
+my rank: 7	my start: 23346
+Process 0 Reconstructing Image...0.0% -- step # 0 -- window 0 -- slice [slice(0, 26, None), slice(0, 26, None)]
+Process 3 Reconstructing Image...309.0% -- step # 317 -- window 10323 -- slice [slice(44, 70, None), slice(159, 185, None)]
+Process 2 Reconstructing Image...209.0% -- step # 322 -- window 6993 -- slice [slice(30, 56, None), slice(63, 89, None)]
+Process 7 Reconstructing Image...708.0% -- step # 297 -- window 23643 -- slice [slice(102, 128, None), slice(81, 107, None)]
+Process 6 Reconstructing Image...609.0% -- step # 302 -- window 20313 -- slice [slice(87, 113, None), slice(216, 242, None)]
+Process 15 Reconstructing Image...1507.0% -- step # 257 -- window 50283 -- slice [slice(217, 243, None), slice(156, 182, None)]
+Process 14 Reconstructing Image...1407.0% -- step # 262 -- window 46953 -- slice [slice(203, 229, None), slice(60, 86, None)]
+Process 11 Reconstructing Image...1108.0% -- step # 277 -- window 36963 -- slice [slice(160, 186, None), slice(3, 29, None)]
+Process 10 Reconstructing Image...1008.0% -- step # 282 -- window 33633 -- slice [slice(145, 171, None), slice(138, 164, None)]
+Process 1 Reconstructing Image...109.0% -- step # 327 -- window 3663 -- slice [slice(15, 41, None), slice(198, 224, None)]
+Process 0 Reconstructing Image...9.0% -- step # 333 -- window 333 -- slice [slice(1, 27, None), slice(102, 128, None)]
+Process 5 Reconstructing Image...509.0% -- step # 307 -- window 16983 -- slice [slice(73, 99, None), slice(120, 146, None)]
+Process 3 Reconstructing Image...319.0% -- step # 650 -- window 10656 -- slice [slice(46, 72, None), slice(30, 56, None)]
+Process 4 Reconstructing Image...409.0% -- step # 312 -- window 13653 -- slice [slice(59, 85, None), slice(24, 50, None)]
+Process 2 Reconstructing Image...219.0% -- step # 655 -- window 7326 -- slice [slice(31, 57, None), slice(165, 191, None)]
+Process 7 Reconstructing Image...718.0% -- step # 630 -- window 23976 -- slice [slice(103, 129, None), slice(183, 209, None)]
+Process 6 Reconstructing Image...619.0% -- step # 635 -- window 20646 -- slice [slice(89, 115, None), slice(87, 113, None)]
+Process 15 Reconstructing Image...1517.0% -- step # 590 -- window 50616 -- slice [slice(219, 245, None), slice(27, 53, None)]
+Process 9 Reconstructing Image...908.0% -- step # 287 -- window 30303 -- slice [slice(131, 157, None), slice(42, 68, None)]
+Process 12 Reconstructing Image...1208.0% -- step # 272 -- window 40293 -- slice [slice(174, 200, None), slice(99, 125, None)]
+Process 14 Reconstructing Image...1417.0% -- step # 595 -- window 47286 -- slice [slice(204, 230, None), slice(162, 188, None)]
+Process 13 Reconstructing Image...1308.0% -- step # 267 -- window 43623 -- slice [slice(188, 214, None), slice(195, 221, None)]
+Process 11 Reconstructing Image...1118.0% -- step # 610 -- window 37296 -- slice [slice(161, 187, None), slice(105, 131, None)]
+Process 8 Reconstructing Image...808.0% -- step # 292 -- window 26973 -- slice [slice(116, 142, None), slice(177, 203, None)]
+Process 10 Reconstructing Image...1018.0% -- step # 615 -- window 33966 -- slice [slice(147, 173, None), slice(9, 35, None)]
+Process 1 Reconstructing Image...119.0% -- step # 660 -- window 3996 -- slice [slice(17, 43, None), slice(69, 95, None)]
+Process 5 Reconstructing Image...519.0% -- step # 640 -- window 17316 -- slice [slice(74, 100, None), slice(222, 248, None)]
+Process 0 Reconstructing Image...19.0% -- step # 666 -- window 666 -- slice [slice(2, 28, None), slice(204, 230, None)]
+Process 3 Reconstructing Image...329.0% -- step # 983 -- window 10989 -- slice [slice(47, 73, None), slice(132, 158, None)]
+Process 4 Reconstructing Image...419.0% -- step # 645 -- window 13986 -- slice [slice(60, 86, None), slice(126, 152, None)]
+Process 2 Reconstructing Image...229.0% -- step # 988 -- window 7659 -- slice [slice(33, 59, None), slice(36, 62, None)]
+Process 7 Reconstructing Image...728.0% -- step # 963 -- window 24309 -- slice [slice(105, 131, None), slice(54, 80, None)]
+Process 6 Reconstructing Image...629.0% -- step # 968 -- window 20979 -- slice [slice(90, 116, None), slice(189, 215, None)]
+Process 15 Reconstructing Image...1527.0% -- step # 923 -- window 50949 -- slice [slice(220, 246, None), slice(129, 155, None)]
+Process 9 Reconstructing Image...918.0% -- step # 620 -- window 30636 -- slice [slice(132, 158, None), slice(144, 170, None)]
+Process 14 Reconstructing Image...1427.0% -- step # 928 -- window 47619 -- slice [slice(206, 232, None), slice(33, 59, None)]
+Process 12 Reconstructing Image...1218.0% -- step # 605 -- window 40626 -- slice [slice(175, 201, None), slice(201, 227, None)]
+Process 13 Reconstructing Image...1318.0% -- step # 600 -- window 43956 -- slice [slice(190, 216, None), slice(66, 92, None)]
+Process 11 Reconstructing Image...1128.0% -- step # 943 -- window 37629 -- slice [slice(162, 188, None), slice(207, 233, None)]
+Process 8 Reconstructing Image...818.0% -- step # 625 -- window 27306 -- slice [slice(118, 144, None), slice(48, 74, None)]
+Process 10 Reconstructing Image...1028.0% -- step # 948 -- window 34299 -- slice [slice(148, 174, None), slice(111, 137, None)]
+Process 1 Reconstructing Image...129.0% -- step # 993 -- window 4329 -- slice [slice(18, 44, None), slice(171, 197, None)]
+Process 5 Reconstructing Image...529.0% -- step # 973 -- window 17649 -- slice [slice(76, 102, None), slice(93, 119, None)]
+Process 3 Reconstructing Image...339.0% -- step # 1316 -- window 11322 -- slice [slice(49, 75, None), slice(3, 29, None)]
+Process 0 Reconstructing Image...29.0% -- step # 999 -- window 999 -- slice [slice(4, 30, None), slice(75, 101, None)]
+Process 2 Reconstructing Image...239.0% -- step # 1321 -- window 7992 -- slice [slice(34, 60, None), slice(138, 164, None)]
+Process 4 Reconstructing Image...429.0% -- step # 978 -- window 14319 -- slice [slice(61, 87, None), slice(228, 254, None)]
+Process 7 Reconstructing Image...738.0% -- step # 1296 -- window 24642 -- slice [slice(106, 132, None), slice(156, 182, None)]
+Process 6 Reconstructing Image...639.0% -- step # 1301 -- window 21312 -- slice [slice(92, 118, None), slice(60, 86, None)]
+Process 15 Reconstructing Image...1537.0% -- step # 1256 -- window 51282 -- slice [slice(222, 248, None), slice(0, 26, None)]
+Process 9 Reconstructing Image...928.0% -- step # 953 -- window 30969 -- slice [slice(134, 160, None), slice(15, 41, None)]
+Process 14 Reconstructing Image...1437.0% -- step # 1261 -- window 47952 -- slice [slice(207, 233, None), slice(135, 161, None)]
+Process 12 Reconstructing Image...1228.0% -- step # 938 -- window 40959 -- slice [slice(177, 203, None), slice(72, 98, None)]
+Process 11 Reconstructing Image...1138.0% -- step # 1276 -- window 37962 -- slice [slice(164, 190, None), slice(78, 104, None)]
+Process 13 Reconstructing Image...1328.0% -- step # 933 -- window 44289 -- slice [slice(191, 217, None), slice(168, 194, None)]
+Process 10 Reconstructing Image...1038.0% -- step # 1281 -- window 34632 -- slice [slice(149, 175, None), slice(213, 239, None)]
+Process 8 Reconstructing Image...828.0% -- step # 958 -- window 27639 -- slice [slice(119, 145, None), slice(150, 176, None)]
+Process 1 Reconstructing Image...139.0% -- step # 1326 -- window 4662 -- slice [slice(20, 46, None), slice(42, 68, None)]
+Process 5 Reconstructing Image...539.0% -- step # 1306 -- window 17982 -- slice [slice(77, 103, None), slice(195, 221, None)]
+Process 3 Reconstructing Image...349.0% -- step # 1649 -- window 11655 -- slice [slice(50, 76, None), slice(105, 131, None)]
+Process 0 Reconstructing Image...39.0% -- step # 1332 -- window 1332 -- slice [slice(5, 31, None), slice(177, 203, None)]
+Process 2 Reconstructing Image...249.0% -- step # 1654 -- window 8325 -- slice [slice(36, 62, None), slice(9, 35, None)]
+Process 4 Reconstructing Image...439.0% -- step # 1311 -- window 14652 -- slice [slice(63, 89, None), slice(99, 125, None)]
+Process 7 Reconstructing Image...748.0% -- step # 1629 -- window 24975 -- slice [slice(108, 134, None), slice(27, 53, None)]
+Process 6 Reconstructing Image...649.0% -- step # 1634 -- window 21645 -- slice [slice(93, 119, None), slice(162, 188, None)]
+Process 15 Reconstructing Image...1547.0% -- step # 1589 -- window 51615 -- slice [slice(223, 249, None), slice(102, 128, None)]
+Process 9 Reconstructing Image...938.0% -- step # 1286 -- window 31302 -- slice [slice(135, 161, None), slice(117, 143, None)]
+Process 14 Reconstructing Image...1447.0% -- step # 1594 -- window 48285 -- slice [slice(209, 235, None), slice(6, 32, None)]
+Process 12 Reconstructing Image...1238.0% -- step # 1271 -- window 41292 -- slice [slice(178, 204, None), slice(174, 200, None)]
+Process 11 Reconstructing Image...1148.0% -- step # 1609 -- window 38295 -- slice [slice(165, 191, None), slice(180, 206, None)]
+Process 13 Reconstructing Image...1337.0% -- step # 1266 -- window 44622 -- slice [slice(193, 219, None), slice(39, 65, None)]
+Process 10 Reconstructing Image...1048.0% -- step # 1614 -- window 34965 -- slice [slice(151, 177, None), slice(84, 110, None)]
+Process 8 Reconstructing Image...838.0% -- step # 1291 -- window 27972 -- slice [slice(121, 147, None), slice(21, 47, None)]
+Process 1 Reconstructing Image...149.0% -- step # 1659 -- window 4995 -- slice [slice(21, 47, None), slice(144, 170, None)]
+Process 5 Reconstructing Image...549.0% -- step # 1639 -- window 18315 -- slice [slice(79, 105, None), slice(66, 92, None)]
+Process 3 Reconstructing Image...359.0% -- step # 1982 -- window 11988 -- slice [slice(51, 77, None), slice(207, 233, None)]
+Process 0 Reconstructing Image...49.0% -- step # 1665 -- window 1665 -- slice [slice(7, 33, None), slice(48, 74, None)]
+Process 2 Reconstructing Image...259.0% -- step # 1987 -- window 8658 -- slice [slice(37, 63, None), slice(111, 137, None)]
+Process 4 Reconstructing Image...449.0% -- step # 1644 -- window 14985 -- slice [slice(64, 90, None), slice(201, 227, None)]
+Process 7 Reconstructing Image...758.0% -- step # 1962 -- window 25308 -- slice [slice(109, 135, None), slice(129, 155, None)]
+Process 6 Reconstructing Image...659.0% -- step # 1967 -- window 21978 -- slice [slice(95, 121, None), slice(33, 59, None)]
+Process 15 Reconstructing Image...1557.0% -- step # 1922 -- window 51948 -- slice [slice(224, 250, None), slice(204, 230, None)]
+Process 9 Reconstructing Image...948.0% -- step # 1619 -- window 31635 -- slice [slice(136, 162, None), slice(219, 245, None)]
+Process 14 Reconstructing Image...1457.0% -- step # 1927 -- window 48618 -- slice [slice(210, 236, None), slice(108, 134, None)]
+Process 11 Reconstructing Image...1158.0% -- step # 1942 -- window 38628 -- slice [slice(167, 193, None), slice(51, 77, None)]
+Process 12 Reconstructing Image...1248.0% -- step # 1604 -- window 41625 -- slice [slice(180, 206, None), slice(45, 71, None)]
+Process 13 Reconstructing Image...1347.0% -- step # 1599 -- window 44955 -- slice [slice(194, 220, None), slice(141, 167, None)]
+Process 10 Reconstructing Image...1058.0% -- step # 1947 -- window 35298 -- slice [slice(152, 178, None), slice(186, 212, None)]
+Process 8 Reconstructing Image...848.0% -- step # 1624 -- window 28305 -- slice [slice(122, 148, None), slice(123, 149, None)]
+Process 1 Reconstructing Image...159.0% -- step # 1992 -- window 5328 -- slice [slice(23, 49, None), slice(15, 41, None)]
+Process 3 Reconstructing Image...369.0% -- step # 2315 -- window 12321 -- slice [slice(53, 79, None), slice(78, 104, None)]
+Process 5 Reconstructing Image...559.0% -- step # 1972 -- window 18648 -- slice [slice(80, 106, None), slice(168, 194, None)]
+Process 2 Reconstructing Image...269.0% -- step # 2320 -- window 8991 -- slice [slice(38, 64, None), slice(213, 239, None)]
+Process 0 Reconstructing Image...59.0% -- step # 1998 -- window 1998 -- slice [slice(8, 34, None), slice(150, 176, None)]
+Process 4 Reconstructing Image...459.0% -- step # 1977 -- window 15318 -- slice [slice(66, 92, None), slice(72, 98, None)]
+Process 7 Reconstructing Image...768.0% -- step # 2295 -- window 25641 -- slice [slice(111, 137, None), slice(0, 26, None)]
+Process 6 Reconstructing Image...668.0% -- step # 2300 -- window 22311 -- slice [slice(96, 122, None), slice(135, 161, None)]
+Process 15 Reconstructing Image...1567.0% -- step # 2255 -- window 52281 -- slice [slice(226, 252, None), slice(75, 101, None)]
+Process 9 Reconstructing Image...958.0% -- step # 1952 -- window 31968 -- slice [slice(138, 164, None), slice(90, 116, None)]
+Process 14 Reconstructing Image...1467.0% -- step # 2260 -- window 48951 -- slice [slice(211, 237, None), slice(210, 236, None)]
+Process 11 Reconstructing Image...1168.0% -- step # 2275 -- window 38961 -- slice [slice(168, 194, None), slice(153, 179, None)]
+Process 12 Reconstructing Image...1258.0% -- step # 1937 -- window 41958 -- slice [slice(181, 207, None), slice(147, 173, None)]
+Process 13 Reconstructing Image...1357.0% -- step # 1932 -- window 45288 -- slice [slice(196, 222, None), slice(12, 38, None)]
+Process 10 Reconstructing Image...1068.0% -- step # 2280 -- window 35631 -- slice [slice(154, 180, None), slice(57, 83, None)]
+Process 8 Reconstructing Image...858.0% -- step # 1957 -- window 28638 -- slice [slice(123, 149, None), slice(225, 251, None)]
+Process 1 Reconstructing Image...169.0% -- step # 2325 -- window 5661 -- slice [slice(24, 50, None), slice(117, 143, None)]
+Process 3 Reconstructing Image...379.0% -- step # 2648 -- window 12654 -- slice [slice(54, 80, None), slice(180, 206, None)]
+Process 5 Reconstructing Image...569.0% -- step # 2305 -- window 18981 -- slice [slice(82, 108, None), slice(39, 65, None)]
+Process 2 Reconstructing Image...279.0% -- step # 2653 -- window 9324 -- slice [slice(40, 66, None), slice(84, 110, None)]
+Process 4 Reconstructing Image...469.0% -- step # 2310 -- window 15651 -- slice [slice(67, 93, None), slice(174, 200, None)]
+Process 0 Reconstructing Image...69.0% -- step # 2331 -- window 2331 -- slice [slice(10, 36, None), slice(21, 47, None)]
+Process 7 Reconstructing Image...778.0% -- step # 2628 -- window 25974 -- slice [slice(112, 138, None), slice(102, 128, None)]
+Process 6 Reconstructing Image...678.0% -- step # 2633 -- window 22644 -- slice [slice(98, 124, None), slice(6, 32, None)]
+Process 15 Reconstructing Image...1577.0% -- step # 2588 -- window 52614 -- slice [slice(227, 253, None), slice(177, 203, None)]
+Process 14 Reconstructing Image...1477.0% -- step # 2593 -- window 49284 -- slice [slice(213, 239, None), slice(81, 107, None)]
+Process 9 Reconstructing Image...968.0% -- step # 2285 -- window 32301 -- slice [slice(139, 165, None), slice(192, 218, None)]
+Process 11 Reconstructing Image...1178.0% -- step # 2608 -- window 39294 -- slice [slice(170, 196, None), slice(24, 50, None)]
+Process 12 Reconstructing Image...1268.0% -- step # 2270 -- window 42291 -- slice [slice(183, 209, None), slice(18, 44, None)]
+Process 13 Reconstructing Image...1367.0% -- step # 2265 -- window 45621 -- slice [slice(197, 223, None), slice(114, 140, None)]
+Process 10 Reconstructing Image...1078.0% -- step # 2613 -- window 35964 -- slice [slice(155, 181, None), slice(159, 185, None)]
+Process 1 Reconstructing Image...179.0% -- step # 2658 -- window 5994 -- slice [slice(25, 51, None), slice(219, 245, None)]
+Process 8 Reconstructing Image...868.0% -- step # 2290 -- window 28971 -- slice [slice(125, 151, None), slice(96, 122, None)]
+Process 3 Reconstructing Image...389.0% -- step # 2981 -- window 12987 -- slice [slice(56, 82, None), slice(51, 77, None)]
+Process 5 Reconstructing Image...579.0% -- step # 2638 -- window 19314 -- slice [slice(83, 109, None), slice(141, 167, None)]
+Process 2 Reconstructing Image...289.0% -- step # 2986 -- window 9657 -- slice [slice(41, 67, None), slice(186, 212, None)]
+Process 4 Reconstructing Image...479.0% -- step # 2643 -- window 15984 -- slice [slice(69, 95, None), slice(45, 71, None)]
+Process 0 Reconstructing Image...79.0% -- step # 2664 -- window 2664 -- slice [slice(11, 37, None), slice(123, 149, None)]
+Process 7 Reconstructing Image...788.0% -- step # 2961 -- window 26307 -- slice [slice(113, 139, None), slice(204, 230, None)]
+Process 6 Reconstructing Image...688.0% -- step # 2966 -- window 22977 -- slice [slice(99, 125, None), slice(108, 134, None)]
+Process 15 Reconstructing Image...1587.0% -- step # 2921 -- window 52947 -- slice [slice(229, 255, None), slice(48, 74, None)]
+Process 14 Reconstructing Image...1487.0% -- step # 2926 -- window 49617 -- slice [slice(214, 240, None), slice(183, 209, None)]
+Process 11 Reconstructing Image...1188.0% -- step # 2941 -- window 39627 -- slice [slice(171, 197, None), slice(126, 152, None)]
+Process 9 Reconstructing Image...978.0% -- step # 2618 -- window 32634 -- slice [slice(141, 167, None), slice(63, 89, None)]
+Process 12 Reconstructing Image...1278.0% -- step # 2603 -- window 42624 -- slice [slice(184, 210, None), slice(120, 146, None)]
+Process 13 Reconstructing Image...1377.0% -- step # 2598 -- window 45954 -- slice [slice(198, 224, None), slice(216, 242, None)]
+Process 10 Reconstructing Image...1088.0% -- step # 2946 -- window 36297 -- slice [slice(157, 183, None), slice(30, 56, None)]
+Process 1 Reconstructing Image...189.0% -- step # 2991 -- window 6327 -- slice [slice(27, 53, None), slice(90, 116, None)]
+Process 8 Reconstructing Image...878.0% -- step # 2623 -- window 29304 -- slice [slice(126, 152, None), slice(198, 224, None)]
+Process 3 Reconstructing Image...399.0% -- step # 3314 -- window 13320 -- slice [slice(57, 83, None), slice(153, 179, None)]
+Process 5 Reconstructing Image...589.0% -- step # 2971 -- window 19647 -- slice [slice(85, 111, None), slice(12, 38, None)]
+Process 2 Reconstructing Image...299.0% -- step # 3319 -- window 9990 -- slice [slice(43, 69, None), slice(57, 83, None)]
+Process 4 Reconstructing Image...489.0% -- step # 2976 -- window 16317 -- slice [slice(70, 96, None), slice(147, 173, None)]
+Process 0 Reconstructing Image...89.0% -- step # 2997 -- window 2997 -- slice [slice(12, 38, None), slice(225, 251, None)]
+Process 7 Reconstructing Image...798.0% -- step # 3294 -- window 26640 -- slice [slice(115, 141, None), slice(75, 101, None)]
+Process 6 Reconstructing Image...698.0% -- step # 3299 -- window 23310 -- slice [slice(100, 126, None), slice(210, 236, None)]
+Process 15 Reconstructing Image...1597.0% -- step # 3254 -- window 53280 -- slice [slice(230, 256, None), slice(150, 176, None)]
+Process 14 Reconstructing Image...1497.0% -- step # 3259 -- window 49950 -- slice [slice(216, 242, None), slice(54, 80, None)]
+Process 11 Reconstructing Image...1198.0% -- step # 3274 -- window 39960 -- slice [slice(172, 198, None), slice(228, 254, None)]
+Process 9 Reconstructing Image...988.0% -- step # 2951 -- window 32967 -- slice [slice(142, 168, None), slice(165, 191, None)]
+Process 13 Reconstructing Image...1387.0% -- step # 2931 -- window 46287 -- slice [slice(200, 226, None), slice(87, 113, None)]
+Process 12 Reconstructing Image...1288.0% -- step # 2936 -- window 42957 -- slice [slice(185, 211, None), slice(222, 248, None)]
+Process 1 Reconstructing Image...199.0% -- step # 3324 -- window 6660 -- slice [slice(28, 54, None), slice(192, 218, None)]
+Process 10 Reconstructing Image...1098.0% -- step # 3279 -- window 36630 -- slice [slice(158, 184, None), slice(132, 158, None)]
+Process 8 Reconstructing Image...888.0% -- step # 2956 -- window 29637 -- slice [slice(128, 154, None), slice(69, 95, None)]
+Process 5 Reconstructing Image...599.0% -- step # 3304 -- window 19980 -- slice [slice(86, 112, None), slice(114, 140, None)]
+Process 4 Reconstructing Image...499.0% -- step # 3309 -- window 16650 -- slice [slice(72, 98, None), slice(18, 44, None)]
+Process 0 Reconstructing Image...99.0% -- step # 3330 -- window 3330 -- slice [slice(14, 40, None), slice(96, 122, None)]
+Process 9 Reconstructing Image...998.0% -- step # 3284 -- window 33300 -- slice [slice(144, 170, None), slice(36, 62, None)]
+Process 13 Reconstructing Image...1397.0% -- step # 3264 -- window 46620 -- slice [slice(201, 227, None), slice(189, 215, None)]
+Process 12 Reconstructing Image...1298.0% -- step # 3269 -- window 43290 -- slice [slice(187, 213, None), slice(93, 119, None)]
+Process 8 Reconstructing Image...898.0% -- step # 3289 -- window 29970 -- slice [slice(129, 155, None), slice(171, 197, None)]
+Finished summing chunks of windows on all processors.  Combining them with Allreduce.
+Creating new group
+65536 24
+Image chunking (4096, 1)
+Creating Cleaned_Image dataset.
+Writing image to dataset
+my rank: 0, I write: slice(0, 4096, None)
+my rank: 3, I write: slice(12288, 16384, None)
+my rank: 1, I write: slice(4096, 8192, None)
+my rank: 2, I write: slice(8192, 12288, None)
+my rank: 14, I write: slice(57344, 61440, None)
+my rank: 15, I write: slice(61440, 65536, None)
+my rank: 13, I write: slice(53248, 57344, None)
+my rank: 12, I write: slice(49152, 53248, None)
+my rank: 9, I write: slice(36864, 40960, None)
+my rank: 10, I write: slice(40960, 45056, None)
+my rank: 11, I write: slice(45056, 49152, None)
+my rank: 8, I write: slice(32768, 36864, None)
+my rank: 7, I write: slice(28672, 32768, None)
+my rank: 5, I write: slice(20480, 24576, None)
+my rank: 6, I write: slice(24576, 28672, None)
+my rank: 4, I write: slice(16384, 20480, None)
+image written
+Image has been successfully cleaned and rebuilt.
+Cleaned Image dataset located at /Measurement_000/Channel_000/Raw_Data-Windowing_000/Image_Windows-SVD_000/PCA-Cleaned_Image_000/Cleaned_Image
+File closed
+Application 18229442 resources: utime ~51s, stime ~224s, Rss ~246396, inblocks ~169105, outblocks ~29135
