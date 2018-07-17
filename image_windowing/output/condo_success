@@ -1,0 +1,66 @@
+Currently Loaded Modulefiles:
+  1) gcc/5.3.0        3) xalt/0.7.6       5) python/3.6.3
+  2) openmpi/1.10.3   4) PE-gnu/1.0
+[or-condo-c235.ornl.gov:49593] 1 more process has sent help message help-mpi-runtime.txt / mpi_init:warn-fork
+[or-condo-c235.ornl.gov:49593] Set MCA parameter "orte_base_help_aggregate" to 0 to see all help / error messages
+/home/syz/mpi_tutorials/image_cleaning
+--------------------------------------------------------------------------
+An MPI process has executed an operation involving a call to the
+"fork()" system call to create a child process.  Open MPI is currently
+operating in a condition that could result in memory corruption or
+other system errors; your MPI job may hang, crash, or produce silent
+data corruption.  The use of fork() (or system() or other calls that
+create child processes) is strongly discouraged.
+
+The process that invoked fork was:
+
+  Local host:          or-condo-c235 (PID 49612)
+  MPI_COMM_WORLD rank: 0
+
+If you are *absolutely sure* that your application will successfully
+and correctly survive a call to fork(), you may disable this warning
+by setting the mpi_warn_on_fork MCA parameter to 0.
+--------------------------------------------------------------------------
+arg: -i = image_02.h5
+arg: -d = /Measurement_000/Channel_000/Raw_Data-Windowing_000/Image_Windows-SVD_000
+arg: -c = 24
+Cleaning the image by removing unwanted components.
+Number of positions:  53361
+Number of windows batches: 2 should equal the number of ranks: 2
+Rank 0 has 26681 windows.
+Rank 1 has 26680 windows.
+my rank: 0	my start: 0
+my rank: 1	my start: 26681
+Rank 1 Reconstructing Image...110.0% -- step # 2667 -- window 29348 -- slice [slice(127, 153, None), slice(11, 37, None)]
+Rank 1 Reconstructing Image...120.0% -- step # 5335 -- window 32016 -- slice [slice(138, 164, None), slice(138, 164, None)]
+Rank 1 Reconstructing Image...130.0% -- step # 8003 -- window 34684 -- slice [slice(150, 176, None), slice(34, 60, None)]
+Rank 1 Reconstructing Image...140.0% -- step # 10671 -- window 37352 -- slice [slice(161, 187, None), slice(161, 187, None)]
+Rank 1 Reconstructing Image...150.0% -- step # 13339 -- window 40020 -- slice [slice(173, 199, None), slice(57, 83, None)]
+Rank 1 Reconstructing Image...160.0% -- step # 16007 -- window 42688 -- slice [slice(184, 210, None), slice(184, 210, None)]
+Rank 1 Reconstructing Image...170.0% -- step # 18675 -- window 45356 -- slice [slice(196, 222, None), slice(80, 106, None)]
+Rank 1 Reconstructing Image...180.0% -- step # 21343 -- window 48024 -- slice [slice(207, 233, None), slice(207, 233, None)]
+Rank 1 Reconstructing Image...190.0% -- step # 24011 -- window 50692 -- slice [slice(219, 245, None), slice(103, 129, None)]
+Rank 1 Reconstructing Image...200.0% -- step # 26679 -- window 53360 -- slice [slice(230, 256, None), slice(230, 256, None)]
+Rank 0 Reconstructing Image...0.0% -- step # 0 -- window 0 -- slice [slice(0, 26, None), slice(0, 26, None)]
+Rank 0 Reconstructing Image...10.0% -- step # 2668 -- window 2668 -- slice [slice(11, 37, None), slice(127, 153, None)]
+Rank 0 Reconstructing Image...20.0% -- step # 5336 -- window 5336 -- slice [slice(23, 49, None), slice(23, 49, None)]
+Rank 0 Reconstructing Image...30.0% -- step # 8004 -- window 8004 -- slice [slice(34, 60, None), slice(150, 176, None)]
+Rank 0 Reconstructing Image...40.0% -- step # 10672 -- window 10672 -- slice [slice(46, 72, None), slice(46, 72, None)]
+Rank 0 Reconstructing Image...50.0% -- step # 13340 -- window 13340 -- slice [slice(57, 83, None), slice(173, 199, None)]
+Rank 0 Reconstructing Image...60.0% -- step # 16008 -- window 16008 -- slice [slice(69, 95, None), slice(69, 95, None)]
+Rank 0 Reconstructing Image...70.0% -- step # 18676 -- window 18676 -- slice [slice(80, 106, None), slice(196, 222, None)]
+Rank 0 Reconstructing Image...80.0% -- step # 21344 -- window 21344 -- slice [slice(92, 118, None), slice(92, 118, None)]
+Rank 0 Reconstructing Image...90.0% -- step # 24012 -- window 24012 -- slice [slice(103, 129, None), slice(219, 245, None)]
+Rank 0 Reconstructing Image...100.0% -- step # 26680 -- window 26680 -- slice [slice(115, 141, None), slice(115, 141, None)]
+Finished summing chunks of windows on all ranks.  Combining them with All-reduce.
+Creating new group
+65536 24
+Image chunking (4096, 1)
+Creating Cleaned_Image dataset.
+Writing image to dataset
+my rank: 0, I write: slice(0, 32768, None)
+my rank: 1, I write: slice(32768, 65536, None)
+image written
+Image has been successfully cleaned and rebuilt.
+Cleaned Image dataset located at /Measurement_000/Channel_000/Raw_Data-Windowing_000/Image_Windows-SVD_000/PCA-Cleaned_Image_000/Cleaned_Image
+File closed
