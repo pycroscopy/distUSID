@@ -66,7 +66,7 @@ def gen_batches_mpi(n_items, n_batches):
     batch_size = 0
     rem = n_items
     while rem > n_batches:
-        batch_size += n_items/n_batches
+        batch_size += n_items // n_batches
         rem = n_items % n_batches
 
     start = 0
@@ -142,7 +142,7 @@ def calc_chunks(dimensions, data_size, unit_chunks=None, max_chunk_mem=10240):
         Find the index of the next chunk to be increased and increment it by the base_chunk
         size
         '''
-        ichunk = np.argmax(dimensions / unit_chunks)
+        ichunk = np.argmax(dimensions // unit_chunks)
         unit_chunks[ichunk] += base_chunks[ichunk]
 
     '''
@@ -217,9 +217,11 @@ def clean_and_build_components(h5_svd, comm, comp_slice=None):
 
     # Create array of windows for each rank
     if mpi_rank == 0:
-        print('# of positions:  {}'.format(n_pos))
+        print('Number of positions:  {}'.format(n_pos))
+        # print('Window batches: {}'.format(list(win_batches)))
 
         windows = [h5_pos[my_batch] for my_batch in win_batches]
+        print('Number of windows batches: {} should equal the number of ranks: {}'.format(len(windows), mpi_size))
 
         for rank in range(mpi_size):
             print('Rank {} has {} windows.'.format(rank, windows[rank].shape[0]))
@@ -499,13 +501,12 @@ if __name__ == '__main__':
 
     args, extra = getopt.getopt(sys.argv[1:], 'hi:d:c:')
     
-    for arg,argval in args:
+    for arg, argval in args:
         '''
         Print a simple help
         '''
         if comm.rank == 0:
-            print('arg:',arg)
-            print('argval:', argval)
+            print('arg: {} = {}'.format(arg, argval))
         
         if arg == '-h':
             print('clean_windows.py -i <inputfile> -d <path-to-svd-group> [-c <components-to-keep>]')
