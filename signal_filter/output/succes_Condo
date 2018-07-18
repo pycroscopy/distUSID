@@ -1,0 +1,100 @@
+Currently Loaded Modulefiles:
+  1) gcc/5.3.0        3) xalt/0.7.6       5) python/3.6.3
+  2) openmpi/1.10.3   4) PE-gnu/1.0
+[or-condo-c81.ornl.gov:72471] 1 more process has sent help message help-mpi-runtime.txt / mpi_init:warn-fork
+[or-condo-c81.ornl.gov:72471] Set MCA parameter "orte_base_help_aggregate" to 0 to see all help / error messages
+/home/syz/mpi_tutorials/signal_filter
+--------------------------------------------------------------------------
+An MPI process has executed an operation involving a call to the
+"fork()" system call to create a child process.  Open MPI is currently
+operating in a condition that could result in memory corruption or
+other system errors; your MPI job may hang, crash, or produce silent
+data corruption.  The use of fork() (or system() or other calls that
+create child processes) is strongly discouraged.
+
+The process that invoked fork was:
+
+  Local host:          or-condo-c81 (PID 72490)
+  MPI_COMM_WORLD rank: 0
+
+If you are *absolutely sure* that your application will successfully
+and correctly survive a call to fork(), you may disable this warning
+by setting the mpi_warn_on_fork MCA parameter to 0.
+--------------------------------------------------------------------------
+Rank 0 of 2 on or-condo-c81.ornl.gov sees 36 logical cores on the socket
+Working on 2 nodes via MPI
+Rank 1 of 2 on or-condo-c171.ornl.gov sees 36 logical cores on the socket
+Rank 1 will read positions 128 to 256 of 256
+Consider calling test() to check results before calling compute() which computes on the entire dataset and writes back to the HDF5 file
+Creating datagroup and datasets
+Each rank is required to work on 128 of the 256 positions in this dataset
+Rank 0 will read positions 0 to 128 of 256
+Allowed to read 427 pixels per chunk
+Allowed to use up to 36 cores and 4096 MB of memory
+Consider calling test() to check results before calling compute() which computes on the entire dataset and writes back to the HDF5 file
+Allowed to read 142 pixels per chunk
+Checking for duplicates:
+Creating datagroup and datasets
+Rank 0 - Finished creating the Composite_Filter dataset
+Rank 0 - Reusing source datasets position datasets
+h5 group and file OK
+quantity, units, main_data_name all OK
+Selected empty dataset creation. OK so far
+Provided h5 position indices and values OK
+Passed all pre-tests for creating spectroscopic datasets
+Indices:
+[[0]]
+Values:
+[[1.]]
+Starting to write Region References to Dataset /Measurement_000/Channel_000/Raw_Data-FFT_Filtering_000/Noise_Spec_Indices of shape: (1, 1)
+About to write region reference: arb : (slice(0, 1, None), slice(None, None, None))
+Comparing (slice(0, 1, None), slice(None, None, None)) with h5 dataset maxshape of (1, 1)
+Region reference tuple now: [slice(0, 1, None), slice(None, None, None)]
+Wrote Region Reference:arb
+Writing header attributes: labels
+Wrote Region References of Dataset Noise_Spec_Indices
+Starting to write Region References to Dataset /Measurement_000/Channel_000/Raw_Data-FFT_Filtering_000/Noise_Spec_Values of shape: (1, 1)
+About to write region reference: arb : (slice(0, 1, None), slice(None, None, None))
+Comparing (slice(0, 1, None), slice(None, None, None)) with h5 dataset maxshape of (1, 1)
+Region reference tuple now: [slice(0, 1, None), slice(None, None, None)]
+Wrote Region Reference:arb
+Writing header attributes: labels
+Wrote Region References of Dataset Noise_Spec_Values
+Created Spectroscopic datasets
+Created empty dataset for Main
+Wrote quantity and units attributes to main dataset
+Successfully linked datasets - dataset should be main now
+Rank 0 - Finished creating the Noise_Floors dataset
+Rank 0 - Finished creating the Filtered dataset
+You maybe able to abort this computation at any time and resume at a later time!
+	If you are operating in a python console, press Ctrl+C or Cmd+C to abort
+	If you are in a Jupyter notebook, click on "Kernel">>"Interrupt"
+You maybe able to abort this computation at any time and resume at a later time!
+	If you are operating in a python console, press Ctrl+C or Cmd+C to abort
+	If you are in a Jupyter notebook, click on "Kernel">>"Interrupt"
+Rank 0 - Read positions 0 to 128. Need to read till 128
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+36 cores requested.
+computational jobs per core = 3. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Computations are not lengthy.
+Not enough jobs per core. Reducing cores to 3
+Starting computing on 3 cores (requested 36 cores)
+Finished parallel computation
+Rank 0 - parallel computed chunk in 4.56 sec or 35.62 msec per pixel
+Rank 0 - Finished processing upto pixel 128 of 128
+Rank 0 - Finished reading all data!
+Rank 0 - Finished computing all jobs!
+Rank 1 - Read positions 128 to 256. Need to read till 256
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+36 cores requested.
+computational jobs per core = 3. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Computations are not lengthy.
+Not enough jobs per core. Reducing cores to 3
+Starting computing on 3 cores (requested 36 cores)
+Finished parallel computation
+Rank 1 - parallel computed chunk in 4.37 sec or 34.14 msec per pixel
+Rank 1 - Finished processing upto pixel 256 of 256
+Rank 1 - Finished reading all data!
+Rank 0 passed the very last barrier
+Rank 1 - Finished computing all jobs!
+Rank 1 passed the very last barrier
