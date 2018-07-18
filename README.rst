@@ -13,13 +13,13 @@ Status
 ------
 #. ``Process`` class requires no more changes for **basic** MPI functionality / scaling embarrassingly parallel problems
 
-  * Checkpointing has not yet been implemented (ran out of allocation time for example). Challenges:
+   * Checkpointing has not yet been implemented (ran out of allocation time for example). Challenges:
 
-    * Need to figure out how to interrupt / checkpoint without corrupting hdf5 file
-    * Need to figure out metadata that will be necessary to indicate completed pixels
+     * Need to figure out how to interrupt / checkpoint without corrupting hdf5 file
+     * Need to figure out metadata that will be necessary to indicate completed pixels
 
-      * One solution - ``last_pixel`` = list of completed slices.
-      * ``Process.__init__`` should build a list of pixels that need to be computed and distribute those to ranks via ``scatter`` instead.
+       * One solution - ``last_pixel`` = list of completed slices.
+       * ``Process.__init__`` should build a list of pixels that need to be computed and distribute those to ranks via ``scatter`` instead.
 #. Image Cleaning: Already tested and working code by Chris
 #. Signal Filter - now working just fine
 #. GIV Bayesian inference - problem with joblib. Works fine in serial processing mode.
