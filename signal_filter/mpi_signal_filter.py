@@ -358,8 +358,7 @@ class SignalFilter(Process):
         #TODO: I don't know how this part will work - need to shift to a 1 bit dataset?
         self.h5_results_grp.attrs['last_pixel'] = self._end_pos
 
-        # RuntimeError: Unable to flush file's cached information (MPI_ERR_ARG: invalid argument of some other kind)
-        # self.h5_main.file.flush()
+        self.h5_main.file.flush()
 
         # Almost NO change here at all! users will only be responsible for start and _end_pos only
         print('Rank {} - Finished processing upto pixel {} of {}'.format(self.mpi_rank, self._end_pos, self._rank_end_pos))
