@@ -239,17 +239,11 @@ class SignalFilter(Process):
         Creates all the datasets necessary for holding all parameters + data.
         """
 
-        self.mpi_comm.Barrier()
-
         self.h5_results_grp = create_results_group(self.h5_main, self.process_name)
-
-        self.mpi_comm.Barrier()
 
         self.parms_dict.update({'last_pixel': 0, 'algorithm': 'pycroscopy_SignalFilter'})
 
         write_simple_attrs(self.h5_results_grp, self.parms_dict)
-
-        self.mpi_comm.Barrier()
 
         assert isinstance(self.h5_results_grp, h5py.Group)
 
@@ -259,8 +253,6 @@ class SignalFilter(Process):
 
             if self.verbose and self.mpi_rank==0:
                 print('Rank {} - Finished creating the Composite_Filter dataset'.format(self.mpi_rank))
-
-            self.mpi_comm.Barrier()
 
         # First create the position datsets if the new indices are smaller...
         if self.num_effective_pix != self.h5_main.shape[0]:
@@ -290,8 +282,6 @@ class SignalFilter(Process):
             if self.verbose and self.mpi_rank==0:
                 print('Rank {} - Reusing source datasets position datasets'.format(self.mpi_rank))
 
-        self.mpi_comm.Barrier()
-
         if self.noise_threshold is not None:
             self.h5_noise_floors = write_main_dataset(self.h5_results_grp, (self.num_effective_pix, 1), 'Noise_Floors',
                                                       'Noise', 'a.u.', None, Dimension('arb', '', [1]),
@@ -301,16 +291,12 @@ class SignalFilter(Process):
             if self.verbose and self.mpi_rank==0:
                 print('Rank {} - Finished creating the Noise_Floors dataset'.format(self.mpi_rank))
 
-            self.mpi_comm.Barrier()
-
         if self.write_filtered:
             # Filtered data is identical to Main_Data in every way - just a duplicate
             self.h5_filtered = create_empty_dataset(self.h5_main, self.h5_main.dtype, 'Filtered_Data',
                                                     h5_group=self.h5_results_grp)
             if self.verbose and self.mpi_rank==0:
                 print('Rank {} - Finished creating the Filtered dataset'.format(self.mpi_rank))
-
-            self.mpi_comm.Barrier()
 
         self.hot_inds = None
 
@@ -325,8 +311,7 @@ class SignalFilter(Process):
             if self.verbose and self.mpi_rank==0:
                 print('Rank {} - Finished creating the Condensed dataset'.format(self.mpi_rank))
 
-            self.mpi_comm.Barrier()
-
+        self.mpi_comm.Barrier()
         self.h5_main.file.flush()
 
     def _get_existing_datasets(self):
