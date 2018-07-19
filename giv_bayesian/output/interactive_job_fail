@@ -1,0 +1,114 @@
+Rank 1 of 2 on or-condo-c195.ornl.gov sees 36 logical cores on the socket
+Rank 0 of 2 on or-condo-c190.ornl.gov sees 36 logical cores on the socket
+Working on 2 nodes via MPI
+Rank 1 will read positions 34048 to 68096 of 68096
+ensuring that half steps should be odd, num_x_steps is now 250
+Each rank is required to work on 34048 of the 68096 positions in this dataset
+Rank 0 will read positions 0 to 34048 of 68096
+Allowed to read 56888 pixels per chunk
+Allowed to use up to 36 cores and 4096 MB of memory
+Max positions per read set to 36
+Consider calling test() to check results before calling compute() which computes on the entire dataset and writes back to the HDF5 file
+ensuring that half steps should be odd, num_x_steps is now 250
+Checking for duplicates:
+Note: Bayesian_Inference has already been performed PARTIALLY with the same parameters. compute() will resuming computation in the last group below. To choose a different group call use_patial_computation()Set override to True to force fresh computation or resume from a data group besides the last in the list.
+[<HDF5 group "/Measurement_000/Channel_000/Raw_Data-FFT_Filtering_000/Filtered_Data-Reshape_000/Reshaped_Data-Bayesian_Inference_000" (8 members)>]
+Resuming computation in group: /Measurement_000/Channel_000/Raw_Data-FFT_Filtering_000/Filtered_Data-Reshape_000/Reshaped_Data-Bayesian_Inference_000
+Resuming computation in group: /Measurement_000/Channel_000/Raw_Data-FFT_Filtering_000/Filtered_Data-Reshape_000/Reshaped_Data-Bayesian_Inference_000
+Each rank is required to work on 34048 of the 68096 positions in this dataset
+Rank 0 will read positions 0 to 34048 of 68096
+Resuming computation
+Rank 1 will read positions 34048 to 68096 of 68096
+Resuming computation
+You maybe able to abort this computation at any time and resume at a later time!
+	If you are operating in a python console, press Ctrl+C or Cmd+C to abort
+	If you are in a Jupyter notebook, click on "Kernel">>"Interrupt"
+Rank 1 - Read positions 34048 to 34084. Need to read till 68096
+Rank 1 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+36 cores requested.
+computational jobs per core = 1. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 36 cores (requested 36 cores)
+Rank 0 - Read positions 0 to 36. Need to read till 34048
+Rank 0 beginning parallel compute for Forward
+Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
+36 cores requested.
+computational jobs per core = 1. For short computations, each core must have at least 20 jobs to warrant parallel computation.
+Starting computing on 36 cores (requested 36 cores)
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file base/odls_base_default_fns.c at line 1762
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file orted/orted_comm.c at line 916
+[or-condo-c190.ornl.gov:98115] Local abort before MPI_INIT completed successfully; not able to aggregate error messages, and not able to guarantee that all other processes were killed!
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file base/odls_base_default_fns.c at line 1762
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file orted/orted_comm.c at line 916
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file base/odls_base_default_fns.c at line 1762
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file orted/orted_comm.c at line 916
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file base/odls_base_default_fns.c at line 1762
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file orted/orted_comm.c at line 916
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file base/odls_base_default_fns.c at line 1762
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file orted/orted_comm.c at line 916
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file base/odls_base_default_fns.c at line 1762
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file orted/orted_comm.c at line 916
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file base/odls_base_default_fns.c at line 1762
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file orted/orted_comm.c at line 916
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file base/odls_base_default_fns.c at line 1762
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file orted/orted_comm.c at line 916
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file base/odls_base_default_fns.c at line 1762
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file orted/orted_comm.c at line 916
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file base/odls_base_default_fns.c at line 1762
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file orted/orted_comm.c at line 916
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file base/odls_base_default_fns.c at line 1762
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file orted/orted_comm.c at line 916
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file base/odls_base_default_fns.c at line 1762
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file orted/orted_comm.c at line 916
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file base/odls_base_default_fns.c at line 1762
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file orted/orted_comm.c at line 916
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file base/odls_base_default_fns.c at line 1762
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file orted/orted_comm.c at line 916
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file base/odls_base_default_fns.c at line 1762
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file orted/orted_comm.c at line 916
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file base/odls_base_default_fns.c at line 1762
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file orted/orted_comm.c at line 916
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file base/odls_base_default_fns.c at line 1762
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file orted/orted_comm.c at line 916
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file base/odls_base_default_fns.c at line 1762
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file orted/orted_comm.c at line 916
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file base/odls_base_default_fns.c at line 1762
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file orted/orted_comm.c at line 916
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file base/odls_base_default_fns.c at line 1762
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file orted/orted_comm.c at line 916
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file base/odls_base_default_fns.c at line 1762
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file orted/orted_comm.c at line 916
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file base/odls_base_default_fns.c at line 1762
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file orted/orted_comm.c at line 916
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file base/odls_base_default_fns.c at line 1762
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file orted/orted_comm.c at line 916
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file base/odls_base_default_fns.c at line 1762
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file orted/orted_comm.c at line 916
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file base/odls_base_default_fns.c at line 1762
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file orted/orted_comm.c at line 916
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file base/odls_base_default_fns.c at line 1762
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file orted/orted_comm.c at line 916
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file base/odls_base_default_fns.c at line 1762
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file orted/orted_comm.c at line 916
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file base/odls_base_default_fns.c at line 1762
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file orted/orted_comm.c at line 916
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file base/odls_base_default_fns.c at line 1762
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file orted/orted_comm.c at line 916
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file base/odls_base_default_fns.c at line 1762
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file orted/orted_comm.c at line 916
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file base/odls_base_default_fns.c at line 1762
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file orted/orted_comm.c at line 916
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file base/odls_base_default_fns.c at line 1762
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file orted/orted_comm.c at line 916
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file base/odls_base_default_fns.c at line 1762
+[or-condo-c190.ornl.gov:98047] [[49081,0],0] ORTE_ERROR_LOG: Not found in file orted/orted_comm.c at line 916
+[or-condo-c195.ornl.gov:147782] Local abort before MPI_INIT completed successfully; not able to aggregate error messages, and not able to guarantee that all other processes were killed!
+[or-condo-c195.ornl.gov:147780] Local abort before MPI_INIT completed successfully; not able to aggregate error messages, and not able to guarantee that all other processes were killed!
+[or-condo-c195.ornl.gov:147790] Local abort before MPI_INIT completed successfully; not able to aggregate error messages, and not able to guarantee that all other processes were killed!
+[or-condo-c195.ornl.gov:147806] Local abort before MPI_INIT completed successfully; not able to aggregate error messages, and not able to guarantee that all other processes were killed!
+[or-condo-c195.ornl.gov:147816] Local abort before MPI_INIT completed successfully; not able to aggregate error messages, and not able to guarantee that all other processes were killed!
+[or-condo-c195.ornl.gov:147844] Local abort before MPI_INIT completed successfully; not able to aggregate error messages, and not able to guarantee that all other processes were killed!
+[or-condo-c195.ornl.gov:147836] Local abort before MPI_INIT completed successfully; not able to aggregate error messages, and not able to guarantee that all other processes were killed!
+[or-condo-c195.ornl.gov:147848] Local abort before MPI_INIT completed successfully; not able to aggregate error messages, and not able to guarantee that all other processes were killed!
+[or-condo-c190.ornl.gov:98047] 1 more process has sent help message help-mpi-runtime.txt / mpi_init:warn-fork
+[or-condo-c190.ornl.gov:98047] Set MCA parameter "orte_base_help_aggregate" to 0 to see all help / error messages
