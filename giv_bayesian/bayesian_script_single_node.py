@@ -1,8 +1,7 @@
-import h5py
-from giv_bayesian_mpi import GIVBayesian
 import multiprocessing
 
 """
+It is crucial that NO OTHER package be imported till the process spawning method is set.
 The next two lines must be left as is whether it is for single or multi-node computation.
 There is a bug in the way numpy is linked with accelerator libraries in Unix based systems that can sometimes
 cause multiprocessing / joblib to hang on numpy operations like dot. See these issues and links:
@@ -17,6 +16,16 @@ So, keep everything under if __name__ == 'main'
 """
 if __name__ == '__main__':
     multiprocessing.set_start_method('forkserver')
+
+    import h5py
+    from giv_bayesian_mpi import GIVBayesian
+
+    if True:
+        import os
+        if os.path.exists('giv_raw.h5'):
+            os.remove('giv_raw.h5')
+        import shutil
+        shutil.copy('/Users/syz/Documents/pycroscopy/giv/pzt_nanocap_6_just_translation_filt_resh_copy.h5', 'giv_raw.h5')
 
     h5_path = 'giv_raw.h5'
     h5_f = h5py.File(h5_path, mode='r+')
