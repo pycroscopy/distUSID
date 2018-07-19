@@ -244,9 +244,8 @@ class GIVBayesian(Process):
 
         self.h5_results_grp = create_results_group(self.h5_main, self.process_name)
 
-        if self.mpi_rank == 0:
-            write_simple_attrs(self.h5_results_grp, {'algorithm_author': 'Kody J. Law', 'last_pixel': 0})
-            write_simple_attrs(self.h5_results_grp, self.parms_dict)
+        write_simple_attrs(self.h5_results_grp, {'algorithm_author': 'Kody J. Law', 'last_pixel': 0})
+        write_simple_attrs(self.h5_results_grp, self.parms_dict)
 
         if self.verbose and self.mpi_rank == 0:
             print('created group: {} with attributes:'.format(self.h5_results_grp.name))
@@ -292,8 +291,8 @@ class GIVBayesian(Process):
             # print_tree(self.h5_results_grp)
             print('Done creating all results datasets!')
 
-        # Still don't know why we cannot flush!
-        # self.h5_main.file.flush()
+        self.mpi_comm.Barrier()
+        self.h5_main.file.flush()
 
     def _get_existing_datasets(self):
         """
