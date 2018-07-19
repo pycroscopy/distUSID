@@ -20,13 +20,6 @@ if __name__ == '__main__':
     import h5py
     from giv_bayesian_mpi import GIVBayesian
 
-    if True:
-        import os
-        if os.path.exists('giv_raw.h5'):
-            os.remove('giv_raw.h5')
-        import shutil
-        shutil.copy('/Users/syz/Documents/pycroscopy/giv/pzt_nanocap_6_just_translation_filt_resh_copy.h5', 'giv_raw.h5')
-
     h5_path = 'giv_raw.h5'
     h5_f = h5py.File(h5_path, mode='r+')
     h5_grp = h5_f['Measurement_000/Channel_000']
