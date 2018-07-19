@@ -311,7 +311,8 @@ class SignalFilter(Process):
             if self.verbose and self.mpi_rank==0:
                 print('Rank {} - Finished creating the Condensed dataset'.format(self.mpi_rank))
 
-        self.mpi_comm.Barrier()
+        if self.mpi_size > 1:
+            self.mpi_comm.Barrier()
         self.h5_main.file.flush()
 
     def _get_existing_datasets(self):

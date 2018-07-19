@@ -291,7 +291,8 @@ class GIVBayesian(Process):
             # print_tree(self.h5_results_grp)
             print('Done creating all results datasets!')
 
-        self.mpi_comm.Barrier()
+        if self.mpi_size > 1:
+            self.mpi_comm.Barrier()
         self.h5_main.file.flush()
 
     def _get_existing_datasets(self):
