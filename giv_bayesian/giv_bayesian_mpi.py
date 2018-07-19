@@ -227,11 +227,7 @@ class GIVBayesian(Process):
         # raw, compensated current, resistance, variance
         self._max_pos_per_read = self._max_pos_per_read // 4  # Integer division
         # Since these computations take far longer than functional fitting, do in smaller batches:
-        self._max_pos_per_read = min(10, self._max_pos_per_read)
-
-        # Forcing serial for debugging purposes
-        # self._cores = 1
-        self._cores = 2
+        self._max_pos_per_read = min(100, self._max_pos_per_read)
 
         if self.verbose and self.mpi_rank == 0:
             print('Max positions per read set to {}'.format(self._max_pos_per_read))
