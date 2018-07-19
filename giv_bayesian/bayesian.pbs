@@ -31,11 +31,32 @@ module load python/3.6.3
 module list
 
 ### Switch to the working directory (path of your PBS script).
-cd $HOME/mpi_tutorials/giv_bayesian
+EGNAME=giv_bayesian
+DATA_PATH=$HOME/giv/pzt_nanocap_6_just_translation_filt_resh_copy.h5
+SCRIPTS_PATH=$HOME/mpi_tutorials/$EGNAME
+WORK_PATH=/lustre/or-hydra/cades-ccsd/syz/pycroscopy_ensemble
+
+cd $WORK_PATH
+mkdir $EGNAME
+cd $EGNAME
 
 ### Show current directory.
 pwd
 
+### Copy data:
+DATA_NAME=giv_raw.h5
+rm -rf $DATA_NAME
+cp $DATA_PATH $DATA_NAME
+
+### Copy python files:
+cp $SCRIPTS_PATH/mpi_process.py .
+cp $SCRIPTS_PATH/giv_bayesian_mpi.py .
+cp $SCRIPTS_PATH/giv_utils.py .
+cp $SCRIPTS_PATH/bayesian_script_mpi.py .
+
+# See the contents in Lustre to make sure they are OK
+ls -hl
+
 ### MPI run followed by the name/path of the binary.
-cp $HOME/giv/pzt_nanocap_6_just_translation_filt_resh_copy.h5 giv_raw.h5
 mpiexec --map-by ppr:1:node python bayesian_script_mpi.py
+### mpiexec --map-by ppr:1:node python -m cProfile -s cumtime bayesian_script_mpi.py
