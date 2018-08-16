@@ -1,14 +1,14 @@
-mpiUSID
+distUSID
 =======
 
-MPI versions of the embarrassingly-parallel ``Process`` classes in pycroscopy and pyUSID.
+Distributed versions of the embarrassingly-parallel ``Process`` classes in pycroscopy and pyUSID.
 
-* The emphasis is to develop the ``pyUSID.Process`` class such that it continues to work for laptops but also works on HPC with minimal modifications to children classes.
+* The emphasis is to develop the ``pyUSID.Process`` class such that it continues to work for laptops but also works on HPC / cloud clusters with minimal modifications to children classes (in pycroscopy).
   Once certified to work well for a handful of examples, the changes in the class(es) will be rolled back into ``pyUSID`` and even ``pycroscopy``.
 * Code here is developed and tested on ORNL CADES SHPC OR Condo only for the time being. The code should, in theory, be portable to OLCF or other machines.
 
-Strategies
-----------
+Limitations
+-----------
 Before diving in to the many strategies for going about how to solve this problem, it is important to be cognizant of the restrictions:
 
 * The user-facing sub-classes should see minimal changes to enable distributed computing and not require expert knowledge of MPI or other paradigms
@@ -16,8 +16,18 @@ Before diving in to the many strategies for going about how to solve this proble
   operations should be minimized. Even with a single node with 36 cores, we do not want 36 processes / ranks waiting on each other to write data to the file.
   The majority of the time should be spent on the computation which is the main problem that has necessitated distributed computing.
 
-With these boundary conditions in mind, here are three (of many) strategies for distributing computing:
+Strategies
+----------
+1. Dask
+2. mpi4py + existing Joblib
+3. Pure mpi4py
+4. pySpark
+5. Workflows such as Swift
 
+2. mpi4py+joblib
+----------------
+Strategies
+~~~~~~~~~~
 #. **1 rank / node**: Use an MPI + OpenMP paradigm where each rank is in charge of one node and computes via ``joblib`` within the node just as in pyUSID / pycroscopy.
 
    Pros:
@@ -57,10 +67,8 @@ With these boundary conditions in mind, here are three (of many) strategies for 
    * Noticeably more complicated in that additional book-keeping would be required for the relationships (master) within each node
    * The rank that collects all the results may not have sufficient memory. This may limit how much each rank can compute at a given time
 
-Currently, the first approach is the only one being explored
-
 Status
-------
+~~~~~~
 #. ``Process`` class requires no more changes for **basic** MPI functionality / scaling embarrassingly parallel problems
 
    * Checkpointing has not yet been implemented (ran out of allocation time for example). Challenges:
@@ -75,7 +83,7 @@ Status
 #. GIV Bayesian inference - `problem with joblib + MPI <./giv_bayesian/bayesian_script_mpi.py>`_. Works fine in serial processing mode.
 
 Observations
-------------
+~~~~~~~~~~~~
 * Minimal changes are required for the children classes of ``pyUSID.Process`` - mainly in verbose print statements
 * First test the dataset creation step with the computation disabled to speed up debugging time. Most of the challenges are in the dataset creation portion.
 * ``h5py`` (parallel) results in **segmentation faults** for the following situations:
