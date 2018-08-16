@@ -70,6 +70,7 @@ Strategies
 Status
 ~~~~~~
 Only the first of the three mpi4py+joblib approaches has been explored so far
+
 #. ``Process`` class requires no more changes for **basic** MPI functionality / scaling embarrassingly parallel problems
 
    * Checkpointing has not yet been implemented (ran out of allocation time for example). Challenges:
