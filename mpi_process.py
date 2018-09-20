@@ -25,6 +25,54 @@ from pyUSID.io.hdf_utils import check_if_main, check_for_old, get_attributes
 from pyUSID.io.usi_data import USIDataset
 from pyUSID.io.io_utils import recommend_cpu_cores, get_available_memory, format_time
 
+def find_master_per_socket(verbose=False):
+    """
+    Assigns a master rank for each rank such that there is a single master rank per socket (CPU).
+    This is relevant especially when trying to bring down the number of ranks that are writing to the HDF5 file.
+    This is all based on the premise that data analysis involves a fair amount of file writing and writing with
+    3 ranks is a lot better than writing with 100 ranks. An assumption is made that the communication between the
+    ranks within each socket would be faster than communicating across nodes / scokets. No assumption is made about the
+    names of each socket
+
+    Parameters
+    ----------
+    verbose : bool, optional
+        Whether or not to print debugging statements
+
+    Returns
+    -------
+    master_ranks : 1D unsigned integer numpy array
+        Array with values that signify which rank a given rank should consider its master.
+    """
+    comm = MPI.COMM_WORLD
+    size = comm.Get_size()
+    rank = comm.Get_rank()
+
+    # Step 1: Gather all the socket names:
+    sendbuf = MPI.Get_processor_name()
+    if verbose:
+        print('Rank: ', rank, ', sendbuf: ', sendbuf)
+    recvbuf = comm.allgather(sendbuf)
+    if verbose and rank == 0:
+        print('Rank: ', rank, ', recvbuf received: ', recvbuf)
+
+    # Step 2: Find all unique socket names:
+    recvbuf = np.array(recvbuf)
+    unique_sockets = np.unique(recvbuf)
+    if verbose and rank == 0:
+        print('Unique sockets: {}'.format(unique_sockets))
+
+    master_ranks = np.zeros(size, dtype=np.uint16)
+
+    for item in unique_sockets:
+        temp = np.where(recvbuf == item)[0]
+        master_ranks[temp] = temp[0]
+
+    if verbose and rank == 0:
+        print('Parent rank for all ranks: {}'.format(master_ranks))
+
+    return master_ranks
+
 
 class Process(object):
     """
