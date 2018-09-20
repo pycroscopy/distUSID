@@ -25,6 +25,38 @@ from pyUSID.io.hdf_utils import check_if_main, check_for_old, get_attributes
 from pyUSID.io.usi_data import USIDataset
 from pyUSID.io.io_utils import recommend_cpu_cores, get_available_memory, format_time
 
+"""
+For hyperthreaded applications: need to tack on the additional flag as shown below
+No need to specify -n 4 or whatever if you want to use all available processors
+$ mpirun -use-hwthread-cpus python hello_world.py 
+
+Look into sub-communication worlds that can create mini worlds instaed of the general COMM WOLRD
+
+set self.verbose = True for all master ranks. Won't need to worry about printing later on
+Do we need a new variable called self._worker_ranks = [1,5,9, 13...] for master ranks? <-- this can save time and repeated book-keeping!
+
+How much memory each rank can work with is a function of:
+1. How much available memory this chip has
+2. How many ranks are sharing this socket - Will need the new master per socket function's result
+
+1. Find all unique ranks in the giant array of ranks
+2. Create empty array to hold how much memory a rank can load
+2. For each unique rank:
+    a. Find available memory
+    b. Find number of ranks that share this master
+    c. Assign quotient to all ranks that share this socket
+
+0. Do standard book-keeping of creating datasets etc.
+1. Scatter position slices among all ranks
+2. Instead of doing joblib either use a for-loop or the map-function
+3. When it is time to write the results chunks back to file. 
+    a. If not master -> send data to master
+    b. If master -> gather from this smaller world and then write to file once. IF this is too much memory to handle, then loop over each rank:
+        i. receive
+        ii. write
+        iii. repeat.
+"""
+
 def find_master_per_socket(verbose=False):
     """
     Assigns a master rank for each rank such that there is a single master rank per socket (CPU).
