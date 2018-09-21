@@ -377,7 +377,6 @@ class Process(object):
             print('Rank {} - {} processes with access to {} memory on this socket'.format(socket_master, self._cores,
                                                                                 format_size(_max_mem_mb * 1024**2, 2)))
             print('Allowed to read {} pixels per chunk'.format(self._max_pos_per_read))
-            print('Allowed to use up to', str(self._cores), 'cores and', str(self._max_mem_mb), 'MB of memory')
 
     @staticmethod
     def _map_function(*args, **kwargs):
@@ -444,7 +443,7 @@ class Process(object):
         """
         # TODO: Try to use the functools.partials to preconfigure the map function
         # For cores to be 1.
-        self._results = parallel_compute(self.data, self._map_function, cores=1,  # self._cores,
+        self._results = parallel_compute(self.data, self._map_function, cores=self._cores,
                                          lengthy_computation=False,
                                          func_args=args, func_kwargs=kwargs,
                                          verbose=self.verbose)
@@ -578,15 +577,19 @@ def parallel_compute(data, func, cores=1, lengthy_computation=False, func_args=N
     else:
         if not isinstance(func_kwargs, dict):
             raise TypeError('Keyword arguments to the mapped function should be specified via a dictionary')
-    req_cores = cores
-    cores = recommend_cpu_cores(data.shape[0],
-                                requested_cores=cores,
-                                lengthy_computation=lengthy_computation,
-                                verbose=verbose)
 
-    rank = 0
     if MPI is not None:
         rank = MPI.COMM_WORLD.Get_rank()
+        if cores > 1 and rank == 0:
+            print('Note - Each rank will compute serially using pure MPI mode')
+        cores = 1
+    else:
+        rank = 0
+        req_cores = cores
+        cores = recommend_cpu_cores(data.shape[0],
+                                    requested_cores=cores,
+                                    lengthy_computation=lengthy_computation,
+                                    verbose=verbose)
 
     if verbose:
         print('Rank {} starting computing on {} cores (requested {} cores)'.format(rank, cores, req_cores))
