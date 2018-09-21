@@ -22,7 +22,7 @@ except ImportError:
 
 from pyUSID.io.hdf_utils import check_if_main, check_for_old, get_attributes
 from pyUSID.io.usi_data import USIDataset
-from pyUSID.io.io_utils import recommend_cpu_cores, get_available_memory, format_time
+from pyUSID.io.io_utils import recommend_cpu_cores, get_available_memory, format_time, format_size
 
 """
 For hyperthreaded applications: need to tack on the additional flag as shown below
@@ -160,7 +160,7 @@ class Process(object):
 
             # It is sufficient if just one rank checks all this.
             if verbose and self.mpi_rank == 0:
-                print('Working on {} nodes via MPI'.format(self.mpi_size))
+                print('Working on {} ranks via MPI'.format(self.mpi_size))
 
             # Ensure that the file is opened in the correct comm or something
             if h5_main.file.driver != 'mpio':
@@ -336,18 +336,24 @@ class Process(object):
         """
         if MPI is None:
             min_free_cores = 1 + int(psutil.cpu_count() > 4)
-       else:
-            min_free_cores = 0
 
-        if cores is None:
-            self._cores = max(1, psutil.cpu_count() - min_free_cores)
+            if cores is None:
+                self._cores = max(1, psutil.cpu_count() - min_free_cores)
+            else:
+                if not isinstance(cores, int):
+                    raise TypeError('cores should be an integer but got: {}'.format(cores))
+                cores = int(abs(cores))
+                self._cores = max(1, min(psutil.cpu_count(), cores))
+            socket_master = 0
         else:
-            if not isinstance(cores, int):
-                raise TypeError('cores should be an integer but got: {}'.format(cores))
-            cores = int(abs(cores))
-            self._cores = max(1, min(psutil.cpu_count(), cores))
+            ranks_by_socket = group_ranks_by_socket(verbose=self.verbose)
+            socket_master = ranks_by_socket[self.mpi_rank]
+            # which ranks in this socket?
+            ranks_on_this_socket = np.where(ranks_by_socket == socket_master)[0]
+            # how many in this socket?
+            self._cores = ranks_on_this_socket.size
 
-        _max_mem_mb = get_available_memory() / 1E6  # in MB
+        _max_mem_mb = get_available_memory() / 1024 ** 2  # in MB
         if mem is None:
             mem = _max_mem_mb
         else:
@@ -357,15 +363,17 @@ class Process(object):
 
         self._max_mem_mb = min(_max_mem_mb, mem)
 
-        # This line should actually use the number of ranks within this socket. This is fine for now.
+        # Remember that multiple processes (either via MPI or joblib) will share this socket
         max_data_chunk = self._max_mem_mb / self._cores
 
         # Now calculate the number of positions that can be stored in memory in one go.
         mb_per_position = self.h5_main.dtype.itemsize * self.h5_main.shape[1] / 1e6
         self._max_pos_per_read = int(np.floor(max_data_chunk / mb_per_position))
 
-        if self.verbose and self.mpi_rank == 0:
+        if self.verbose and self.mpi_rank == socket_master:
             # expected to be the same for all ranks so just use this.
+            print('{} processes with access to {} memory on this socket'.format(self._cores,
+                                                                                format_size(_max_mem_mb * 1024**2, 2)))
             print('Allowed to read {} pixels per chunk'.format(self._max_pos_per_read))
             print('Allowed to use up to', str(self._cores), 'cores and', str(self._max_mem_mb), 'MB of memory')
 
@@ -434,7 +442,7 @@ class Process(object):
         """
         # TODO: Try to use the functools.partials to preconfigure the map function
         # For cores to be 1.
-        self._results = parallel_compute(self.data, self._map_function, cores=1, #self._cores,
+        self._results = parallel_compute(self.data, self._map_function, cores=1,  # self._cores,
                                          lengthy_computation=False,
                                          func_args=args, func_kwargs=kwargs,
                                          verbose=self.verbose)
@@ -498,7 +506,7 @@ class Process(object):
 
             tot_time = np.round(tm.time() - t_start, decimals=2)
             if self.verbose:
-                print('Rank {} - parallel computed chunk in {} or {} per pixel'.format(self.mpi_rank, format_time(tot_time),
+                print('Rank {} - computed chunk in {} or {} per pixel'.format(self.mpi_rank, format_time(tot_time),
                                                                              format_time(
                                                                                  tot_time / self.data.shape[0])))
             if self._start_pos == orig_start_pos:
@@ -507,7 +515,13 @@ class Process(object):
                 time_remaining = (num_pos - (self._rank_end_pos - self._start_pos)) * time_per_pix  # in seconds
                 print('Rank {} - Time remaining: {}'.format(self.mpi_rank, format_time(time_remaining)))
 
+            t_start = tm.time()
             self._write_results_chunk()
+            if self.verbose:
+                tot_time = np.round(tm.time() - t_start, decimals=2)
+                print('Rank {} - wrote its {} pixel chunk in {}'.format(self.mpi_rank, self.data.shape[0],
+                                                                        format_time(tot_time)))
+
             self._read_data_chunk()
 
         print('Rank {} - Finished computing all jobs!'.format(self.mpi_rank))
@@ -566,17 +580,23 @@ def parallel_compute(data, func, cores=1, lengthy_computation=False, func_args=N
                                 lengthy_computation=lengthy_computation,
                                 verbose=verbose)
 
-    print('Starting computing on {} cores (requested {} cores)'.format(cores, req_cores))
+    rank = 0
+    if MPI is not None:
+        rank = MPI.COMM_WORLD.Get_rank()
+
+    if verbose:
+        print('Rank {} starting computing on {} cores (requested {} cores)'.format(rank, cores, req_cores))
 
     if cores > 1:
         values = [joblib.delayed(func)(x, *func_args, **func_kwargs) for x in data]
         results = joblib.Parallel(n_jobs=cores)(values)
 
         # Finished reading the entire data set
-        print('Finished parallel computation')
+        print('Rank {} finished parallel computation'.format(rank))
 
     else:
-        print("Computing serially ...")
+        if verbose:
+            print("Rank {} computing serially ...".format(rank))
         results = [func(vector, *func_args, **func_kwargs) for vector in data]
 
     return results
