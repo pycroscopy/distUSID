@@ -352,6 +352,8 @@ class Process(object):
             ranks_on_this_socket = np.where(ranks_by_socket == socket_master)[0]
             # how many in this socket?
             self._cores = ranks_on_this_socket.size
+            # Force usage of all available memory
+            mem = None
 
         _max_mem_mb = get_available_memory() / 1024 ** 2  # in MB
         if mem is None:
@@ -372,7 +374,7 @@ class Process(object):
 
         if self.verbose and self.mpi_rank == socket_master:
             # expected to be the same for all ranks so just use this.
-            print('{} processes with access to {} memory on this socket'.format(self._cores,
+            print('Rank {} - {} processes with access to {} memory on this socket'.format(socket_master, self._cores,
                                                                                 format_size(_max_mem_mb * 1024**2, 2)))
             print('Allowed to read {} pixels per chunk'.format(self._max_pos_per_read))
             print('Allowed to use up to', str(self._cores), 'cores and', str(self._max_mem_mb), 'MB of memory')
@@ -477,7 +479,7 @@ class Process(object):
         if self.h5_results_grp is None:
             # starting fresh
             if self.verbose and self.mpi_rank == 0:
-                print('Creating datagroup and datasets')
+                print('Creating HDF5 group and datasets to hold results')
             self._create_results_datasets()
         else:
             # resuming from previous checkpoint
