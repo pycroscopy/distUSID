@@ -150,7 +150,7 @@ class GIVBayesian(Process):
         self.num_x_steps = int(num_x_steps)
         if self.num_x_steps % 4 == 0:
             self.num_x_steps = ((self.num_x_steps // 2) + 1) * 2
-        if self.verbose:
+        if self.verbose and self.mpi_rank == 0:
             print('ensuring that half steps should be odd, num_x_steps is now', self.num_x_steps)
 
         self.h5_main = USIDataset(self.h5_main)
