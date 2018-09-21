@@ -368,8 +368,8 @@ class Process(object):
         # Remember that multiple processes (either via MPI or joblib) will share this socket
         max_data_chunk = self._max_mem_mb / self._cores
 
-        # Now calculate the number of positions that can be stored in memory in one go.
-        mb_per_position = self.h5_main.dtype.itemsize * self.h5_main.shape[1] / 1e6
+        # Now calculate the number of positions OF RAW DATA ONLY that can be stored in memory in one go PER RANK
+        mb_per_position = self.h5_main.dtype.itemsize * self.h5_main.shape[1] / 1024 ** 2
         self._max_pos_per_read = int(np.floor(max_data_chunk / mb_per_position))
 
         if self.verbose and self.mpi_rank == socket_master:
@@ -465,6 +465,33 @@ class Process(object):
         h5_results_grp : h5py.Datagroup object
             Datagroup containing all the results
         """
+
+        class SimpleFIFO(object):
+            """
+            Would have loved to have used the built in queue object but it looks like that would be a bit of a pain
+            """
+
+            def __init__(self, length):
+                self.__queue = list()
+                if not isinstance(length, int):
+                    raise TypeError('length must be a positive integer')
+                if length <= 0:
+                    raise ValueError('length must be a positive integer')
+                self.__max_length = length
+                self.__count = 0
+
+            def put(self, item):
+                self.__queue.append(item)
+                self.__count += 1
+                if len(self.__queue) > self.__max_length:
+                    _ = self.__queue.pop(0)
+
+            def get_mean(self):
+                return np.mean(self.__queue)
+
+            def get_cycles(self):
+                return self.__count
+
         if not override:
             if len(self.duplicate_h5_groups) > 0:
                 if self.mpi_rank == 0:
@@ -490,9 +517,9 @@ class Process(object):
         if self.mpi_comm is not None:
             self.mpi_comm.barrier()
 
-        time_per_pix = 0
-        num_pos = self._rank_end_pos - self._start_pos
-        orig_start_pos = self._start_pos
+        compute_times = SimpleFIFO(5)
+        write_times = SimpleFIFO(5)
+        # read_times = SimpleFIFO(5)
 
         # TODO: Need to find a nice way of figuring out if a process has implemented the partial feature.
         if self.mpi_rank == 0:
@@ -503,27 +530,33 @@ class Process(object):
         self._read_data_chunk()
         while self.data is not None:
 
-            t_start = tm.time()
+            t_start_1 = tm.time()
 
             self._unit_computation(*args, **kwargs)
 
-            tot_time = np.round(tm.time() - t_start, decimals=2)
-            if self.verbose:
-                print('Rank {} - computed chunk in {} or {} per pixel'.format(self.mpi_rank, format_time(tot_time),
-                                                                             format_time(
-                                                                                 tot_time / self.data.shape[0])))
-            if self._start_pos == orig_start_pos:
-                time_per_pix = tot_time / (self._rank_end_pos - orig_start_pos)  # in seconds
-            else:
-                time_remaining = (num_pos - (self._rank_end_pos - self._start_pos)) * time_per_pix  # in seconds
-                print('Rank {} - Time remaining: {}'.format(self.mpi_rank, format_time(time_remaining)))
+            comp_time = np.round(tm.time() - t_start_1, decimals=2)  # in seconds
+            time_per_pix = comp_time / self.data.shape[0]
+            compute_times.put(time_per_pix)
 
-            t_start = tm.time()
-            self._write_results_chunk()
             if self.verbose:
-                tot_time = np.round(tm.time() - t_start, decimals=2)
+                print('Rank {} - computed chunk in {} or {} per pixel. Average: {} per pixel'
+                      '.'.format(self.mpi_rank, format_time(comp_time), format_time(time_per_pix),
+                                 format_time(compute_times.get_mean())))
+
+            t_start_2 = tm.time()
+            self._write_results_chunk()
+
+            dump_time = np.round(tm.time() - t_start_2, decimals=2)
+            write_times.put(dump_time / self.data.shape[0])
+
+            if self.verbose:
                 print('Rank {} - wrote its {} pixel chunk in {}'.format(self.mpi_rank, self.data.shape[0],
-                                                                        format_time(tot_time)))
+                                                                        format_time(dump_time)))
+
+            time_remaining = (self._rank_end_pos - self._end_pos) * (compute_times.get_mean() + write_times.get_mean())
+
+            if self.verbose or self.mpi_rank == 0:
+                print('Rank {} - Time remaining: {}'.format(self.mpi_rank, format_time(time_remaining)))
 
             self._read_data_chunk()
 
