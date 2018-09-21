@@ -578,6 +578,7 @@ def parallel_compute(data, func, cores=1, lengthy_computation=False, func_args=N
         if not isinstance(func_kwargs, dict):
             raise TypeError('Keyword arguments to the mapped function should be specified via a dictionary')
 
+    req_cores = cores
     if MPI is not None:
         rank = MPI.COMM_WORLD.Get_rank()
         if cores > 1 and rank == 0:
@@ -585,7 +586,6 @@ def parallel_compute(data, func, cores=1, lengthy_computation=False, func_args=N
         cores = 1
     else:
         rank = 0
-        req_cores = cores
         cores = recommend_cpu_cores(data.shape[0],
                                     requested_cores=cores,
                                     lengthy_computation=lengthy_computation,
