@@ -11,7 +11,6 @@ import joblib
 import time as tm
 
 from multiprocessing import cpu_count
-import socket
 try:
     from mpi4py import MPI
     if MPI.COMM_WORLD.Get_size() == 1:
@@ -30,7 +29,14 @@ For hyperthreaded applications: need to tack on the additional flag as shown bel
 No need to specify -n 4 or whatever if you want to use all available processors
 $ mpirun -use-hwthread-cpus python hello_world.py 
 
+The naive approach will be to simply allow all ranks to write data directly to file
+Forcing only a single rank within a socket may negate performance benefits
+Writing out to separate files and then merging them later on is the most performant option
+
 Look into sub-communication worlds that can create mini worlds instaed of the general COMM WOLRD
+https://stackoverflow.com/questions/50900655/mpi4py-create-multiple-groups-and-scatter-from-each-group
+https://www.bu.edu/pasi/files/2011/01/Lisandro-Dalcin-mpi4py.pdf
+No work will be necessary to figure out the new ranking within the new communicator / group - automatically assigned from lowest value
 
 set self.verbose = True for all master ranks. Won't need to worry about printing later on
 Do we need a new variable called self._worker_ranks = [1,5,9, 13...] for master ranks? <-- this can save time and repeated book-keeping!
@@ -51,16 +57,23 @@ How much memory each rank can work with is a function of:
 2. Instead of doing joblib either use a for-loop or the map-function
 3. When it is time to write the results chunks back to file. 
     a. If not master -> send data to master
-    b. If master -> gather from this smaller world and then write to file once. IF this is too much memory to handle, then loop over each rank:
+    b. If master -> gather from this smaller world and then write to file once. IF this is too much memory to handle, then loop over each rank <-- how is this different from just looping over each rank within the new communicator and asking it to write?:
         i. receive
         ii. write
         iii. repeat.
+    A copy of the data will be made on Rank 0. ie- Rank 0 will have to hold N ranks worth of data. Meaning that each rank can hold only around M/(2N) of data where M is the memory per node and N is the number of ranks per socket
+    
+    
 """
 
-def find_master_per_socket(verbose=False):
+def group_ranks_by_socket(verbose=False):
     """
-    Assigns a master rank for each rank such that there is a single master rank per socket (CPU).
-    This is relevant especially when trying to bring down the number of ranks that are writing to the HDF5 file.
+    Groups MPI ranks in COMM_WORLD by socket. Another way to think about this is that it assigns a master rank for each
+    rank such that there is a single master rank per socket (CPU). The results from this function can be used to split
+    MPI communicators based on the socket for intra-node communication.
+
+    This is necessary when wanting to carve up the memory for all ranks within a socket.
+    This is also relevant when trying to bring down the number of ranks that are writing to the HDF5 file.
     This is all based on the premise that data analysis involves a fair amount of file writing and writing with
     3 ranks is a lot better than writing with 100 ranks. An assumption is made that the communication between the
     ranks within each socket would be faster than communicating across nodes / scokets. No assumption is made about the
@@ -137,7 +150,10 @@ class Process(object):
             self.mpi_rank = comm.Get_rank()
             self.mpi_size = comm.Get_size()
 
-            print("Rank {} of {} on {} sees {} logical cores on the socket".format(comm.Get_rank(), comm.Get_size(), socket.gethostname(), cpu_count()))
+            if verbose:
+                print("Rank {} of {} on {} sees {} logical cores on the socket".format(comm.Get_rank(), comm.Get_size(),
+                                                                                       MPI.Get_processor_name(),
+                                                                                       cpu_count()))
 
             # First, ensure that cores=logical cores in node. No point being economical / considerate
             cores = psutil.cpu_count()
@@ -173,6 +189,8 @@ class Process(object):
         if self.mpi_rank == 0:
             if not check_if_main(h5_main, verbose=verbose):
                 raise ValueError('Provided dataset is not a "Main" dataset with necessary ancillary datasets')
+        if MPI is not None:
+            MPI.COMM_WORLD.barrier()
         # Not sure if we need a barrier here.
 
         # Saving these as properties of the object:
@@ -316,7 +334,10 @@ class Process(object):
             Default - 1024
             The amount a memory in Mb to use in the computation
         """
-        min_free_cores = 1 + int(psutil.cpu_count() > 4)
+        if MPI is None:
+            min_free_cores = 1 + int(psutil.cpu_count() > 4)
+       else:
+            min_free_cores = 0
 
         if cores is None:
             self._cores = max(1, psutil.cpu_count() - min_free_cores)
@@ -336,6 +357,7 @@ class Process(object):
 
         self._max_mem_mb = min(_max_mem_mb, mem)
 
+        # This line should actually use the number of ranks within this socket. This is fine for now.
         max_data_chunk = self._max_mem_mb / self._cores
 
         # Now calculate the number of positions that can be stored in memory in one go.
@@ -411,7 +433,8 @@ class Process(object):
         as well as multiple calls to parallel_compute if necessary
         """
         # TODO: Try to use the functools.partials to preconfigure the map function
-        self._results = parallel_compute(self.data, self._map_function, cores=self._cores,
+        # For cores to be 1.
+        self._results = parallel_compute(self.data, self._map_function, cores=1, #self._cores,
                                          lengthy_computation=False,
                                          func_args=args, func_kwargs=kwargs,
                                          verbose=self.verbose)
