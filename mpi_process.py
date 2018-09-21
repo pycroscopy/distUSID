@@ -466,20 +466,22 @@ class Process(object):
         """
         if not override:
             if len(self.duplicate_h5_groups) > 0:
-                print('Returned previously computed results at ' + self.duplicate_h5_groups[-1].name)
+                if self.mpi_rank == 0:
+                    print('Returned previously computed results at ' + self.duplicate_h5_groups[-1].name)
                 return self.duplicate_h5_groups[-1]
             elif len(self.partial_h5_groups) > 0:
-                print('Resuming computation in group: ' + self.partial_h5_groups[-1].name)
+                if self.mpi_rank == 0:
+                    print('Resuming computation in group: ' + self.partial_h5_groups[-1].name)
                 self.use_partial_computation()
 
         if self.h5_results_grp is None:
             # starting fresh
-            if self.verbose:
+            if self.verbose and self.mpi_rank == 0:
                 print('Creating datagroup and datasets')
             self._create_results_datasets()
         else:
             # resuming from previous checkpoint
-            if self.verbose:
+            if self.verbose and self.mpi_rank == 0:
                 print('Resuming computation')
             self._get_existing_datasets()
 
