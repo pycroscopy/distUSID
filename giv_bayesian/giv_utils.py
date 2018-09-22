@@ -111,7 +111,13 @@ def do_bayesian_inference(i_meas, bias, freq, num_x_steps=251, r_extra=110, gam=
     P0[:num_x_steps, :num_x_steps] = 1. / sigma ** 2 * (1. * np.eye(num_x_steps) + np.linalg.matrix_power(Lap, 3))
     P0[num_x_steps, num_x_steps] = 1. / sigmaC ** 2
 
+    """
+    There is a SERIOUS problem with numpy, especially linear algebra. Parallelism is wasted on just this one line!
+    See single_rank_single_node log in the output folder
+    https://github.com/joblib/joblib/issues/575
+    """
     Sigma = np.linalg.inv(np.dot(A.T, np.dot(O, A)) + P0)
+
     m = np.dot(Sigma, (np.dot(A.T, np.dot(O, i_meas)) + np.dot(P0, m0)))
 
     # Reconstructed current
