@@ -20,6 +20,8 @@ except ImportError:
     # mpi4py not even present! Single node by default:
     MPI = None
 
+mpi_serial_warning = False
+
 from pyUSID.io.hdf_utils import check_if_main, check_for_old, get_attributes
 from pyUSID.io.usi_data import USIDataset
 from pyUSID.io.io_utils import recommend_cpu_cores, get_available_memory, format_time, format_size
@@ -162,7 +164,7 @@ class Process(object):
             cores = psutil.cpu_count()
 
             # It is sufficient if just one rank checks all this.
-            if verbose and self.mpi_rank == 0:
+            if self.mpi_rank == 0:
                 print('Working on {} ranks via MPI'.format(self.mpi_size))
 
             # Ensure that the file is opened in the correct comm or something
@@ -182,8 +184,7 @@ class Process(object):
             """
 
         else:
-            if verbose:
-                print('No mpi4py found. Asssuming single node computation')
+            print('No mpi4py found. Assuming single node computation')
             self.mpi_comm = None
             self.mpi_size = 1
             self.mpi_rank = 0
@@ -522,10 +523,10 @@ class Process(object):
 
         compute_times = SimpleFIFO(5)
         write_times = SimpleFIFO(5)
-        # read_times = SimpleFIFO(5)
+        orig_rank_start = self._start_pos
 
         # TODO: Need to find a nice way of figuring out if a process has implemented the partial feature.
-        if self.mpi_rank == 0:
+        if self.mpi_rank == 0 and self.mpi_size == 1:
             print('You maybe able to abort this computation at any time and resume at a later time!\n'
                   '\tIf you are operating in a python console, press Ctrl+C or Cmd+C to abort\n'
                   '\tIf you are in a Jupyter notebook, click on "Kernel">>"Interrupt"')
@@ -559,11 +560,18 @@ class Process(object):
             time_remaining = (self._rank_end_pos - self._end_pos) * (compute_times.get_mean() + write_times.get_mean())
 
             if self.verbose or self.mpi_rank == 0:
-                print('Rank {} - Time remaining: {}'.format(self.mpi_rank, format_time(time_remaining)))
+                percent_complete = int(100 * (self._end_pos - orig_rank_start) / (self._rank_end_pos - orig_rank_start))
+                print('Rank {} - {}% complete. Time remaining: {}'.format(self.mpi_rank, percent_complete,
+                                                                          format_time(time_remaining)))
 
             self._read_data_chunk()
 
-        print('Rank {} - Finished computing all jobs!'.format(self.mpi_rank))
+        if self.verbose:
+            print('Rank {} - Finished computing all jobs!'.format(self.mpi_rank))
+
+        self.mpi_comm.barrier()
+        if self.mpi_rank == 0:
+            print('Finished processing the entire dataset!')
 
         return self.h5_results_grp
 
@@ -617,8 +625,9 @@ def parallel_compute(data, func, cores=1, lengthy_computation=False, func_args=N
     req_cores = cores
     if MPI is not None:
         rank = MPI.COMM_WORLD.Get_rank()
-        if cores > 1 and rank == 0:
+        if cores > 1 and rank == 0:  # and not mpi_serial_warning:
             print('Note - Each rank will compute serially using pure MPI mode')
+            # mpi_serial_warning = True
         cores = 1
     else:
         rank = 0
