@@ -1,142 +1,48 @@
-[or-condo-c172.ornl.gov:110602] 1 more process has sent help message help-mpi-runtime.txt / mpi_init:warn-fork
-[or-condo-c172.ornl.gov:110602] Set MCA parameter "orte_base_help_aggregate" to 0 to see all help / error messages
-Traceback (most recent call last):
-  File "bayesian_script_mpi.py", line 16, in <module>
-    h5_bayes_grp = i_cleaner.compute()
-  File "/home/syz/mpi_tutorials/giv_bayesian/giv_bayesian_mpi.py", line 447, in compute
-    return super(GIVBayesian, self).compute(override=override, *args, **kwargs)
-  File "/home/syz/mpi_tutorials/giv_bayesian/mpi_process.py", line 393, in compute
-    self._unit_computation(*args, **kwargs)
-  File "/home/syz/mpi_tutorials/giv_bayesian/giv_bayesian_mpi.py", line 407, in _unit_computation
-    verbose=self.verbose)
-  File "/home/syz/mpi_tutorials/giv_bayesian/mpi_process.py", line 572, in parallel_compute_mp
-    results = pool.map(preconf_func, data)
-  File "/software/dev_tools/swtree/cs400_centos7.2_pe2016-08/python/3.6.3/centos7.2_gnu5.3.0/lib/python3.6/multiprocessing/pool.py", line 266, in map
-    return self._map_async(func, iterable, mapstar, chunksize).get()
-  File "/software/dev_tools/swtree/cs400_centos7.2_pe2016-08/python/3.6.3/centos7.2_gnu5.3.0/lib/python3.6/multiprocessing/pool.py", line 644, in get
-    raise self._value
-  File "/software/dev_tools/swtree/cs400_centos7.2_pe2016-08/python/3.6.3/centos7.2_gnu5.3.0/lib/python3.6/multiprocessing/pool.py", line 424, in _handle_tasks
-    put(task)
-  File "/software/dev_tools/swtree/cs400_centos7.2_pe2016-08/python/3.6.3/centos7.2_gnu5.3.0/lib/python3.6/multiprocessing/connection.py", line 206, in send
-    self._send_bytes(_ForkingPickler.dumps(obj))
-  File "/software/dev_tools/swtree/cs400_centos7.2_pe2016-08/python/3.6.3/centos7.2_gnu5.3.0/lib/python3.6/multiprocessing/reduction.py", line 51, in dumps
-    cls(buf, protocol).dump(obj)
-AttributeError: Can't pickle local object 'parallel_compute_mp.<locals>.partial_custom.<locals>.newfunc'
-Traceback (most recent call last):
-  File "bayesian_script_mpi.py", line 16, in <module>
-    h5_bayes_grp = i_cleaner.compute()
-  File "/home/syz/mpi_tutorials/giv_bayesian/giv_bayesian_mpi.py", line 447, in compute
-    return super(GIVBayesian, self).compute(override=override, *args, **kwargs)
-  File "/home/syz/mpi_tutorials/giv_bayesian/mpi_process.py", line 393, in compute
-    self._unit_computation(*args, **kwargs)
-  File "/home/syz/mpi_tutorials/giv_bayesian/giv_bayesian_mpi.py", line 407, in _unit_computation
-    verbose=self.verbose)
-  File "/home/syz/mpi_tutorials/giv_bayesian/mpi_process.py", line 572, in parallel_compute_mp
-    results = pool.map(preconf_func, data)
-  File "/software/dev_tools/swtree/cs400_centos7.2_pe2016-08/python/3.6.3/centos7.2_gnu5.3.0/lib/python3.6/multiprocessing/pool.py", line 266, in map
-    return self._map_async(func, iterable, mapstar, chunksize).get()
-  File "/software/dev_tools/swtree/cs400_centos7.2_pe2016-08/python/3.6.3/centos7.2_gnu5.3.0/lib/python3.6/multiprocessing/pool.py", line 644, in get
-    raise self._value
-  File "/software/dev_tools/swtree/cs400_centos7.2_pe2016-08/python/3.6.3/centos7.2_gnu5.3.0/lib/python3.6/multiprocessing/pool.py", line 424, in _handle_tasks
-    put(task)
-  File "/software/dev_tools/swtree/cs400_centos7.2_pe2016-08/python/3.6.3/centos7.2_gnu5.3.0/lib/python3.6/multiprocessing/connection.py", line 206, in send
-    self._send_bytes(_ForkingPickler.dumps(obj))
-  File "/software/dev_tools/swtree/cs400_centos7.2_pe2016-08/python/3.6.3/centos7.2_gnu5.3.0/lib/python3.6/multiprocessing/reduction.py", line 51, in dumps
-    cls(buf, protocol).dump(obj)
-AttributeError: Can't pickle local object 'parallel_compute_mp.<locals>.partial_custom.<locals>.newfunc'
-Traceback (most recent call last):
-  File "h5py/_objects.pyx", line 193, in h5py._objects.ObjectID.__dealloc__
-RuntimeError: Can't decrement id ref count (can't close file, there are objects still open)
-Exception ignored in: 'h5py._objects.ObjectID.__dealloc__'
-Traceback (most recent call last):
-  File "h5py/_objects.pyx", line 193, in h5py._objects.ObjectID.__dealloc__
-RuntimeError: Can't decrement id ref count (can't close file, there are objects still open)
-Traceback (most recent call last):
-  File "h5py/_objects.pyx", line 193, in h5py._objects.ObjectID.__dealloc__
-RuntimeError: Can't decrement id ref count (can't close file, there are objects still open)
-Exception ignored in: 'h5py._objects.ObjectID.__dealloc__'
-Traceback (most recent call last):
-  File "h5py/_objects.pyx", line 193, in h5py._objects.ObjectID.__dealloc__
-RuntimeError: Can't decrement id ref count (can't close file, there are objects still open)
-[or-condo-c172:110620] *** Process received signal ***
-[or-condo-c172:110620] Signal: Segmentation fault (11)
-[or-condo-c172:110620] Signal code: Address not mapped (1)
-[or-condo-c172:110620] Failing at address: 0x52c
-[or-condo-c172:110620] [ 0] /lib64/libpthread.so.0(+0xf100)[0x2ba70b0a3100]
-[or-condo-c172:110620] [ 1] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/hdf5-parallel/1.8.17/centos7.2_gnu5.3.0/lib/libhdf5.so.10(H5F_close+0xc)[0x2ba7129a623c]
-[or-condo-c172:110620] [ 2] [or-condo-c173:110752] *** Process received signal ***
-[or-condo-c173:110752] Signal: Segmentation fault (11)
-[or-condo-c173:110752] Signal code: Address not mapped (1)
-[or-condo-c173:110752] Failing at address: 0x52c
-/software/dev_tools/swtree/cs400_centos7.2_pe2016-08/hdf5-parallel/1.8.17/centos7.2_gnu5.3.0/lib/libhdf5.so.10(+0x11b8ab)[0x2ba712a0f8ab]
-[or-condo-c172:110620] [ 3] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/hdf5-parallel/1.8.17/centos7.2_gnu5.3.0/lib/libhdf5.so.10(H5SL_try_free_safe+0x5a)[0x2ba712a9e6aa]
-[or-condo-c172:110620] [ 4] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/hdf5-parallel/1.8.17/centos7.2_gnu5.3.0/lib/libhdf5.so.10(H5I_clear_type+0x68)[0x2ba712a10138]
-[or-condo-c172:110620] [ 5] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/hdf5-parallel/1.8.17/centos7.2_gnu5.3.0/lib/libhdf5.so.10(H5F_term_interface+0x30)[0x2ba71299f400]
-[or-condo-c172:110620] [ 6] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/hdf5-parallel/1.8.17/centos7.2_gnu5.3.0/lib/libhdf5.so.10(+0x3972e)[0x2ba71292d72e]
-[or-condo-c172:110620] [ 7] [or-condo-c173:110752] [ 0] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/hdf5-parallel/1.8.17/centos7.2_gnu5.3.0/lib/libhdf5.so.10(+0x39e59)[0x2ba71292de59]
-[or-condo-c172:110620] [ 8] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/openmpi/1.10.3/centos7.2_gnu5.3.0/lib/libmpi.so.12(ompi_attr_delete_all+0x303)[0x2ba713272543]
-[or-condo-c172:110620] [ 9] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/openmpi/1.10.3/centos7.2_gnu5.3.0/lib/libmpi.so.12(ompi_mpi_finalize+0xa6)[0x2ba713289e96]
-[or-condo-c172:110620] [10] /lib64/libpthread.so.0(+0xf100)[0x2b38cd090100]
-[or-condo-c173:110752] [ 1] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/python/3.6.3/centos7.2_gnu5.3.0/lib/python3.6/site-packages/mpi4py/MPI.cpython-36m-x86_64-linux-gnu.so(+0x34594)[0x2ba7140db594]
-[or-condo-c172:110620] [11] python[0x421c83]
-[or-condo-c172:110620] [12] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/hdf5-parallel/1.8.17/centos7.2_gnu5.3.0/lib/libhdf5.so.10(H5F_close+0xc)[0x2b38d495323c]
-[or-condo-c173:110752] [ 2] python(Py_Main+0x6f5)[0x43a755]
-[or-condo-c172:110620] [13] python(main+0x162)[0x41d8d2]
-[or-condo-c172:110620] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/hdf5-parallel/1.8.17/centos7.2_gnu5.3.0/lib/libhdf5.so.10(+0x11b8ab)[0x2b38d49bc8ab]
-[or-condo-c173:110752] [ 3] [14] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/hdf5-parallel/1.8.17/centos7.2_gnu5.3.0/lib/libhdf5.so.10(H5SL_try_free_safe+0x5a)[0x2b38d4a4b6aa]
-[or-condo-c173:110752] [ 4] /lib64/libc.so.6(__libc_start_main+0xf5)[0x2ba70b9dab15]
-[or-condo-c172:110620] [15] python[0x41d991]
-[or-condo-c172:110620] *** End of error message ***
-/software/dev_tools/swtree/cs400_centos7.2_pe2016-08/hdf5-parallel/1.8.17/centos7.2_gnu5.3.0/lib/libhdf5.so.10(H5I_clear_type+0x68)[0x2b38d49bd138]
-[or-condo-c173:110752] [ 5] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/hdf5-parallel/1.8.17/centos7.2_gnu5.3.0/lib/libhdf5.so.10(H5F_term_interface+0x30)[0x2b38d494c400]
-[or-condo-c173:110752] [ 6] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/hdf5-parallel/1.8.17/centos7.2_gnu5.3.0/lib/libhdf5.so.10(+0x3972e)[0x2b38d48da72e]
-[or-condo-c173:110752] [ 7] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/hdf5-parallel/1.8.17/centos7.2_gnu5.3.0/lib/libhdf5.so.10(+0x39e59)[0x2b38d48dae59]
-[or-condo-c173:110752] [ 8] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/openmpi/1.10.3/centos7.2_gnu5.3.0/lib/libmpi.so.12(ompi_attr_delete_all+0x303)[0x2b38d521f543]
-[or-condo-c173:110752] [ 9] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/openmpi/1.10.3/centos7.2_gnu5.3.0/lib/libmpi.so.12(ompi_mpi_finalize+0xa6)[0x2b38d5236e96]
-[or-condo-c173:110752] [10] /software/dev_tools/swtree/cs400_centos7.2_pe2016-08/python/3.6.3/centos7.2_gnu5.3.0/lib/python3.6/site-packages/mpi4py/MPI.cpython-36m-x86_64-linux-gnu.so(+0x34594)[0x2b38d6088594]
-[or-condo-c173:110752] [11] python[0x421c83]
-[or-condo-c173:110752] [12] python(Py_Main+0x6f5)[0x43a755]
-[or-condo-c173:110752] [13] python(main+0x162)[0x41d8d2]
-[or-condo-c173:110752] [14] /lib64/libc.so.6(__libc_start_main+0xf5)[0x2b38cd9c7b15]
-[or-condo-c173:110752] [15] python[0x41d991]
-[or-condo-c173:110752] *** End of error message ***
-/home/syz/mpi_tutorials/giv_bayesian
+/lustre/or-hydra/cades-ccsd/syz/pycroscopy_ensemble/giv_bayesian_pure_mpi
+total 279M
+-rw-r--r-- 1 syz cades-ccsd  585 Sep 22 15:56 bayesian_script_mpi.py
+-rw-r--r-- 1 syz cades-ccsd  536 Sep 21 18:23 bayesian_script_single_node.py
+-rw-r--r-- 1 syz cades-ccsd  20K Sep 22 15:56 giv_bayesian_mpi.py
+-rw-r--r-- 1 syz cades-ccsd  15K Sep 21 18:23 giv_bayesian_mpi.pyc
+-rwx------ 1 syz cades-ccsd 321M Sep 22 15:56 giv_raw.h5
+-rw-r--r-- 1 syz cades-ccsd  21K Sep 22 15:56 giv_utils.py
+-rw-r--r-- 1 syz cades-ccsd  28K Sep 22 15:56 mpi_process.py
+drwxr-sr-x 2 syz cades-ccsd  33K Sep 22 15:44 __pycache__
 --------------------------------------------------------------------------
 An MPI process has executed an operation involving a call to the
 "fork()" system call to create a child process.  Open MPI is currently
 operating in a condition that could result in memory corruption or
 other system errors; your MPI job may hang, crash, or produce silent
 data corruption.  The use of fork() (or system() or other calls that
-create child processes) is strongly discouraged.  
+create child processes) is strongly discouraged.
 
 The process that invoked fork was:
 
-  Local host:          or-condo-c173 (PID 110752)
-  MPI_COMM_WORLD rank: 1
+  Local host:          or-condo-c54 (PID 50341)
+  MPI_COMM_WORLD rank: 0
 
 If you are *absolutely sure* that your application will successfully
 and correctly survive a call to fork(), you may disable this warning
 by setting the mpi_warn_on_fork MCA parameter to 0.
 --------------------------------------------------------------------------
-Rank 1 of 2 on or-condo-c173.ornl.gov sees 36 logical cores on the socket
-Rank 0 of 2 on or-condo-c172.ornl.gov sees 36 logical cores on the socket
-Working on 2 nodes via MPI
-Each rank is required to work on 34048 of the 68096 positions in this dataset
-Rank 0 will read positions 0 to 34048 of 68096
-Allowed to read 142222 pixels per chunk
-Allowed to use up to 36 cores and 10240 MB of memory
-Max positions per read set to 10
-Consider calling test() to check results before calling compute() which computes on the entire dataset and writes back to the HDF5 file
-ensuring that half steps should be odd, num_x_steps is now 250
-Rank 1 will read positions 34048 to 68096 of 68096
+Rank 0 of 1 on or-condo-c54.ornl.gov sees 32 logical cores on the socket
+Working on 1 ranks via MPI
+Each rank is required to work on 68096 of the 68096 positions in this dataset
+Rank 0 will read positions 0 to 68096 of 68096
+Rank:  0 , sendbuf:  or-condo-c54.ornl.gov
+Rank:  0 , recvbuf received:  ['or-condo-c54.ornl.gov']
+Unique sockets: ['or-condo-c54.ornl.gov']
+Parent rank for all ranks: [0]
+Rank 0 - 1 processes with access to 122.56 GB memory on this socket
+Allowed to read 65801250 pixels per chunk
+Max positions per read set to 100
 Consider calling test() to check results before calling compute() which computes on the entire dataset and writes back to the HDF5 file
 ensuring that half steps should be odd, num_x_steps is now 250
 Checking for duplicates:
-Creating datagroup and datasets
+Creating HDF5 group and datasets to hold results
 Now creating the datasets
-Creating datagroup and datasets
 created group: /Measurement_000/Channel_000/Raw_Data-FFT_Filtering_000/Filtered_Data-Reshape_000/Reshaped_Data-Bayesian_Inference_000 with attributes:
-{'machine_id': 'or-condo-c172.ornl.gov', 'timestamp': '2018_07_15-14_16_53', 'pyUSID_version': '0.0.4', 'platform': 'Linux-3.10.0-327.4.4.el7.x86_64-x86_64-with-centos-7.2.1511-Core', 'tool': 'Bayesian_Inference', 'num_source_dsets': 1, 'source_000': <HDF5 object reference>, 'algorithm_author': 'Kody J. Law', 'last_pixel': 0, 'freq': 200.0, 'num_x_steps': 250, 'r_extra': 110, 'gam': 0.03, 'e': 10.0, 'sigma': 10.0, 'sigmaC': 1.0, 'num_samples': 2000.0}
+{'machine_id': 'or-condo-c54.ornl.gov', 'timestamp': '2018_09_22-15_56_22', 'pyUSID_version': '0.0.4', 'platform': 'Linux-3.10.0-327.4.4.el7.x86_64-x86_64-with-centos-7.5.1804-Core', 'tool': 'Bayesian_Inference', 'num_source_dsets': 1, 'source_000': <HDF5 object reference>, 'algorithm_author': 'Kody J. Law', 'last_pixel': 0, 'freq': 200.0, 'num_x_steps': 250, 'r_extra': 110, 'gam': 0.03, 'e': 10.0, 'sigma': 10.0, 'sigmaC': 1.0, 'num_samples': 2000.0}
 Created I Corrected
 Created Resistance
 Created Variance
@@ -145,18 +51,100 @@ Done creating all results datasets!
 You maybe able to abort this computation at any time and resume at a later time!
 	If you are operating in a python console, press Ctrl+C or Cmd+C to abort
 	If you are in a Jupyter notebook, click on "Kernel">>"Interrupt"
-Rank 0 - Read positions 0 to 10. Need to read till 34048
+Rank 0 - Read positions 0 to 100. Need to read till 68096
 Rank 0 beginning parallel compute for Forward
-Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
-2 cores requested.
-computational jobs per core = 5. For short computations, each core must have at least 20 jobs to warrant parallel computation.
-Starting computing on 2 cores (requested 2 cores)
-Rank 1 - Read positions 34048 to 34058. Need to read till 68096
-Rank 1 beginning parallel compute for Forward
-Number of CPU free cores set to: 2 given that the CPU has 36 logical cores.
-2 cores requested.
-computational jobs per core = 5. For short computations, each core must have at least 20 jobs to warrant parallel computation.
-Starting computing on 2 cores (requested 2 cores)
---------------------------------------------------------------------------
-mpiexec noticed that process rank 1 with PID 0 on node or-pbs-c173.ornl.gov exited on signal 11 (Segmentation fault).
---------------------------------------------------------------------------
+Rank 0 starting computing on 1 cores (requested 1 cores)
+Rank 0 computing serially ...
+Rank 0 finished processing forward sections. Now working on reverse sections....
+Rank 0 starting computing on 1 cores (requested 1 cores)
+Rank 0 computing serially ...
+Rank 0 Finished processing reverse loops (and this chunk)
+Rank 0 - computed chunk in 11.34 mins or 6.8 sec per pixel. Average: 6.802899999999999 per pixel.
+Rank 0 - Started accumulating results for this chunk
+Rank 0 - Finished accumulating results. Writing results of chunk to h5
+Rank 0 - Finished processing up to pixel 100 of 68096.
+Rank 0 - wrote its 100 pixel chunk in 10.0 msec
+Rank 0 - Time remaining: 128.49 hours
+Rank 0 - Finished computing all jobs!
+         2842449 function calls (2815002 primitive calls) in 683.433 seconds
+
+   Ordered by: cumulative time
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+   1627/1    0.066    0.000  683.624  683.624 {built-in method builtins.exec}
+        1    0.000    0.000  683.623  683.623 bayesian_script_mpi.py:1(<module>)
+        1    0.000    0.000  680.796  680.796 giv_bayesian_mpi.py:414(compute)
+        1    0.000    0.000  680.796  680.796 mpi_process.py:451(compute)
+        1    0.000    0.000  680.294  680.294 giv_bayesian_mpi.py:379(_unit_computation)
+        2    0.000    0.000  680.294  340.147 mpi_process.py:565(parallel_compute)
+        2    0.001    0.001  680.293  340.147 mpi_process.py:637(<listcomp>)
+      200    1.297    0.006  680.292    3.401 giv_utils.py:17(do_bayesian_inference)
+      200  636.608    3.183  636.612    3.183 linalg.py:464(inv)
+      200    0.006    0.000   38.210    0.191 _matfuncs_sqrtm.py:119(sqrtm)
+      200   34.892    0.174   34.905    0.175 decomp_schur.py:20(schur)
+       72    0.001    0.000    3.481    0.048 __init__.py:1(<module>)
+      200    2.357    0.012    3.201    0.016 _matfuncs_sqrtm.py:26(_sqrtm_triu)
+   1849/3    0.011    0.000    2.682    0.894 <frozen importlib._bootstrap>:966(_find_and_load)
+   1843/3    0.008    0.000    2.682    0.894 <frozen importlib._bootstrap>:936(_find_and_load_unlocked)
+   1369/3    0.007    0.000    2.681    0.894 <frozen importlib._bootstrap>:651(_load_unlocked)
+   1202/3    0.004    0.000    2.681    0.894 <frozen importlib._bootstrap_external>:672(exec_module)
+   1865/4    0.001    0.000    2.671    0.668 <frozen importlib._bootstrap>:211(_call_with_frames_removed)
+   719/20    0.001    0.000    2.492    0.125 {built-in method builtins.__import__}
+ 6723/908    0.005    0.000    2.490    0.003 <frozen importlib._bootstrap>:997(_handle_fromlist)
+     2202    2.003    0.001    2.003    0.001 {built-in method numpy.core.multiarray.dot}
+      200    1.943    0.010    1.943    0.010 {method 'randn' of 'mtrand.RandomState' objects}
+        1    0.000    0.000    1.918    1.918 giv_bayesian_mpi.py:7(<module>)
+        6    0.000    0.000    1.888    0.315 __init__.py:10(<module>)
+        1    0.000    0.000    1.781    1.781 __init__.py:18(<module>)
+        1    0.000    0.000    1.135    1.135 usi_data.py:6(<module>)
+1365/1170    0.003    0.000    1.055    0.001 <frozen importlib._bootstrap>:564(module_from_spec)
+  158/111    0.001    0.000    1.023    0.009 <frozen importlib._bootstrap_external>:919(create_module)
+  158/111    0.582    0.004    1.022    0.009 {built-in method _imp.create_dynamic}
+     1202    0.010    0.000    0.922    0.001 <frozen importlib._bootstrap_external>:743(get_code)
+  1525601    0.896    0.000    0.896    0.000 {method 'dot' of 'numpy.ndarray' objects}
+        1    0.000    0.000    0.749    0.749 __init__.py:13(<module>)
+     1205    0.386    0.000    0.672    0.001 <frozen importlib._bootstrap_external>:830(get_data)
+        2    0.000    0.000    0.645    0.323 image.py:5(<module>)
+        2    0.000    0.000    0.563    0.282 __init__.py:19(<module>)
+        1    0.000    0.000    0.559    0.559 jupyter_utils.py:4(<module>)
+        1    0.000    0.000    0.513    0.513 plot_utils.py:6(<module>)
+        1    0.000    0.000    0.492    0.492 __init__.py:106(<module>)
+        1    0.000    0.000    0.484    0.484 giv_bayesian_mpi.py:235(_create_results_datasets)
+        1    0.000    0.000    0.447    0.447 add_newdocs.py:10(<module>)
+        1    0.000    0.000    0.404    0.404 type_check.py:3(<module>)
+        2    0.000    0.000    0.382    0.191 __init__.py:6(<module>)
+        1    0.000    0.000    0.354    0.354 pyplot.py:19(<module>)
+     1802    0.014    0.000    0.333    0.000 <frozen importlib._bootstrap>:870(_find_spec)
+        3    0.000    0.000    0.314    0.105 __init__.py:57(<module>)
+     1797    0.002    0.000    0.310    0.000 <frozen importlib._bootstrap_external>:1149(find_spec)
+1798/1797    0.008    0.000    0.308    0.000 <frozen importlib._bootstrap_external>:1117(_get_spec)
+        1    0.000    0.000    0.305    0.305 embed.py:4(<module>)
+     2899    0.027    0.000    0.287    0.000 <frozen importlib._bootstrap_external>:1233(find_spec)
+     1205    0.286    0.000    0.286    0.000 {method 'read' of '_io.FileIO' objects}
+        6    0.001    0.000    0.282    0.047 usi_data.py:26(__init__)
+        1    0.000    0.000    0.260    0.260 _polygon.py:1(<module>)
+        1    0.000    0.000    0.258    0.258 __init__.py:308(<module>)
+        2    0.000    0.000    0.255    0.128 giv_bayesian_mpi.py:35(create_empty_dataset)
+       12    0.000    0.000    0.235    0.020 hdf_utils.py:1161(get_sort_order)
+       12    0.002    0.000    0.235    0.020 hdf_utils.py:1183(<listcomp>)
+3343/3279    0.063    0.000    0.204    0.000 {built-in method builtins.__build_class__}
+        3    0.000    0.000    0.189    0.063 __init__.py:4(<module>)
+        8    0.000    0.000    0.162    0.020 group.py:63(create_dataset)
+        8    0.161    0.020    0.162    0.020 dataset.py:54(make_new_dset)
+     6440    0.157    0.000    0.157    0.000 {built-in method posix.stat}
+        1    0.000    0.000    0.154    0.154 interactiveshell.py:1(<module>)
+     6134    0.003    0.000    0.151    0.000 <frozen importlib._bootstrap_external>:75(_path_stat)
+        1    0.000    0.000    0.149    0.149 widget.py:8(<module>)
+     1199    0.004    0.000    0.147    0.000 <frozen importlib._bootstrap_external>:485(_compile_bytecode)
+        2    0.000    0.000    0.145    0.073 colorbar.py:20(<module>)
+     1199    0.141    0.000    0.141    0.000 {built-in method marshal.loads}
+        1    0.000    0.000    0.137    0.137 apply_parallel.py:1(<module>)
+        1    0.000    0.000    0.136    0.136 giv_bayesian_mpi.py:127(__init__)
+        1    0.000    0.000    0.134    0.134 __init__.py:101(<module>)
+        1    0.000    0.000    0.134    0.134 _peak_finding.py:3(<module>)
+        1    0.000    0.000    0.131    0.131 __init__.py:342(<module>)
+        1    0.130    0.130    0.130    0.130 files.py:383(flush)
+     2030    0.003    0.000    0.123    0.000 <frozen importlib._bootstrap_external>:85(_path_is_mode_type)
+     1866    0.001    0.000    0.123    0.000 <frozen importlib._bootstrap_external>:94(_path_isfile)
+        1    0.000    0.000    0.117    0.117 _internal.py:6(<module>)
+        1    0.000    0.000    0.113    0.113 stats.py:156(<module>)
