@@ -63,7 +63,10 @@ How much memory each rank can work with is a function of:
         iii. repeat.
     A copy of the data will be made on Rank 0. ie- Rank 0 will have to hold N ranks worth of data. Meaning that each rank can hold only around M/(2N) of data where M is the memory per node and N is the number of ranks per socket
     
-    
+http://mpitutorial.com/tutorials/introduction-to-groups-and-communicators/
+https://info.gwdg.de/~ceulig/docs-dev/doku.php?id=en:services:application_services:high_performance_computing:mpi4py
+https://rabernat.github.io/research_computing/parallel-programming-with-mpi-for-python.html
+
 """
 
 def group_ranks_by_socket(verbose=False):
