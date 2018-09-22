@@ -370,9 +370,6 @@ class GIVBayesian(Process):
         # Disabling flush because h5py-parallel doesn't like it
         # self.h5_main.file.flush()
 
-        print('Rank {} - Finished processing up to pixel {} of {}'
-              '.'.format(self.mpi_rank, self._end_pos, self._rank_end_pos))
-
         # Now update the start position
         self._start_pos = self._end_pos
 
