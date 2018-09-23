@@ -334,11 +334,11 @@ class SignalFilter(Process):
         pos_in_batch = self._get_pixels_in_current_batch()
 
         if self.write_condensed:
-            self.h5_condensed[pos_in_batch] = self.condensed_data
+            self.h5_condensed[pos_in_batch, :] = self.condensed_data
         if self.noise_threshold is not None:
-            self.h5_noise_floors[pos_in_batch] = np.atleast_2d(self.noise_floors)
+            self.h5_noise_floors[pos_in_batch, :] = np.atleast_2d(self.noise_floors)
         if self.write_filtered:
-            self.h5_filtered[pos_in_batch] = self.filtered_data
+            self.h5_filtered[pos_in_batch, :] = self.filtered_data
 
         # Leaving in this provision that will allow restarting of processes
         # TODO: I don't know how this part will work - need to shift to a 1 bit dataset?

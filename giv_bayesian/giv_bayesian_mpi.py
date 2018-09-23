@@ -364,10 +364,10 @@ class GIVBayesian(Process):
         # Get access to the private variable:
         pos_in_batch = self._get_pixels_in_current_batch()
 
-        self.h5_cap[pos_in_batch] = np.atleast_2d(stack_real_to_compound(cap_mat, cap_dtype)).T
-        self.h5_variance[pos_in_batch] = r_var_mat
-        self.h5_resistance[pos_in_batch] = r_inf_mat
-        self.h5_i_corrected[pos_in_batch] = i_cor_sin_mat
+        self.h5_cap[pos_in_batch, :] = np.atleast_2d(stack_real_to_compound(cap_mat, cap_dtype)).T
+        self.h5_variance[pos_in_batch, :] = r_var_mat
+        self.h5_resistance[pos_in_batch, :] = r_inf_mat
+        self.h5_i_corrected[pos_in_batch, :] = i_cor_sin_mat
 
     def _unit_computation(self, *args, **kwargs):
         """
