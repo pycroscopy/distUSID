@@ -9,6 +9,7 @@ import numpy as np
 import psutil
 import joblib
 import time as tm
+import h5py
 
 from multiprocessing import cpu_count
 try:
@@ -59,16 +60,52 @@ How much memory each rank can work with is a function of:
 2. Instead of doing joblib either use a for-loop or the map-function
 3. When it is time to write the results chunks back to file. 
     a. If not master -> send data to master
-    b. If master -> gather from this smaller world and then write to file once. IF this is too much memory to handle, then loop over each rank <-- how is this different from just looping over each rank within the new communicator and asking it to write?:
+    b. If master -> gather from this smaller world and then write to file once. IF this is too much memory to handle, 
+    then loop over each rank <-- how is this different from just looping over each rank within the new communicator and 
+    asking it to write?:
         i. receive
         ii. write
         iii. repeat.
-    A copy of the data will be made on Rank 0. ie- Rank 0 will have to hold N ranks worth of data. Meaning that each rank can hold only around M/(2N) of data where M is the memory per node and N is the number of ranks per socket
+    A copy of the data will be made on Rank 0. ie - Rank 0 will have to hold N ranks worth of data. Meaning that each 
+    rank can hold only around M/(2N) of data where M is the memory per node and N is the number of ranks per socket
     
 http://mpitutorial.com/tutorials/introduction-to-groups-and-communicators/
 https://info.gwdg.de/~ceulig/docs-dev/doku.php?id=en:services:application_services:high_performance_computing:mpi4py
 https://rabernat.github.io/research_computing/parallel-programming-with-mpi-for-python.html
 
+We know that just like the joblib mode, the HDF5 file is NOT corrupted if the job is preempted by the wall-time limit.
+We need a more robust method for tracking what portions of the computation are completed.
+The catch is that the previous method may have used serial / single node or a different number of ranks
+Essentially, we would need to build a table of the pixels that still need to be computed and distribute this to the new 
+ranks instead of a contiguous chunk from 0 to N pixels. This is drawing the Process class squarely into load management
+
+Should one rank be spent on managing workers? We spend more time ahead of time to figure out which rank is responsible 
+for what. Then all the ranks are on their own to do what they were told to.
+
+Assuming that all ranks have the same amount of load, why ask them to start in evenly spaced portions of the dataset?
+Given a dataset with 100 jobs and 4 ranks, currently, the ranks start as: 0, 25, 50, and 75
+
+Now, tracking the completed portions, we have two challenges:
+1. retaining what the previous jobs have completed
+2. Having a contention-free way to track which rank has completed what
+What should each rank do when it has finished one batch of computation?
+
+HDF5 attributes CANNOT be modified (MPI or otherwise). They can be reassigned to a new value.
+This means that  if multiple MPI ranks want to update an attribute, they will be overwriting each others changes
+unless there is a lock and release / semaphore
+
+just message passing does NOT prevent concurrency issues
+Blocking will be wasting performance
+
+Since concurrency on attributes cannot be controlled:
+Option 1: create the same things as (indexed) datasets <--- can get ugly  very quickly
+
+Option 2: Create a giant low precision dataset. Instead of storing indices, let each rank set the completed indices to 
+True.  The problem is that the smallest precision is 1 byte and NOT 1 bit. Even boolean = 1 byte!
+See - http://docs.h5py.org/en/latest/faq.html#faq
+https://support.hdfgroup.org/HDF5/hdf5-quest.html#bool
+
+https://groups.google.com/a/continuum.io/forum/#!topic/anaconda/qFOGRTOxFTM
 """
 
 def group_ranks_by_socket(verbose=False):
@@ -190,9 +227,9 @@ class Process(object):
             self.mpi_rank = 0
 
         # Checking if dataset is "Main"
-        if self.mpi_rank == 0:
-            if not check_if_main(h5_main, verbose=verbose):
-                raise ValueError('Provided dataset is not a "Main" dataset with necessary ancillary datasets')
+        if not check_if_main(h5_main, verbose=verbose and self.mpi_rank == 0):
+            raise ValueError('Provided dataset is not a "Main" dataset with necessary ancillary datasets')
+
         if MPI is not None:
             MPI.COMM_WORLD.barrier()
         # Not sure if we need a barrier here.
@@ -207,7 +244,6 @@ class Process(object):
         self._start_pos = None
         self._rank_end_pos = None
         self._end_pos = None
-        self.__assign_job_indices(start=0)
 
         # Determining the max size of the data that can be put into memory
         # all ranks go through this and they need to have this value any
@@ -216,6 +252,9 @@ class Process(object):
         self.partial_h5_groups = []
         self.process_name = None  # Reset this in the extended classes
         self.parms_dict = None
+
+        # The name of the HDF5 dataset that should be present to signify which positions have already been computed
+        self.__status_dset_name = 'completed_positions'
 
         self._results = None
         self.h5_results_grp = None
@@ -227,7 +266,7 @@ class Process(object):
         # DON'T check for duplicates since parms_dict has not yet been initialized.
         # Sub classes will check by themselves if they are interested.
 
-    def __assign_job_indices(self, start=0):
+    def __assign_job_indices(self):
         """
         Sets the start and end indices for each MPI rank
 
@@ -236,17 +275,28 @@ class Process(object):
         start : uint (optional), default = 0
             Position index from which to start computing. Default assumes a fresh computation (start = 0)
         """
-        pos_per_rank = (self.h5_main.shape[0] - start) // self.mpi_size  # integer division
-        if self.verbose and self.mpi_rank==0:
-            print('Each rank is required to work on {} of the {} positions in this dataset'.format(pos_per_rank, self.h5_main.shape[0] - start))
-        self._start_pos = start + self.mpi_rank * pos_per_rank
-        self._rank_end_pos = start + (self.mpi_rank+1) * pos_per_rank
-        self._end_pos = self._rank_end_pos
+        # First figure out what positions need to be computed
+        self._compute_jobs = np.where(self._h5_status_dset[()] == 0)[0]
+        if self.verbose and self.mpi_rank == 0:
+            print('Among the {} positions in this dataset, the following positions need to be computed: {}'
+                  '.'.format(self.h5_main.shape[0], self._compute_jobs))
+
+        pos_per_rank = self._compute_jobs.size // self.mpi_size  # integer division
+        if self.verbose and self.mpi_rank == 0:
+            print('Each rank is required to work on {} of the {} (remaining) positions in this dataset'
+                  '.'.format(pos_per_rank, self._compute_jobs.size))
+
+        # The start and end indices now correspond to the indices in the incomplete jobs rather than the h5 dataset
+        self._start_pos = self.mpi_rank * pos_per_rank
+        self._rank_end_pos = (self.mpi_rank+1) * pos_per_rank
+        self._end_pos = int(min(self._rank_end_pos, self._start_pos + self._max_pos_per_read))
         if self.mpi_rank == self.mpi_size - 1:
             # Force the last rank to go to the end of the dataset
-            self._rank_end_pos = self.h5_main.shape[0]
+            self._rank_end_pos = self._compute_jobs.size
+
         if self.verbose:
-            print('Rank {} will read positions {} to {} of {}'.format(self.mpi_rank, self._start_pos, self._rank_end_pos, self.h5_main.shape[0]))
+            print('Rank {} will read positions {} to {} of {}'.format(self.mpi_rank, self._start_pos,
+                                                                      self._rank_end_pos, self.h5_main.shape[0]))
 
     def test(self, **kwargs):
         """
@@ -274,13 +324,56 @@ class Process(object):
         if self.verbose and self.mpi_rank == 0:
             print('Checking for duplicates:')
 
+        # This list will contain completed runs only
         duplicate_h5_groups = check_for_old(self.h5_main, self.process_name, new_parms=self.parms_dict)
         partial_h5_groups = []
 
         # First figure out which ones are partially completed:
         if len(duplicate_h5_groups) > 0:
             for index, curr_group in enumerate(duplicate_h5_groups):
+                """
+                Earlier, we only checked the 'last_pixel' but to be rigorous we should check self.__status_dset_name
+                The last_pixel attribute check may be deprecated in the future.
+                Note that legacy computations did not have this dataset. We can add to partially computed datasets
+                """
+                if self.__status_dset_name in curr_group.keys():
+
+                    # Case 1: Modern Process results:
+                    status_dset = curr_group[self.__status_dset_name]
+
+                    if not isinstance(status_dset, h5py.Dataset):
+                        # We should not come here if things were implemented correctly
+                        if self.mpi_rank == 0:
+                            print('Results group: {} contained an object named: {} that should have been a dataset'
+                                  '.'.format(curr_group, self.__status_dset_name))
+
+                    if self.h5_main.shape[0] != status_dset.shape[0] or len(status_dset.shape) > 1 or \
+                            status_dset.dtype != np.uint8:
+                        if self.mpi_rank == 0:
+                            print('Status dataset: {} was not of the expected shape or datatype'.format(status_dset))
+
+                    # Finally, check how far the computation was completed.
+                    if len(np.where(status_dset[()] == 0)[0]) == 0:
+                        # remove from duplicates and move to partial
+                        partial_h5_groups.append(duplicate_h5_groups.pop(index))
+                        # Let's write the legacy attribute for safety
+                        curr_group.attrs['last_pixel'] = self.h5_main.shape[0]
+                        # No further checks necessary
+                        continue
+
+                # Case 2: Legacy results group:
+                if 'last_pixel' not in curr_group.attrs.keys():
+                    if self.mpi_rank == 0:
+                        # Should not be coming here at all
+                        print('Group: {} had neither the status HDF5 dataset or the legacy attribute: "last_pixel"'
+                              '.'.format(curr_group))
+                    # Not sure what to do with such groups. Don't consider them in the future
+                    duplicate_h5_groups.pop(index)
+                    continue
+
+                # Finally, do the legacy test:
                 if curr_group.attrs['last_pixel'] < self.h5_main.shape[0]:
+                    # Should we create the dataset here, to make the group future-proof?
                     # remove from duplicates and move to partial
                     partial_h5_groups.append(duplicate_h5_groups.pop(index))
 
@@ -319,9 +412,6 @@ class Process(object):
                 raise ValueError('Provided group does not appear to be in the list of discovered groups')
 
         self.parms_dict = get_attributes(h5_partial_group)
-
-        # Be careful in assigning the start and end positions - these will be per rank!
-        self.__assign_job_indices(start=self.parms_dict.pop('last_pixel'))
 
         self.h5_results_grp = h5_partial_group
 
@@ -405,9 +495,12 @@ class Process(object):
         """
         if self._start_pos < self._rank_end_pos:
             self._end_pos = int(min(self._rank_end_pos, self._start_pos + self._max_pos_per_read))
-            self.data = self.h5_main[self._start_pos:self._end_pos, :]
+
+            # DON'T DIRECTLY apply the start and end indices anymore to the h5 dataset. Find out what it means first
+            positions_to_read = self._compute_jobs[self._start_pos: self._end_pos]
+            self.data = self.h5_main[positions_to_read, :]
             if self.verbose:
-                print('Rank {} - Read positions {} to {}. Need to read till {}'.format(self.mpi_rank, self._start_pos, self._end_pos, self._rank_end_pos))
+                print('Rank {} - Read positions: {}'.format(self.mpi_rank, positions_to_read, self._rank_end_pos))
 
             # DON'T update the start position
 
@@ -423,6 +516,7 @@ class Process(object):
         """
         # Now update the start position
         self._start_pos = self._end_pos
+        # This line can remain as is
         raise NotImplementedError('Please override the _set_results specific to your process')
 
     def _create_results_datasets(self):
@@ -432,6 +526,31 @@ class Process(object):
         within this function.
         """
         raise NotImplementedError('Please override the _create_results_datasets specific to your process')
+
+    def __create_compute_status_dataset(self):
+        """
+        Creates a dataset that keeps track of what pixels / rows have already been computed. Users are not expected to
+        extend / modify this function.
+        """
+        # Check to make sure that such a group doesn't already exist
+        if self.__status_dset_name in self.h5_results_grp.keys():
+            self._h5_status_dset = self.h5_results_grp[self.__status_dset_name]
+            if not isinstance(self._h5_status_dset, h5py.Dataset):
+                raise ValueError('Provided results group: {} contains an expected object ({}) that is not a dataset'
+                                 '.'.format(self.h5_results_grp, self._h5_status_dset))
+            if self.h5_main.shape[0] != self._h5_status_dset.shape[0] or len(self._h5_status_dset.shape) > 1 or \
+                    self._h5_status_dset.dtype != np.uint8:
+                if self.mpi_rank == 0:
+                    raise ValueError('Status dataset: {} was not of the expected shape or datatype'
+                                     '.'.format(self._h5_status_dset))
+        else:
+            self._h5_status_dset = self.h5_results_grp.create_dataset(self.__status_dset_name, dtype=np.uint8,
+                                                                      shape=(self.h5_main.shape[0]))
+            #  Could be fresh computation or resuming from a legacy computation
+            if 'last_pixel' in self.h5_results_grp.attrs.keys():
+                completed_pixels = self.h5_results_grp.attrs['last_pixel']
+                if completed_pixels > 0:
+                    self._h5_status_dset[:completed_pixels] = 1
 
     def _get_existing_datasets(self):
         """
@@ -517,6 +636,9 @@ class Process(object):
                 print('Resuming computation')
             self._get_existing_datasets()
 
+        self.__create_compute_status_dataset()
+        self.__assign_job_indices()
+
         # Not sure if this is necessary but I don't think it would hurt either
         if self.mpi_comm is not None:
             self.mpi_comm.barrier()
@@ -564,6 +686,10 @@ class Process(object):
                 print('Rank {} - {}% complete. Time remaining: {}'.format(self.mpi_rank, percent_complete,
                                                                           format_time(time_remaining)))
 
+            # All ranks should mark the pixels for this batch as completed. 'last_pixel' attribute will be updated later
+            corresponding_pixels = self._compute_jobs[self._start_pos: self._end_pos]
+            self._h5_status_dset[corresponding_pixels] = 1
+
             self._read_data_chunk()
 
         if self.verbose:
@@ -572,6 +698,10 @@ class Process(object):
         self.mpi_comm.barrier()
         if self.mpi_rank == 0:
             print('Finished processing the entire dataset!')
+
+        # Update the 'last_pixel' attribute here:
+        if self.mpi_rank == 0:
+            self.h5_results_grp.attrs['last_pixel'] = self.h5_main.shape[0]
 
         return self.h5_results_grp
 
