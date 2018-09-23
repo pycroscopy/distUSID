@@ -330,27 +330,18 @@ class SignalFilter(Process):
         """
         Writes data chunks back to the file
         """
-
-        pos_slice = slice(self._start_pos, self._end_pos)
+        # Get access to the private variable:
+        pos_in_batch = self._get_pixels_in_current_batch()
 
         if self.write_condensed:
-            self.h5_condensed[pos_slice] = self.condensed_data
+            self.h5_condensed[pos_in_batch] = self.condensed_data
         if self.noise_threshold is not None:
-            self.h5_noise_floors[pos_slice] = np.atleast_2d(self.noise_floors)
+            self.h5_noise_floors[pos_in_batch] = np.atleast_2d(self.noise_floors)
         if self.write_filtered:
-            self.h5_filtered[pos_slice] = self.filtered_data
+            self.h5_filtered[pos_in_batch] = self.filtered_data
 
         # Leaving in this provision that will allow restarting of processes
-        #TODO: I don't know how this part will work - need to shift to a 1 bit dataset?
-        self.h5_results_grp.attrs['last_pixel'] = self._end_pos
-
-        self.h5_main.file.flush()
-
-        # Almost NO change here at all! users will only be responsible for start and _end_pos only
-        print('Rank {} - Finished processing upto pixel {} of {}'.format(self.mpi_rank, self._end_pos, self._rank_end_pos))
-
-        # Now update the start position
-        self._start_pos = self._end_pos
+        # TODO: I don't know how this part will work - need to shift to a 1 bit dataset?
 
     def _unit_computation(self, *args, **kwargs):
         """

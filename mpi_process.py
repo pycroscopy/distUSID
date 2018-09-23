@@ -241,9 +241,10 @@ class Process(object):
         self._max_mem_mb = None
 
         # Now have to be careful here since the below properties are a function of the MPI rank
-        self._start_pos = None
-        self._rank_end_pos = None
-        self._end_pos = None
+        self.__start_pos = None
+        self.__rank_end_pos = None
+        self.__end_pos = None
+        self.__pixels_in_batch = None
 
         # Determining the max size of the data that can be put into memory
         # all ranks go through this and they need to have this value any
@@ -269,11 +270,6 @@ class Process(object):
     def __assign_job_indices(self):
         """
         Sets the start and end indices for each MPI rank
-
-        Parameters
-        ----------
-        start : uint (optional), default = 0
-            Position index from which to start computing. Default assumes a fresh computation (start = 0)
         """
         # First figure out what positions need to be computed
         self._compute_jobs = np.where(self._h5_status_dset[()] == 0)[0]
@@ -287,16 +283,27 @@ class Process(object):
                   '.'.format(pos_per_rank, self._compute_jobs.size))
 
         # The start and end indices now correspond to the indices in the incomplete jobs rather than the h5 dataset
-        self._start_pos = self.mpi_rank * pos_per_rank
-        self._rank_end_pos = (self.mpi_rank+1) * pos_per_rank
-        self._end_pos = int(min(self._rank_end_pos, self._start_pos + self._max_pos_per_read))
+        self.__start_pos = self.mpi_rank * pos_per_rank
+        self.__rank_end_pos = (self.mpi_rank + 1) * pos_per_rank
+        self.__end_pos = int(min(self.__rank_end_pos, self.__start_pos + self._max_pos_per_read))
         if self.mpi_rank == self.mpi_size - 1:
             # Force the last rank to go to the end of the dataset
-            self._rank_end_pos = self._compute_jobs.size
+            self.__rank_end_pos = self._compute_jobs.size
 
         if self.verbose:
-            print('Rank {} will read positions {} to {} of {}'.format(self.mpi_rank, self._start_pos,
-                                                                      self._rank_end_pos, self.h5_main.shape[0]))
+            print('Rank {} will read positions {} to {} of {}'.format(self.mpi_rank, self.__start_pos,
+                                                                      self.__rank_end_pos, self.h5_main.shape[0]))
+
+    def _get_pixels_in_current_batch(self):
+        """
+        Returns the indices of the pixels that will be processed in this batch.
+
+        Returns
+        -------
+        pixels_in_batch : numpy.ndarray
+            1D array of unsigned integers denoting the pixels that will be read, processed, and written back to
+        """
+        return self.__pixels_in_batch
 
     def test(self, **kwargs):
         """
@@ -493,14 +500,14 @@ class Process(object):
         """
         Reads a chunk of data for the intended computation into memory
         """
-        if self._start_pos < self._rank_end_pos:
-            self._end_pos = int(min(self._rank_end_pos, self._start_pos + self._max_pos_per_read))
+        if self.__start_pos < self.__rank_end_pos:
+            self.__end_pos = int(min(self.__rank_end_pos, self.__start_pos + self._max_pos_per_read))
 
             # DON'T DIRECTLY apply the start and end indices anymore to the h5 dataset. Find out what it means first
-            positions_to_read = self._compute_jobs[self._start_pos: self._end_pos]
-            self.data = self.h5_main[positions_to_read, :]
+            self.__pixels_in_batch = self._compute_jobs[self.__start_pos: self.__end_pos]
+            self.data = self.h5_main[self.__pixels_in_batch, :]
             if self.verbose:
-                print('Rank {} - Read positions: {}'.format(self.mpi_rank, positions_to_read, self._rank_end_pos))
+                print('Rank {} - Read positions: {}'.format(self.mpi_rank, self.__pixels_in_batch, self.__rank_end_pos))
 
             # DON'T update the start position
 
@@ -515,7 +522,7 @@ class Process(object):
         This needs to be rewritten since the processed data is expected to be at least as large as the dataset
         """
         # Now update the start position
-        self._start_pos = self._end_pos
+        self.__start_pos = self.__end_pos
         # This line can remain as is
         raise NotImplementedError('Please override the _set_results specific to your process')
 
@@ -645,7 +652,7 @@ class Process(object):
 
         compute_times = SimpleFIFO(5)
         write_times = SimpleFIFO(5)
-        orig_rank_start = self._start_pos
+        orig_rank_start = self.__start_pos
 
         # TODO: Need to find a nice way of figuring out if a process has implemented the partial feature.
         if self.mpi_rank == 0 and self.mpi_size == 1:
@@ -654,6 +661,7 @@ class Process(object):
                   '\tIf you are in a Jupyter notebook, click on "Kernel">>"Interrupt"')
 
         self._read_data_chunk()
+        
         while self.data is not None:
 
             t_start_1 = tm.time()
@@ -671,6 +679,11 @@ class Process(object):
 
             t_start_2 = tm.time()
             self._write_results_chunk()
+            # NOW, update the positions. Users are NOT allowed to touch start and end pos
+            self.__start_pos = self.__end_pos
+            # Leaving in this provision that will allow restarting of processes
+            self.h5_results_grp.attrs['last_pixel'] = self.__end_pos
+            self.h5_main.file.flush()
 
             dump_time = np.round(tm.time() - t_start_2, decimals=2)
             write_times.put(dump_time / self.data.shape[0])
@@ -679,16 +692,15 @@ class Process(object):
                 print('Rank {} - wrote its {} pixel chunk in {}'.format(self.mpi_rank, self.data.shape[0],
                                                                         format_time(dump_time)))
 
-            time_remaining = (self._rank_end_pos - self._end_pos) * (compute_times.get_mean() + write_times.get_mean())
+            time_remaining = (self.__rank_end_pos - self.__end_pos) * (compute_times.get_mean() + write_times.get_mean())
 
             if self.verbose or self.mpi_rank == 0:
-                percent_complete = int(100 * (self._end_pos - orig_rank_start) / (self._rank_end_pos - orig_rank_start))
+                percent_complete = int(100 * (self.__end_pos - orig_rank_start) / (self.__rank_end_pos - orig_rank_start))
                 print('Rank {} - {}% complete. Time remaining: {}'.format(self.mpi_rank, percent_complete,
                                                                           format_time(time_remaining)))
 
             # All ranks should mark the pixels for this batch as completed. 'last_pixel' attribute will be updated later
-            corresponding_pixels = self._compute_jobs[self._start_pos: self._end_pos]
-            self._h5_status_dset[corresponding_pixels] = 1
+            self._h5_status_dset[self.__pixels_in_batch] = 1
 
             self._read_data_chunk()
 

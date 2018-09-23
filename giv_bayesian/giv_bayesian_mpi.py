@@ -180,6 +180,8 @@ class GIVBayesian(Process):
         self.forward_results = None
         self._bayes_parms = None
 
+        self.__first_batch = True
+
     def test(self, pix_ind=None, show_plots=True):
         """
         Tests the inference on a single pixel (randomly chosen unless manually specified) worth of data.
@@ -355,23 +357,17 @@ class GIVBayesian(Process):
         if self.verbose:
             print('Rank {} - Finished accumulating results. Writing results of chunk to h5'.format(self.mpi_rank))
 
-        if self._start_pos == 0:
+        if self.__first_batch:
             self.h5_new_spec_vals[0, :] = full_results['x']  # Technically this needs to only be done once
+            self.__first_batch = False
 
-        pos_slice = slice(self._start_pos, self._end_pos)
-        self.h5_cap[pos_slice] = np.atleast_2d(stack_real_to_compound(cap_mat, cap_dtype)).T
-        self.h5_variance[pos_slice] = r_var_mat
-        self.h5_resistance[pos_slice] = r_inf_mat
-        self.h5_i_corrected[pos_slice] = i_cor_sin_mat
+        # Get access to the private variable:
+        pos_in_batch = self._get_pixels_in_current_batch()
 
-        # Leaving in this provision that will allow restarting of processes
-        self.h5_results_grp.attrs['last_pixel'] = self._end_pos
-
-        # Disabling flush because h5py-parallel doesn't like it
-        # self.h5_main.file.flush()
-
-        # Now update the start position
-        self._start_pos = self._end_pos
+        self.h5_cap[pos_in_batch] = np.atleast_2d(stack_real_to_compound(cap_mat, cap_dtype)).T
+        self.h5_variance[pos_in_batch] = r_var_mat
+        self.h5_resistance[pos_in_batch] = r_inf_mat
+        self.h5_i_corrected[pos_in_batch] = i_cor_sin_mat
 
     def _unit_computation(self, *args, **kwargs):
         """
