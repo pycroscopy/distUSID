@@ -10,6 +10,7 @@ import psutil
 import joblib
 import time as tm
 import h5py
+import itertools
 
 from multiprocessing import cpu_count
 try:
@@ -159,6 +160,27 @@ def group_ranks_by_socket(verbose=False):
         print('Parent rank for all ranks: {}'.format(master_ranks))
 
     return master_ranks
+
+
+def to_ranges(iterable):
+    """
+    Converts a sequence of iterables to range tuples
+    From https://stackoverflow.com/questions/4628333/converting-a-list-of-integers-into-range-in-python
+    Credits: @juanchopanza and @luca
+    Parameters
+    ----------
+    iterable : collections.Iterable object
+        iterable object like a list
+    Returns
+    -------
+    iterable : generator object
+        Cast to list or similar to use
+    """
+    iterable = sorted(set(iterable))
+    for key, group in itertools.groupby(enumerate(iterable),
+                                        lambda t: t[1] - t[0]):
+        group = list(group)
+        yield group[0][1], group[-1][1]
 
 
 class Process(object):
@@ -552,7 +574,7 @@ class Process(object):
                                      '.'.format(self._h5_status_dset))
         else:
             self._h5_status_dset = self.h5_results_grp.create_dataset(self.__status_dset_name, dtype=np.uint8,
-                                                                      shape=(self.h5_main.shape[0]))
+                                                                      shape=(self.h5_main.shape[0],))
             #  Could be fresh computation or resuming from a legacy computation
             if 'last_pixel' in self.h5_results_grp.attrs.keys():
                 completed_pixels = self.h5_results_grp.attrs['last_pixel']
@@ -669,7 +691,7 @@ class Process(object):
             self._unit_computation(*args, **kwargs)
 
             comp_time = np.round(tm.time() - t_start_1, decimals=2)  # in seconds
-            time_per_pix = comp_time / self.data.shape[0]
+            time_per_pix = comp_time / (self.__end_pos - self.__start_pos)
             compute_times.put(time_per_pix)
 
             if self.verbose:
@@ -686,10 +708,11 @@ class Process(object):
             self.h5_main.file.flush()
 
             dump_time = np.round(tm.time() - t_start_2, decimals=2)
-            write_times.put(dump_time / self.data.shape[0])
+            write_times.put(dump_time / (self.__end_pos - self.__start_pos))
 
             if self.verbose:
-                print('Rank {} - wrote its {} pixel chunk in {}'.format(self.mpi_rank, self.data.shape[0],
+                print('Rank {} - wrote its {} pixel chunk in {}'.format(self.mpi_rank,
+                                                                        self.__end_pos - self.__start_pos,
                                                                         format_time(dump_time)))
 
             time_remaining = (self.__rank_end_pos - self.__end_pos) * (compute_times.get_mean() + write_times.get_mean())
@@ -700,7 +723,9 @@ class Process(object):
                                                                           format_time(time_remaining)))
 
             # All ranks should mark the pixels for this batch as completed. 'last_pixel' attribute will be updated later
-            self._h5_status_dset[self.__pixels_in_batch] = 1
+            # Setting each section to 1 independently
+            for section in to_ranges(self.__pixels_in_batch):
+                self._h5_status_dset[section[0]: section[1]+1] = 1
 
             self._read_data_chunk()
 
