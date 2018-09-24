@@ -35,6 +35,7 @@ module list
 # MUST KEEP THESE LINES. WILL NOT WORK OTHERWISE
 export MKL_NUM_THREADS=1
 export OPENBLAS_NUM_THREADS=1
+export OMP_NUM_THREADS=1
 
 ### Switch to the working directory (path of your PBS script).
 EGNAME=giv_bayesian_pure_mpi
