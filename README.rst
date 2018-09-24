@@ -37,11 +37,12 @@ Use one rank per logical core. All ranks read and write to the file. Code availa
 
 * If a node has fewer ranks than the number of logical cores, those cores are wasted. This minor problem can be fixed
 
-**Status**:
-
+Status
+~~~~~~
 * Works very well for both the ``SignalFilter`` and the ``GIVBayesian`` class in addition to Chris' success on the ``image windowing``
 * This same code **had** been `generalized <https://github.com/pycroscopy/distUSID/commit/4e4e367230c9a85540828b7d8e56cc261f135fae>`_
   to capture the two sub-cases of mpi4py+joblib below . However, this causes ``GIVBayesian`` to fail - just does not compute anything at all. No errors observed.
+  If a fix is discovered, this capability can be enabled with just 2 lines.
 
   * This may be related to some complication in the `math libraries <https://github.com/pycroscopy/distUSID/commit/3930df86c6119226702628145090726ad1f00312>`_
 * Have not yet seen any problems with regards to the bottleneck on up to 4 nodes (36 cores each). Benchmarking will be necessary for identify bottlenecks
@@ -55,10 +56,21 @@ Use one rank per logical core. All ranks read and write to the file. Code availa
 * Plenty of documentation about the thought process included within the ``Process`` class file.
 * The ``Process`` class from this branch will be rolled into pyUSID after some checks
 
+Tips and Gotchas
+~~~~~~~~~~~~~~~~
+* First test the dataset creation step with the computation disabled to speed up debugging time. Most of the challenges are in the dataset creation portion.
+* ``h5py`` (parallel) results in **segmentation faults** for the following situations:
+
+  * If ``compression`` is specified when creating datasets. Known issue with no workaround
+  * ``if rank == 0: write_simple_attrs(....)`` <-- Make all ranks write attributes
+* Environment variables need to be set in the PBS script to minimize conflicts between LAPACK's preference to use threading and MPI / multiprocessing.
+  Two `environment variables <https://github.com/pycroscopy/distUSID/commit/72d8ac086ee974a4ed644fbe55738d198b7265ec>`_ made a night-and-day difference
+  in the `pure_mpi <https://github.com/pycroscopy/distUSID/tree/pure_mpi>`_ branch.
+
+  * Setting these variables within ``parallel_compute()`` had the `same effect <https://github.com/pycroscopy/distUSID/commit/3ccdacfa32ac97af7eb9994a1562ea9c0caf51e5>`_ as not setting these environment variables at all.
+
 3. mpi4py+joblib
 ----------------
-Strategies
-~~~~~~~~~~
 #. **1 rank / node**: Use an MPI + OpenMP paradigm where each rank is in charge of one node and computes via ``joblib`` within the node just as in pyUSID / pycroscopy. See the `mpi_plus_joblib <https://github.com/pycroscopy/distUSID/tree/mpi_plus_joblib)>`_ branch
 
    **Pros**:
@@ -91,16 +103,3 @@ Strategies
 
    * As mentioned above, the ``Process`` class in the `pure_mpi <https://github.com/pycroscopy/distUSID/tree/pure_mpi>`_ branch already
      captures this use-case but this refuses to work for ``GIVBayesian`` just like in the `mpi_plus_joblib <https://github.com/pycroscopy/distUSID/tree/mpi_plus_joblib)>`_ branch
-
-Tips and Gotchas
-~~~~~~~~~~~~~~~~
-* First test the dataset creation step with the computation disabled to speed up debugging time. Most of the challenges are in the dataset creation portion.
-* ``h5py`` (parallel) results in **segmentation faults** for the following situations:
-
-  * If ``compression`` is specified when creating datasets. Known issue with no workaround
-  * ``if rank == 0: write_simple_attrs(....)`` <-- Make all ranks write attributes
-* Environment variables need to be set in the PBS script to minimize conflicts between LAPACK's preference to use threading and MPI / multiprocessing.
-  Two `environment variables <https://github.com/pycroscopy/distUSID/commit/72d8ac086ee974a4ed644fbe55738d198b7265ec>`_ made a night-and-day difference
-  in the `pure_mpi <https://github.com/pycroscopy/distUSID/tree/pure_mpi>`_ branch.
-
-  * Setting these variables within ``parallel_compute()`` had the `same effect <https://github.com/pycroscopy/distUSID/commit/3ccdacfa32ac97af7eb9994a1562ea9c0caf51e5>`_ as not setting these environment variables at all.
