@@ -28,16 +28,16 @@ Strategies
 --------------
 Use one rank per logical core. All ranks read and write to the file. Code available on the `pure_mpi <https://github.com/pycroscopy/distUSID/tree/pure_mpi>`_ branch
 
-Pros:
+**Pros**:
 
 * Circumvents ``joblib`` related problems since it obviates the need for ``joblib``
 * (Potentially) less restrictive PBS script
 
-Cons:
+**Cons**:
 
 * If a node has fewer ranks than the number of logical cores, those cores are wasted. This minor problem can be fixed
 
-Status:
+**Status**:
 
 * Works very well for both the ``SignalFilter`` and the ``GIVBayesian`` class in addition to Chris' success on the ``image windowing``
 * This same code **had** been `generalized <https://github.com/pycroscopy/distUSID/commit/4e4e367230c9a85540828b7d8e56cc261f135fae>`_
@@ -54,33 +54,33 @@ Strategies
 ~~~~~~~~~~
 #. **1 rank / node**: Use an MPI + OpenMP paradigm where each rank is in charge of one node and computes via ``joblib`` within the node just as in pyUSID / pycroscopy. See the `mpi_plus_joblib <https://github.com/pycroscopy/distUSID/tree/mpi_plus_joblib)>`_ branch
 
-   Pros:
+   **Pros**:
 
    * Easy to understand and implement since each node continues to do whatever a laptop would do / has been doing
 
-   Cons:
+   **Cons**:
 
    * ``joblib`` sometimes does not like to work with ``numpy`` and ``mpi4py``
 
-   Status:
+   **Status**:
 
    * Worked for the ``SignalFilter`` but not for the ``GIVBayesian`` class.
 
 #. **Arbitrary MPI ranks / node**: Use a combination of joblib and MPI and pose no restrictions whatsoever on the number of ranks or configuration
 
-   Pros:
+   **Pros**:
 
    * Probably the programmatically "proper" way to do this
    * PBS script and ``mpiexec`` call can be configured in any way
 
-   Cons:
+   **Cons**:
 
    * Has nearly all the major cons of the two above approaches
    * ``joblib`` sometimes does not like to work with ``numpy`` and ``mpi4py``
    * Noticeably more complicated in that additional book-keeping would be required for the relationships (master) within each node
    * The rank that collects all the results may not have sufficient memory. This may limit how much each rank can compute at a given time
 
-   Status:
+   **Status**:
 
    * As mentioned above, the ``Process`` class in the `pure_mpi <https://github.com/pycroscopy/distUSID/tree/pure_mpi>`_ branch already
      captures this use-case but this refuses to work for ``GIVBayesian`` just like in the `mpi_plus_joblib <https://github.com/pycroscopy/distUSID/tree/mpi_plus_joblib)>`_ branch
@@ -92,8 +92,8 @@ Observations
 * The ``Process`` class has been made even more robust against accidental damage from user-side by moving more underlying code into private variables.
 * Minimal changes are required for the children classes of ``pyUSID.Process``:
 
-    * mainly in verbose print statements - need to check for ``rank == 0``
-    * ``Process`` completely handles all check-pointing and resuming + including flushing the file after each batch
+  * mainly in verbose print statements - need to check for ``rank == 0``
+  * ``Process`` completely handles all check-pointing and resuming + including flushing the file after each batch
 * First test the dataset creation step with the computation disabled to speed up debugging time. Most of the challenges are in the dataset creation portion.
 * ``h5py`` (parallel) results in **segmentation faults** for the following situations:
 
