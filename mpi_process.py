@@ -4,7 +4,6 @@ Created on 7/17/16 10:08 AM
 """
 
 from __future__ import division, print_function, absolute_import
-import os
 import numpy as np
 import psutil
 import joblib
@@ -880,14 +879,6 @@ def parallel_compute(data, func, cores=1, lengthy_computation=False, func_args=N
                                     requested_cores=cores,
                                     lengthy_computation=lengthy_computation,
                                     verbose=verbose)
-
-    """
-    Disable threading since we tend to use MPI / multiprocessing / joblib.
-    Not doing so has resulted in dramatically poorer performance due to competition between threads and processes
-    Question is whether or not these variables should be reset to their prior values after computation.
-    """
-    for var in ['OMP_NUM_THREADS', 'MKL_NUM_THREADS', 'OPENBLAS_NUM_THREADS']:
-        os.environ[var] = '1'
 
     if verbose:
         print('Rank {} starting computing on {} cores (requested {} cores)'.format(rank, cores, req_cores))
