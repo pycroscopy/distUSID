@@ -42,8 +42,8 @@ Status
 * Works very well for both the ``SignalFilter`` and the ``GIVBayesian`` class in addition to Chris' success on the ``image windowing``
 * This same code **had** been `generalized <https://github.com/pycroscopy/distUSID/commit/4e4e367230c9a85540828b7d8e56cc261f135fae>`_
   to capture the two sub-cases of mpi4py+joblib below . However, this causes ``GIVBayesian`` to fail - just does not compute anything at all. No errors observed.
-  If a fix is discovered, this capability can be enabled with just 2 lines.
 
+  * If a fix is discovered, this capability can be enabled with just `2 lines <https://github.com/pycroscopy/distUSID/commit/3d43614e8bd1ae722c26e72d7d1a95dbeac4cee8>`_.
   * This may be related to some complication in the `math libraries <https://github.com/pycroscopy/distUSID/commit/3930df86c6119226702628145090726ad1f00312>`_
 * Have not yet seen any problems with regards to the bottleneck on up to 4 nodes (36 cores each). Benchmarking will be necessary for identify bottlenecks
 * Comprehensive checkpointing / resuming capability has also been incorporated within the ``Process`` class
