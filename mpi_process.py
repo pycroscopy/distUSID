@@ -686,6 +686,7 @@ class Process(object):
                     print('Resuming computation in group: ' + self.partial_h5_groups[-1].name)
                 self.use_partial_computation()
 
+        resuming = False
         if self.h5_results_grp is None:
             # starting fresh
             if self.verbose and self.mpi_rank == 0:
@@ -693,13 +694,16 @@ class Process(object):
             self._create_results_datasets()
         else:
             # resuming from previous checkpoint
-            if self.mpi_rank == 0:
-                percent_complete = int(100 * len(np.where(self._h5_status_dset[()] == 0)[0]) /
-                                       self._h5_status_dset.shape[0])
-                print('Resuming computation. {}% completed already'.format(percent_complete))
+            resuming = True
             self._get_existing_datasets()
 
         self.__create_compute_status_dataset()
+
+        if resuming and self.mpi_rank == 0:
+            percent_complete = int(100 * len(np.where(self._h5_status_dset[()] == 0)[0]) /
+                                   self._h5_status_dset.shape[0])
+            print('Resuming computation. {}% completed already'.format(percent_complete))
+
         self.__assign_job_indices()
 
         # Not sure if this is necessary but I don't think it would hurt either
@@ -858,6 +862,8 @@ def parallel_compute(data, func, cores=1, lengthy_computation=False, func_args=N
     else:
         if verbose:
             print("Rank {} computing serially ...".format(rank))
+        # List comprehension vs map vs for loop?
+        # https://stackoverflow.com/questions/1247486/python-list-comprehension-vs-map
         results = [func(vector, *func_args, **func_kwargs) for vector in data]
 
     return results
