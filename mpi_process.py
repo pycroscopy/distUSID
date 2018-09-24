@@ -33,6 +33,11 @@ For hyperthreaded applications: need to tack on the additional flag as shown bel
 No need to specify -n 4 or whatever if you want to use all available processors
 $ mpirun -use-hwthread-cpus python hello_world.py 
 
+Check the number of ranks per socket. If only 1 rank per socket - that rank is allowed to call joblib
+Thus this paradigm will span the pure-mpi and mpi+joblib paradigm. Note that this does not prevent some sockets to run
+in pure MPI mode while others run in MPI+joblib mode. Eventually, this should allow each rank to use jolib when the 
+number of ranks in a given socket are noticeably less than the number of logical cores....
+
 The naive approach will be to simply allow all ranks to write data directly to file
 Forcing only a single rank within a socket may negate performance benefits
 Writing out to separate files and then merging them later on is the most performant option
@@ -282,6 +287,19 @@ class Process(object):
         self._results = None
         self.h5_results_grp = None
 
+        # Check to see if the resuming feature has been implemented:
+        self.__resume_implemented = False
+        try:
+            self._get_existing_datasets()
+        except NotImplementedError:
+            if verbose and self.mpi_rank == 0:
+                print('It appears that this class may not be able to resume computations')
+        except:
+            # NameError for variables that don't exist
+            # AttributeError for self.var_name that don't exist
+            # TypeError (NoneType) etc.
+            self.__resume_implemented = True
+
         if self.mpi_rank == 0:
             print('Consider calling test() to check results before calling compute() which computes on the entire'
                   ' dataset and writes back to the HDF5 file')
@@ -447,7 +465,9 @@ class Process(object):
     def _set_memory_and_cores(self, cores=None, mem=None):
         """
         Checks hardware limitations such as memory, # cpus and sets the recommended datachunk sizes and the
-        number of cores to be used by analysis methods.
+        number of cores to be used by analysis methods. This function can work with clusters with heterogeneous
+        memory sizes (e.g. CADES SHPC Condo).
+
         Parameters
         ----------
         cores : uint, optional
@@ -676,11 +696,15 @@ class Process(object):
         write_times = SimpleFIFO(5)
         orig_rank_start = self.__start_pos
 
-        # TODO: Need to find a nice way of figuring out if a process has implemented the partial feature.
         if self.mpi_rank == 0 and self.mpi_size == 1:
-            print('You maybe able to abort this computation at any time and resume at a later time!\n'
-                  '\tIf you are operating in a python console, press Ctrl+C or Cmd+C to abort\n'
-                  '\tIf you are in a Jupyter notebook, click on "Kernel">>"Interrupt"')
+            if self.__resume_implemented:
+                print('\tThis class (likely) supports interruption and resuming of computations!\n'
+                      '\tIf you are operating in a python console, press Ctrl+C or Cmd+C to abort\n'
+                      '\tIf you are in a Jupyter notebook, click on "Kernel">>"Interrupt"\n'
+                      '\tIf you are operating on a cluster and your job gets killed, re-run the job to resume\n')
+            else:
+                print('\tThis class does NOT support interruption and resuming of computations.\n'
+                      '\tIn order to enable this feature, simply implement the _get_existing_datasets() function')
 
         self._read_data_chunk()
         
