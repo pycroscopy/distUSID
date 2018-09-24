@@ -4,7 +4,7 @@ Created on 7/17/16 10:08 AM
 """
 
 from __future__ import division, print_function, absolute_import
-
+import os
 import numpy as np
 import psutil
 import joblib
@@ -14,6 +14,7 @@ import itertools
 from numbers import Number
 
 from multiprocessing import cpu_count
+
 try:
     from mpi4py import MPI
     if MPI.COMM_WORLD.Get_size() == 1:
@@ -270,6 +271,7 @@ class Process(object):
         # Saving these as properties of the object:
         self.h5_main = USIDataset(h5_main)
         self.verbose = verbose
+        self._cores = None
         self._max_pos_per_read = None
         self._max_mem_mb = None
 
@@ -494,16 +496,20 @@ class Process(object):
                 cores = int(abs(cores))
                 self._cores = max(1, min(psutil.cpu_count(), cores))
             socket_master = 0
+            ranks_per_socket = 1
         else:
+            # user-provided input cores will simply be ignored in an effort to use the entire CPU
             ranks_by_socket = group_ranks_by_socket(verbose=self.verbose)
             socket_master = ranks_by_socket[self.mpi_rank]
             # which ranks in this socket?
             ranks_on_this_socket = np.where(ranks_by_socket == socket_master)[0]
             # how many in this socket?
-            self._cores = ranks_on_this_socket.size
+            ranks_per_socket = ranks_on_this_socket.size
             # Force usage of all available memory
             mem = None
+            self._cores = self.__cores_per_rank = psutil.cpu_count() // ranks_per_socket
 
+        # TODO: Convert all to bytes!
         _max_mem_mb = get_available_memory() / 1024 ** 2  # in MB
         if mem is None:
             mem = _max_mem_mb
@@ -515,7 +521,7 @@ class Process(object):
         self._max_mem_mb = min(_max_mem_mb, mem)
 
         # Remember that multiple processes (either via MPI or joblib) will share this socket
-        max_data_chunk = self._max_mem_mb / self._cores
+        max_data_chunk = self._max_mem_mb / (self._cores * ranks_per_socket)
 
         # Now calculate the number of positions OF RAW DATA ONLY that can be stored in memory in one go PER RANK
         mb_per_position = self.h5_main.dtype.itemsize * self.h5_main.shape[1] / 1024 ** 2
@@ -523,8 +529,9 @@ class Process(object):
 
         if self.verbose and self.mpi_rank == socket_master:
             # expected to be the same for all ranks so just use this.
-            print('Rank {} - {} processes with access to {} memory on this socket'
-                  '.'.format(socket_master, self._cores, format_size(_max_mem_mb * 1024**2, 2)))
+            print('Rank {} - on socket with {} logical cores and {} avail. RAM shared by {} ranks each given {} cores'
+                  '.'.format(socket_master, psutil.cpu_count(), format_size(_max_mem_mb * 1024**2, 2), ranks_per_socket,
+                             self._cores))
             print('Allowed to read {} pixels per chunk'.format(self._max_pos_per_read))
 
     @staticmethod
@@ -620,7 +627,7 @@ class Process(object):
         as well as multiple calls to parallel_compute if necessary
         """
         # TODO: Try to use the functools.partials to preconfigure the map function
-        # For cores to be 1.
+        # cores = number of processes / rank here
         self._results = parallel_compute(self.data, self._map_function, cores=self._cores,
                                          lengthy_computation=False,
                                          func_args=args, func_kwargs=kwargs,
@@ -859,16 +866,21 @@ def parallel_compute(data, func, cores=1, lengthy_computation=False, func_args=N
     req_cores = cores
     if MPI is not None:
         rank = MPI.COMM_WORLD.Get_rank()
-        if cores > 1 and rank == 0:  # and not mpi_serial_warning:
-            print('Note - Each rank will compute serially using pure MPI mode')
-            # mpi_serial_warning = True
-        cores = 1
     else:
         rank = 0
-        cores = recommend_cpu_cores(data.shape[0],
-                                    requested_cores=cores,
-                                    lengthy_computation=lengthy_computation,
-                                    verbose=verbose)
+
+    cores = recommend_cpu_cores(data.shape[0],
+                                requested_cores=cores,
+                                lengthy_computation=lengthy_computation,
+                                verbose=verbose)
+
+    """
+    Disable threading since we tend to use MPI / multiprocessing / joblib.
+    Not doing so has resulted in dramatically poorer performance due to competition between threads and processes
+    Question is whether or not these variables should be reset to their prior values after computation.
+    """
+    for var in ['OMP_NUM_THREADS', 'MKL_NUM_THREADS', 'OPENBLAS_NUM_THREADS']:
+        os.environ[var] = '1'
 
     if verbose:
         print('Rank {} starting computing on {} cores (requested {} cores)'.format(rank, cores, req_cores))
