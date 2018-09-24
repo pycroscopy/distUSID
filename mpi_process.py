@@ -507,7 +507,9 @@ class Process(object):
             ranks_per_socket = ranks_on_this_socket.size
             # Force usage of all available memory
             mem = None
-            self._cores = self.__cores_per_rank = psutil.cpu_count() // ranks_per_socket
+            self._cores = 1
+            # Disabling the following line since mpi4py and joblib didn't play well for Bayesian Inference
+            # self._cores = self.__cores_per_rank = psutil.cpu_count() // ranks_per_socket
 
         # TODO: Convert all to bytes!
         _max_mem_mb = get_available_memory() / 1024 ** 2  # in MB
@@ -758,12 +760,14 @@ class Process(object):
         
         while self.data is not None:
 
+            num_jobs_in_batch = self.__end_pos - self.__start_pos
+
             t_start_1 = tm.time()
 
             self._unit_computation(*args, **kwargs)
 
             comp_time = np.round(tm.time() - t_start_1, decimals=2)  # in seconds
-            time_per_pix = comp_time / (self.__end_pos - self.__start_pos)
+            time_per_pix = comp_time / num_jobs_in_batch
             compute_times.put(time_per_pix)
 
             if self.verbose:
@@ -773,18 +777,20 @@ class Process(object):
 
             t_start_2 = tm.time()
             self._write_results_chunk()
+
             # NOW, update the positions. Users are NOT allowed to touch start and end pos
             self.__start_pos = self.__end_pos
             # Leaving in this provision that will allow restarting of processes
-            self.h5_results_grp.attrs['last_pixel'] = self.__end_pos
+            if self.mpi_size == 1:
+                self.h5_results_grp.attrs['last_pixel'] = self.__end_pos
             self.h5_main.file.flush()
 
             dump_time = np.round(tm.time() - t_start_2, decimals=2)
-            write_times.put(dump_time / (self.__end_pos - self.__start_pos))
+            write_times.put(dump_time / num_jobs_in_batch)
 
             if self.verbose:
                 print('Rank {} - wrote its {} pixel chunk in {}'.format(self.mpi_rank,
-                                                                        self.__end_pos - self.__start_pos,
+                                                                        num_jobs_in_batch,
                                                                         format_time(dump_time)))
 
             time_remaining = (self.__rank_end_pos - self.__end_pos) * \
@@ -866,13 +872,14 @@ def parallel_compute(data, func, cores=1, lengthy_computation=False, func_args=N
     req_cores = cores
     if MPI is not None:
         rank = MPI.COMM_WORLD.Get_rank()
+        # Was unable to get the MPI + joblib framework to work. Did not compute anything at all. Just froze
+        cores = 1
     else:
         rank = 0
-
-    cores = recommend_cpu_cores(data.shape[0],
-                                requested_cores=cores,
-                                lengthy_computation=lengthy_computation,
-                                verbose=verbose)
+        cores = recommend_cpu_cores(data.shape[0],
+                                    requested_cores=cores,
+                                    lengthy_computation=lengthy_computation,
+                                    verbose=verbose)
 
     """
     Disable threading since we tend to use MPI / multiprocessing / joblib.
