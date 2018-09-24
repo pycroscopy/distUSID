@@ -11,6 +11,7 @@ import joblib
 import time as tm
 import h5py
 import itertools
+from numbers import Number
 
 from multiprocessing import cpu_count
 try:
@@ -45,10 +46,12 @@ Writing out to separate files and then merging them later on is the most perform
 Look into sub-communication worlds that can create mini worlds instaed of the general COMM WOLRD
 https://stackoverflow.com/questions/50900655/mpi4py-create-multiple-groups-and-scatter-from-each-group
 https://www.bu.edu/pasi/files/2011/01/Lisandro-Dalcin-mpi4py.pdf
-No work will be necessary to figure out the new ranking within the new communicator / group - automatically assigned from lowest value
+No work will be necessary to figure out the new ranking within the new communicator / group - automatically assigned 
+from lowest value
 
 set self.verbose = True for all master ranks. Won't need to worry about printing later on
-Do we need a new variable called self._worker_ranks = [1,5,9, 13...] for master ranks? <-- this can save time and repeated book-keeping!
+Do we need a new variable called self._worker_ranks = [1,5,9, 13...] for master ranks? <-- this can save time and 
+repeated book-keeping!
 
 How much memory each rank can work with is a function of:
 1. How much available memory this chip has
@@ -113,6 +116,7 @@ https://support.hdfgroup.org/HDF5/hdf5-quest.html#bool
 
 https://groups.google.com/a/continuum.io/forum/#!topic/anaconda/qFOGRTOxFTM
 """
+
 
 def group_ranks_by_socket(verbose=False):
     """
@@ -233,14 +237,16 @@ class Process(object):
 
             # Ensure that the file is opened in the correct comm or something
             if h5_main.file.driver != 'mpio':
-                raise TypeError('The HDF5 file should have been opened with driver="mpio". Current driver = "{}"'.format(h5_main.file.driver))
+                raise TypeError('The HDF5 file should have been opened with driver="mpio". Current driver = "{}"'
+                                ''.format(h5_main.file.driver))
 
             """
             # Not sure how to check for this correctly
             messg = None
             try:
                 if h5_main.file.comm != comm:
-                    messg = 'The HDF5 file should have been opened with comm=MPI.COMM_WORLD. Currently comm={}'.format(h5_main.file.comm)
+                    messg = 'The HDF5 file should have been opened with comm=MPI.COMM_WORLD. Currently comm={}'
+                            ''.format(h5_main.file.comm)
             except AttributeError:
                 messg = 'The HDF5 file should have been opened with comm=MPI.COMM_WORLD'
             if messg is not None:
@@ -365,7 +371,7 @@ class Process(object):
         Checks for instances where the process was applied to the same dataset with the same parameters
         Returns
         -------
-        duplicate_h5_groups : list of h5py.Datagroup objects
+        duplicate_h5_groups : list of h5py.Group objects
             List of groups satisfying the above conditions
         """
         if self.verbose and self.mpi_rank == 0:
@@ -445,8 +451,8 @@ class Process(object):
         Extracts the necessary parameters from the provided h5 group to resume computation
         Parameters
         ----------
-        h5_partial_group : h5py.Datagroup object
-            Datagroup containing partially computed results
+        h5_partial_group : h5py.Group object
+            Group containing partially computed results
         """
         # Attempt to automatically take partial results
         if h5_partial_group is None:
@@ -517,8 +523,8 @@ class Process(object):
 
         if self.verbose and self.mpi_rank == socket_master:
             # expected to be the same for all ranks so just use this.
-            print('Rank {} - {} processes with access to {} memory on this socket'.format(socket_master, self._cores,
-                                                                                format_size(_max_mem_mb * 1024**2, 2)))
+            print('Rank {} - {} processes with access to {} memory on this socket'
+                  '.'.format(socket_master, self._cores, format_size(_max_mem_mb * 1024**2, 2)))
             print('Allowed to read {} pixels per chunk'.format(self._max_pos_per_read))
 
     @staticmethod
@@ -634,16 +640,24 @@ class Process(object):
             keyword arguments to the mapped function
         Returns
         -------
-        h5_results_grp : h5py.Datagroup object
-            Datagroup containing all the results
+        h5_results_grp : h5py.Group object
+            Group containing all the results
         """
 
         class SimpleFIFO(object):
             """
-            Would have loved to have used the built in queue object but it looks like that would be a bit of a pain
+            Simple class that maintains a moving average of some numbers.
             """
 
-            def __init__(self, length):
+            def __init__(self, length=5):
+                """
+                Create a SimpleFIFO object
+
+                Parameters
+                ----------
+                length : unsigned integer
+                    Number of values that need to be maintained for the moving average
+                """
                 self.__queue = list()
                 if not isinstance(length, int):
                     raise TypeError('length must be a positive integer')
@@ -653,15 +667,42 @@ class Process(object):
                 self.__count = 0
 
             def put(self, item):
+                """
+                Adds the item to the internal queue. If the size of the queue exceeds its capacity, the oldest
+                item is removed.
+
+                Parameters
+                ----------
+                item : float or int
+                    Any real valued number
+                """
+                if (not isinstance(item, Number)) or isinstance(item, complex):
+                    raise TypeError('Provided item: {} is not a Number'.format(item))
                 self.__queue.append(item)
                 self.__count += 1
                 if len(self.__queue) > self.__max_length:
                     _ = self.__queue.pop(0)
 
             def get_mean(self):
+                """
+                Returns the average of the elements within the queue
+
+                Returns
+                -------
+                avg : number.Number
+                    Mean of all elements within the queue
+                """
                 return np.mean(self.__queue)
 
             def get_cycles(self):
+                """
+                Returns the number of items that have been added to the queue in total
+
+                Returns
+                -------
+                count : int
+                    number of items that have been added to the queue in total
+                """
                 return self.__count
 
         if not override:
@@ -739,10 +780,12 @@ class Process(object):
                                                                         self.__end_pos - self.__start_pos,
                                                                         format_time(dump_time)))
 
-            time_remaining = (self.__rank_end_pos - self.__end_pos) * (compute_times.get_mean() + write_times.get_mean())
+            time_remaining = (self.__rank_end_pos - self.__end_pos) * \
+                             (compute_times.get_mean() + write_times.get_mean())
 
             if self.verbose or self.mpi_rank == 0:
-                percent_complete = int(100 * (self.__end_pos - orig_rank_start) / (self.__rank_end_pos - orig_rank_start))
+                percent_complete = int(100 * (self.__end_pos - orig_rank_start) /
+                                       (self.__rank_end_pos - orig_rank_start))
                 print('Rank {} - {}% complete. Time remaining: {}'.format(self.mpi_rank, percent_complete,
                                                                           format_time(time_remaining)))
 
