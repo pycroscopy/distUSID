@@ -43,31 +43,13 @@ The naive approach will be to simply allow all ranks to write data directly to f
 Forcing only a single rank within a socket may negate performance benefits
 Writing out to separate files and then merging them later on is the most performant option
 
-Look into sub-communication worlds that can create mini worlds instaed of the general COMM WOLRD
+Look into sub-communication worlds that can create mini worlds instead of the general COMM WORLD
 https://stackoverflow.com/questions/50900655/mpi4py-create-multiple-groups-and-scatter-from-each-group
 https://www.bu.edu/pasi/files/2011/01/Lisandro-Dalcin-mpi4py.pdf
 No work will be necessary to figure out the new ranking within the new communicator / group - automatically assigned 
 from lowest value
 
-set self.verbose = True for all master ranks. Won't need to worry about printing later on
-Do we need a new variable called self._worker_ranks = [1,5,9, 13...] for master ranks? <-- this can save time and 
-repeated book-keeping!
-
-How much memory each rank can work with is a function of:
-1. How much available memory this chip has
-2. How many ranks are sharing this socket - Will need the new master per socket function's result
-
-1. Find all unique ranks in the giant array of ranks
-2. Create empty array to hold how much memory a rank can load
-2. For each unique rank:
-    a. Find available memory
-    b. Find number of ranks that share this master
-    c. Assign quotient to all ranks that share this socket
-
-0. Do standard book-keeping of creating datasets etc.
-1. Scatter position slices among all ranks
-2. Instead of doing joblib either use a for-loop or the map-function
-3. When it is time to write the results chunks back to file. 
+When it is time to write the results chunks back to file. 
     a. If not master -> send data to master
     b. If master -> gather from this smaller world and then write to file once. IF this is too much memory to handle, 
     then loop over each rank <-- how is this different from just looping over each rank within the new communicator and 
@@ -82,34 +64,7 @@ http://mpitutorial.com/tutorials/introduction-to-groups-and-communicators/
 https://info.gwdg.de/~ceulig/docs-dev/doku.php?id=en:services:application_services:high_performance_computing:mpi4py
 https://rabernat.github.io/research_computing/parallel-programming-with-mpi-for-python.html
 
-We know that just like the joblib mode, the HDF5 file is NOT corrupted if the job is preempted by the wall-time limit.
-We need a more robust method for tracking what portions of the computation are completed.
-The catch is that the previous method may have used serial / single node or a different number of ranks
-Essentially, we would need to build a table of the pixels that still need to be computed and distribute this to the new 
-ranks instead of a contiguous chunk from 0 to N pixels. This is drawing the Process class squarely into load management
-
-Should one rank be spent on managing workers? We spend more time ahead of time to figure out which rank is responsible 
-for what. Then all the ranks are on their own to do what they were told to.
-
-Assuming that all ranks have the same amount of load, why ask them to start in evenly spaced portions of the dataset?
-Given a dataset with 100 jobs and 4 ranks, currently, the ranks start as: 0, 25, 50, and 75
-
-Now, tracking the completed portions, we have two challenges:
-1. retaining what the previous jobs have completed
-2. Having a contention-free way to track which rank has completed what
-What should each rank do when it has finished one batch of computation?
-
-HDF5 attributes CANNOT be modified (MPI or otherwise). They can be reassigned to a new value.
-This means that  if multiple MPI ranks want to update an attribute, they will be overwriting each others changes
-unless there is a lock and release / semaphore
-
-just message passing does NOT prevent concurrency issues
-Blocking will be wasting performance
-
-Since concurrency on attributes cannot be controlled:
-Option 1: create the same things as (indexed) datasets <--- can get ugly  very quickly
-
-Option 2: Create a giant low precision dataset. Instead of storing indices, let each rank set the completed indices to 
+Create a giant low precision dataset. Instead of storing indices, let each rank set the completed indices to 
 True.  The problem is that the smallest precision is 1 byte and NOT 1 bit. Even boolean = 1 byte!
 See - http://docs.h5py.org/en/latest/faq.html#faq
 https://support.hdfgroup.org/HDF5/hdf5-quest.html#bool
@@ -271,6 +226,8 @@ class Process(object):
         self.h5_main = USIDataset(h5_main)
         self.verbose = verbose
         self._cores = None
+        self.__ranks_on_socket = 1
+        self.__socket_master_rank = 0
         self._max_pos_per_read = None
         self._max_mem_mb = None
 
@@ -414,6 +371,11 @@ class Process(object):
                         curr_group.attrs['last_pixel'] = self.h5_main.shape[0]
                         # No further checks necessary
                         continue
+                    else:
+                        # Optionally calculate how much was completed:
+                        if self.mpi_rank == 0:
+                            percent_complete = int(100 * len(np.where(status_dset[()] == 0)[0]) / status_dset.shape[0])
+                            print('Group: {}: computation was {}% completed'.format(curr_group, percent_complete))
 
                 # Case 2: Legacy results group:
                 if 'last_pixel' not in curr_group.attrs.keys():
@@ -494,21 +456,22 @@ class Process(object):
                     raise TypeError('cores should be an integer but got: {}'.format(cores))
                 cores = int(abs(cores))
                 self._cores = max(1, min(psutil.cpu_count(), cores))
-            socket_master = 0
-            ranks_per_socket = 1
+
+            self.__socket_master_rank = 0
+            self.__ranks_on_socket = 1
         else:
             # user-provided input cores will simply be ignored in an effort to use the entire CPU
             ranks_by_socket = group_ranks_by_socket(verbose=self.verbose)
-            socket_master = ranks_by_socket[self.mpi_rank]
+            self.__socket_master_rank = ranks_by_socket[self.mpi_rank]
             # which ranks in this socket?
-            ranks_on_this_socket = np.where(ranks_by_socket == socket_master)[0]
+            ranks_on_this_socket = np.where(ranks_by_socket == self.__socket_master_rank)[0]
             # how many in this socket?
-            ranks_per_socket = ranks_on_this_socket.size
+            self.__ranks_on_socket = ranks_on_this_socket.size
             # Force usage of all available memory
             mem = None
             self._cores = 1
             # Disabling the following line since mpi4py and joblib didn't play well for Bayesian Inference
-            # self._cores = self.__cores_per_rank = psutil.cpu_count() // ranks_per_socket
+            # self._cores = self.__cores_per_rank = psutil.cpu_count() // self.__ranks_on_socket
 
         # TODO: Convert all to bytes!
         _max_mem_mb = get_available_memory() / 1024 ** 2  # in MB
@@ -522,17 +485,17 @@ class Process(object):
         self._max_mem_mb = min(_max_mem_mb, mem)
 
         # Remember that multiple processes (either via MPI or joblib) will share this socket
-        max_data_chunk = self._max_mem_mb / (self._cores * ranks_per_socket)
+        max_data_chunk = self._max_mem_mb / (self._cores * self.__ranks_on_socket)
 
         # Now calculate the number of positions OF RAW DATA ONLY that can be stored in memory in one go PER RANK
         mb_per_position = self.h5_main.dtype.itemsize * self.h5_main.shape[1] / 1024 ** 2
         self._max_pos_per_read = int(np.floor(max_data_chunk / mb_per_position))
 
-        if self.verbose and self.mpi_rank == socket_master:
+        if self.verbose and self.mpi_rank == self.__socket_master_rank:
             # expected to be the same for all ranks so just use this.
             print('Rank {} - on socket with {} logical cores and {} avail. RAM shared by {} ranks each given {} cores'
-                  '.'.format(socket_master, psutil.cpu_count(), format_size(_max_mem_mb * 1024**2, 2), ranks_per_socket,
-                             self._cores))
+                  '.'.format(self.__socket_master_rank, psutil.cpu_count(), format_size(_max_mem_mb * 1024**2, 2), 
+                             self.__ranks_on_socket, self._cores))
             print('Allowed to read {} pixels per chunk'.format(self._max_pos_per_read))
 
     @staticmethod
@@ -730,8 +693,10 @@ class Process(object):
             self._create_results_datasets()
         else:
             # resuming from previous checkpoint
-            if self.verbose and self.mpi_rank == 0:
-                print('Resuming computation')
+            if self.mpi_rank == 0:
+                percent_complete = int(100 * len(np.where(self._h5_status_dset[()] == 0)[0]) /
+                                       self._h5_status_dset.shape[0])
+                print('Resuming computation. {}% completed already'.format(percent_complete))
             self._get_existing_datasets()
 
         self.__create_compute_status_dataset()
