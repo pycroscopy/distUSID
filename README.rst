@@ -45,6 +45,13 @@ Use one rank per logical core. All ranks read and write to the file. Code availa
 
   * This may be related to some complication in the `math libraries <https://github.com/pycroscopy/distUSID/commit/3930df86c6119226702628145090726ad1f00312>`_
 * Have not yet seen any problems with regards to the bottleneck on up to 4 nodes (36 cores each). Benchmarking will be necessary for identify bottlenecks
+* Comprehensive checkpointing / resuming capability has also been incorporated within the ``Process`` class
+* The ``Process`` class has been made even more robust against accidental damage from user-side by moving more underlying code into private variables.
+* Minimal changes are required for the children classes of ``pyUSID.Process``:
+
+  * mainly in verbose print statements - need to check for ``rank == 0``
+  * ``Process`` completely handles all check-pointing (legacy + new) and flushing the file after each batch. The user-side code literally only needs to write to the HDF5 datasets
+
 * Plenty of documentation about the thought process included within the ``Process`` class file.
 * The ``Process`` class from this branch will be rolled into pyUSID after some checks
 
@@ -85,15 +92,8 @@ Strategies
    * As mentioned above, the ``Process`` class in the `pure_mpi <https://github.com/pycroscopy/distUSID/tree/pure_mpi>`_ branch already
      captures this use-case but this refuses to work for ``GIVBayesian`` just like in the `mpi_plus_joblib <https://github.com/pycroscopy/distUSID/tree/mpi_plus_joblib)>`_ branch
 
-Observations
-~~~~~~~~~~~~
-* ``Process`` class requires no more changes for **basic** MPI functionality / scaling embarrassingly parallel problems
-* Comprehensive checkpointing / resuming capability has also been incorporated within the `pure_mpi <https://github.com/pycroscopy/distUSID/tree/pure_mpi>`_ branch
-* The ``Process`` class has been made even more robust against accidental damage from user-side by moving more underlying code into private variables.
-* Minimal changes are required for the children classes of ``pyUSID.Process``:
-
-  * mainly in verbose print statements - need to check for ``rank == 0``
-  * ``Process`` completely handles all check-pointing and resuming + including flushing the file after each batch
+Tips and Gotchas
+~~~~~~~~~~~~~~~~
 * First test the dataset creation step with the computation disabled to speed up debugging time. Most of the challenges are in the dataset creation portion.
 * ``h5py`` (parallel) results in **segmentation faults** for the following situations:
 
