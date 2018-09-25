@@ -724,8 +724,18 @@ class Process(object):
                 print('\tThis class does NOT support interruption and resuming of computations.\n'
                       '\tIn order to enable this feature, simply implement the _get_existing_datasets() function')
 
+        if self.verbose and self.mpi_rank == self.__socket_master_rank:
+            print('Rank: {} - with nothing loaded has {} free memory'
+                  ''.format(self.mpi_rank, format_size(get_available_memory())))
+
         self._read_data_chunk()
-        
+
+        self.mpi_comm.barrier()
+
+        if self.verbose and self.mpi_rank == self.__socket_master_rank:
+            print('Rank: {} - with only raw data loaded has {} free memory'
+                  ''.format(self.mpi_rank, format_size(get_available_memory())))
+
         while self.data is not None:
 
             num_jobs_in_batch = self.__end_pos - self.__start_pos
@@ -743,6 +753,11 @@ class Process(object):
                       '.'.format(self.mpi_rank, format_time(comp_time), format_time(time_per_pix),
                                  format_time(compute_times.get_mean())))
 
+            # Ranks can become memory starved. Check memory usage - raw data + results in memory at this point
+            if self.verbose and self.mpi_rank == self.__socket_master_rank:
+                print('Rank: {} - now holding onto raw data + results has {} free memory'
+                      ''.format(self.mpi_rank, format_size(get_available_memory())))
+
             t_start_2 = tm.time()
             self._write_results_chunk()
 
@@ -751,6 +766,7 @@ class Process(object):
             # Leaving in this provision that will allow restarting of processes
             if self.mpi_size == 1:
                 self.h5_results_grp.attrs['last_pixel'] = self.__end_pos
+            # Child classes don't even have to worry about flushing. Process will do it.
             self.h5_main.file.flush()
 
             dump_time = np.round(tm.time() - t_start_2, decimals=2)
