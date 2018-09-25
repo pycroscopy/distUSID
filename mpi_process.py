@@ -298,6 +298,22 @@ class Process(object):
             print('Rank {} will read positions {} to {} of {}'.format(self.mpi_rank, self.__start_pos,
                                                                       self.__rank_end_pos, self.h5_main.shape[0]))
 
+    def _estimate_compute_time_per_pixel(self, *args, **kwargs):
+        """
+        Estimates how long it takes to compute an average pixel's worth of data. This information should be used by the
+        user to limit the number of pixels that will be processed per batch to make best use of checkpointing. This
+        function is exposed to the developer of the child classes. An approximate can be derived if it is simpler
+
+        Returns
+        -------
+
+        """
+        chosen_pos = np.random.randint(0, high=self.h5_main.shape[0]-1, size=5)
+        t0 = tm.time()
+        _ = parallel_compute(self.h5_main[chosen_pos, :], self._map_function, cores=1,
+                             lengthy_computation=False, func_args=args, func_kwargs=kwargs, verbose=False)
+        return (tm.time() - t0) / len(chosen_pos)
+
     def _get_pixels_in_current_batch(self):
         """
         Returns the indices of the pixels that will be processed in this batch.
