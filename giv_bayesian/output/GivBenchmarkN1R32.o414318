@@ -1,0 +1,628 @@
+/lustre/or-hydra/cades-ccsd/syz/pycroscopy_ensemble/giv_bayesian_pure_mpi
+total 277M
+-rw-r--r-- 1 syz cades-ccsd  928 Sep 22 22:29 attribute_race_test.h5
+-rw-r--r-- 1 syz cades-ccsd  721 Sep 25 11:00 bayesian_script_mpi.py
+-rw-r--r-- 1 syz cades-ccsd  536 Sep 21 18:23 bayesian_script_single_node.py
+-rw-r--r-- 1 syz cades-ccsd  19K Sep 25 11:00 giv_bayesian_mpi.py
+-rw-r--r-- 1 syz cades-ccsd  15K Sep 21 18:23 giv_bayesian_mpi.pyc
+-rwx------ 1 syz cades-ccsd 321M Sep 25 11:00 giv_raw.h5
+-rw-r--r-- 1 syz cades-ccsd  21K Sep 25 11:00 giv_utils.py
+-rw-r--r-- 1 syz cades-ccsd  619 Sep 22 22:28 h5_attribute_race_test.py
+-rw-r--r-- 1 syz cades-ccsd  39K Sep 25 11:00 mpi_process.py
+drwxr-sr-x 2 syz cades-ccsd  41K Sep 25 10:27 __pycache__
+--------------------------------------------------------------------------
+An MPI process has executed an operation involving a call to the
+"fork()" system call to create a child process.  Open MPI is currently
+operating in a condition that could result in memory corruption or
+other system errors; your MPI job may hang, crash, or produce silent
+data corruption.  The use of fork() (or system() or other calls that
+create child processes) is strongly discouraged.  
+
+The process that invoked fork was:
+
+  Local host:          or-condo-c78 (PID 70036)
+  MPI_COMM_WORLD rank: 31
+
+If you are *absolutely sure* that your application will successfully
+and correctly survive a call to fork(), you may disable this warning
+by setting the mpi_warn_on_fork MCA parameter to 0.
+--------------------------------------------------------------------------
+Rank 4 of 32 on or-condo-c78.ornl.gov sees 32 logical cores on the socket
+Rank 9 of 32 on or-condo-c78.ornl.gov sees 32 logical cores on the socket
+Rank 12 of 32 on or-condo-c78.ornl.gov sees 32 logical cores on the socket
+Rank 16 of 32 on or-condo-c78.ornl.gov sees 32 logical cores on the socket
+Rank 22 of 32 on or-condo-c78.ornl.gov sees 32 logical cores on the socket
+Rank 25 of 32 on or-condo-c78.ornl.gov sees 32 logical cores on the socket
+Rank 28 of 32 on or-condo-c78.ornl.gov sees 32 logical cores on the socket
+Rank 30 of 32 on or-condo-c78.ornl.gov sees 32 logical cores on the socket
+Rank 31 of 32 on or-condo-c78.ornl.gov sees 32 logical cores on the socket
+Rank 15 of 32 on or-condo-c78.ornl.gov sees 32 logical cores on the socket
+Rank 17 of 32 on or-condo-c78.ornl.gov sees 32 logical cores on the socket
+Rank 18 of 32 on or-condo-c78.ornl.gov sees 32 logical cores on the socket
+Rank 19 of 32 on or-condo-c78.ornl.gov sees 32 logical cores on the socket
+Rank 20 of 32 on or-condo-c78.ornl.gov sees 32 logical cores on the socket
+Rank 24 of 32 on or-condo-c78.ornl.gov sees 32 logical cores on the socket
+Rank 27 of 32 on or-condo-c78.ornl.gov sees 32 logical cores on the socket
+Rank 2 of 32 on or-condo-c78.ornl.gov sees 32 logical cores on the socket
+Rank 5 of 32 on or-condo-c78.ornl.gov sees 32 logical cores on the socket
+Rank 10 of 32 on or-condo-c78.ornl.gov sees 32 logical cores on the socket
+Rank 13 of 32 on or-condo-c78.ornl.gov sees 32 logical cores on the socket
+Rank 14 of 32 on or-condo-c78.ornl.gov sees 32 logical cores on the socket
+Rank 23 of 32 on or-condo-c78.ornl.gov sees 32 logical cores on the socket
+Rank 26 of 32 on or-condo-c78.ornl.gov sees 32 logical cores on the socket
+Rank 29 of 32 on or-condo-c78.ornl.gov sees 32 logical cores on the socket
+Rank 1 of 32 on or-condo-c78.ornl.gov sees 32 logical cores on the socket
+Rank 3 of 32 on or-condo-c78.ornl.gov sees 32 logical cores on the socket
+Rank 6 of 32 on or-condo-c78.ornl.gov sees 32 logical cores on the socket
+Rank 7 of 32 on or-condo-c78.ornl.gov sees 32 logical cores on the socket
+Rank 8 of 32 on or-condo-c78.ornl.gov sees 32 logical cores on the socket
+Rank 11 of 32 on or-condo-c78.ornl.gov sees 32 logical cores on the socket
+Rank 0 of 32 on or-condo-c78.ornl.gov sees 32 logical cores on the socket
+Working on 32 ranks via MPI
+Rank 21 of 32 on or-condo-c78.ornl.gov sees 32 logical cores on the socket
+Rank:  31 , sendbuf:  or-condo-c78.ornl.gov
+Rank:  9 , sendbuf:  or-condo-c78.ornl.gov
+Rank:  28 , sendbuf:  or-condo-c78.ornl.gov
+Rank:  4 , sendbuf:  or-condo-c78.ornl.gov
+Rank:  22 , sendbuf:  or-condo-c78.ornl.gov
+Rank:  12 , sendbuf:  or-condo-c78.ornl.gov
+Rank:  25 , sendbuf:  or-condo-c78.ornl.gov
+Rank:  27 , sendbuf:  or-condo-c78.ornl.gov
+Rank:  30 , sendbuf:  or-condo-c78.ornl.gov
+Rank:  16 , sendbuf:  or-condo-c78.ornl.gov
+Rank:  2 , sendbuf:  or-condo-c78.ornl.gov
+Rank:  5 , sendbuf:  or-condo-c78.ornl.gov
+Rank:  17 , sendbuf:  or-condo-c78.ornl.gov
+Rank:  19 , sendbuf:  or-condo-c78.ornl.gov
+Rank:  18 , sendbuf:  or-condo-c78.ornl.gov
+Rank:  15 , sendbuf:  or-condo-c78.ornl.gov
+Rank:  24 , sendbuf:  or-condo-c78.ornl.gov
+Rank:  20 , sendbuf:  or-condo-c78.ornl.gov
+Rank:  10 , sendbuf:  or-condo-c78.ornl.gov
+Rank:  6 , sendbuf:  or-condo-c78.ornl.gov
+Rank:  14 , sendbuf:  or-condo-c78.ornl.gov
+Rank:  11 , sendbuf:  or-condo-c78.ornl.gov
+Rank:  7 , sendbuf:  or-condo-c78.ornl.gov
+Rank:  1 , sendbuf:  or-condo-c78.ornl.gov
+Rank:  23 , sendbuf:  or-condo-c78.ornl.gov
+Rank:  3 , sendbuf:  or-condo-c78.ornl.gov
+Rank:  26 , sendbuf:  or-condo-c78.ornl.gov
+Rank:  8 , sendbuf:  or-condo-c78.ornl.gov
+Rank:  21 , sendbuf:  or-condo-c78.ornl.gov
+Rank:  29 , sendbuf:  or-condo-c78.ornl.gov
+Rank:  13 , sendbuf:  or-condo-c78.ornl.gov
+Rank:  0 , sendbuf:  or-condo-c78.ornl.gov
+Rank:  0 , recvbuf received:  ['or-condo-c78.ornl.gov', 'or-condo-c78.ornl.gov', 'or-condo-c78.ornl.gov', 'or-condo-c78.ornl.gov', 'or-condo-c78.ornl.gov', 'or-condo-c78.ornl.gov', 'or-condo-c78.ornl.gov', 'or-condo-c78.ornl.gov', 'or-condo-c78.ornl.gov', 'or-condo-c78.ornl.gov', 'or-condo-c78.ornl.gov', 'or-condo-c78.ornl.gov', 'or-condo-c78.ornl.gov', 'or-condo-c78.ornl.gov', 'or-condo-c78.ornl.gov', 'or-condo-c78.ornl.gov', 'or-condo-c78.ornl.gov', 'or-condo-c78.ornl.gov', 'or-condo-c78.ornl.gov', 'or-condo-c78.ornl.gov', 'or-condo-c78.ornl.gov', 'or-condo-c78.ornl.gov', 'or-condo-c78.ornl.gov', 'or-condo-c78.ornl.gov', 'or-condo-c78.ornl.gov', 'or-condo-c78.ornl.gov', 'or-condo-c78.ornl.gov', 'or-condo-c78.ornl.gov', 'or-condo-c78.ornl.gov', 'or-condo-c78.ornl.gov', 'or-condo-c78.ornl.gov', 'or-condo-c78.ornl.gov']
+Unique sockets: ['or-condo-c78.ornl.gov']
+Parent rank for all ranks: [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+Rank 0 - on socket with 32 logical cores and 119.76 GB avail. RAM shared by 32 ranks each given 1 cores.
+Allowed to read 2009171 pixels per chunk
+Max positions per read set to 401834
+Consider calling test() to check results before calling compute() which computes on the entire dataset and writes back to the HDF5 file
+ensuring that half steps should be odd, num_x_steps is now 250
+Checking for duplicates:
+Creating HDF5 group and datasets to hold results
+Now creating the datasets
+created group: /Measurement_000/Channel_000/Raw_Data-FFT_Filtering_000/Filtered_Data-Reshape_000/Reshaped_Data-Bayesian_Inference_000 with attributes:
+{'machine_id': 'or-condo-c78.ornl.gov', 'timestamp': '2018_09_25-11_00_12', 'pyUSID_version': '0.0.4', 'platform': 'Linux-3.10.0-327.4.4.el7.x86_64-x86_64-with-centos-7.5.1804-Core', 'tool': 'Bayesian_Inference', 'num_source_dsets': 1, 'source_000': <HDF5 object reference>, 'algorithm_author': 'Kody J. Law', 'last_pixel': 0, 'freq': 200.0, 'num_x_steps': 250, 'r_extra': 110, 'gam': 0.03, 'e': 10.0, 'sigma': 10.0, 'sigmaC': 1.0, 'num_samples': 2000.0}
+Created I Corrected
+Created Resistance
+Created Variance
+Created Capacitance
+Done creating all results datasets!
+Rank 16 will read positions 34048 to 36176 of 68096
+Rank 8 will read positions 17024 to 19152 of 68096
+Rank 23 will read positions 48944 to 51072 of 68096
+Rank 10 will read positions 21280 to 23408 of 68096
+Rank 30 will read positions 63840 to 65968 of 68096
+Rank 18 will read positions 38304 to 40432 of 68096
+Rank 22 will read positions 46816 to 48944 of 68096
+Rank 5 will read positions 10640 to 12768 of 68096
+Rank 9 will read positions 19152 to 21280 of 68096
+Among the 68096 positions in this dataset, the following positions need to be computed: [    0     1     2 ... 68093 68094 68095].
+Each rank is required to work on 2128 of the 68096 (remaining) positions in this dataset.
+Rank 0 will read positions 0 to 2128 of 68096
+Rank 13 will read positions 27664 to 29792 of 68096
+Rank 4 will read positions 8512 to 10640 of 68096
+Rank 27 will read positions 57456 to 59584 of 68096
+Rank 15 will read positions 31920 to 34048 of 68096
+Rank 7 will read positions 14896 to 17024 of 68096
+Rank 11 will read positions 23408 to 25536 of 68096
+Rank 12 will read positions 25536 to 27664 of 68096
+Rank 2 will read positions 4256 to 6384 of 68096
+Rank 1 will read positions 2128 to 4256 of 68096
+Rank 6 will read positions 12768 to 14896 of 68096
+Rank 31 will read positions 65968 to 68096 of 68096
+Rank 28 will read positions 59584 to 61712 of 68096
+Rank 3 will read positions 6384 to 8512 of 68096
+Rank 14 will read positions 29792 to 31920 of 68096
+Rank 19 will read positions 40432 to 42560 of 68096
+Rank 25 will read positions 53200 to 55328 of 68096
+Rank 20 will read positions 42560 to 44688 of 68096
+Rank 17 will read positions 36176 to 38304 of 68096
+Rank 21 will read positions 44688 to 46816 of 68096
+Rank 24 will read positions 51072 to 53200 of 68096
+Rank 26 will read positions 55328 to 57456 of 68096
+Rank 29 will read positions 61712 to 63840 of 68096
+Rank 5 - Read positions: [10640 10641 10642 ... 12765 12766 12767]
+Rank 8 - Read positions: [17024 17025 17026 ... 19149 19150 19151]
+Rank 30 - Read positions: [63840 63841 63842 ... 65965 65966 65967]
+Rank 18 - Read positions: [38304 38305 38306 ... 40429 40430 40431]
+Rank 9 - Read positions: [19152 19153 19154 ... 21277 21278 21279]
+Rank 22 - Read positions: [46816 46817 46818 ... 48941 48942 48943]
+Rank 5 beginning parallel compute for Forward
+Rank 16 - Read positions: [34048 34049 34050 ... 36173 36174 36175]
+Rank 8 beginning parallel compute for Forward
+Rank 9 beginning parallel compute for Forward
+Rank 30 beginning parallel compute for Forward
+Rank 18 beginning parallel compute for Forward
+Rank 22 beginning parallel compute for Forward
+Rank 5 starting computing on 1 cores (requested 1 cores)
+Rank 5 computing serially ...
+Rank 8 starting computing on 1 cores (requested 1 cores)
+Rank 8 computing serially ...
+Rank 9 starting computing on 1 cores (requested 1 cores)
+Rank 9 computing serially ...
+Rank 30 starting computing on 1 cores (requested 1 cores)
+Rank 30 computing serially ...
+Rank 18 starting computing on 1 cores (requested 1 cores)
+Rank 18 computing serially ...
+Rank 22 starting computing on 1 cores (requested 1 cores)
+Rank 22 computing serially ...
+Rank 16 beginning parallel compute for Forward
+Rank 16 starting computing on 1 cores (requested 1 cores)
+Rank 16 computing serially ...
+Rank 10 - Read positions: [21280 21281 21282 ... 23405 23406 23407]
+Rank 11 - Read positions: [23408 23409 23410 ... 25533 25534 25535]
+Rank 13 - Read positions: [27664 27665 27666 ... 29789 29790 29791]
+Rank 4 - Read positions: [ 8512  8513  8514 ... 10637 10638 10639]
+Rank 0 - Read positions: [   0    1    2 ... 2125 2126 2127]
+Rank 6 - Read positions: [12768 12769 12770 ... 14893 14894 14895]
+Rank 27 - Read positions: [57456 57457 57458 ... 59581 59582 59583]
+Rank 2 - Read positions: [4256 4257 4258 ... 6381 6382 6383]
+Rank 7 - Read positions: [14896 14897 14898 ... 17021 17022 17023]
+Rank 15 - Read positions: [31920 31921 31922 ... 34045 34046 34047]
+Rank 23 - Read positions: [48944 48945 48946 ... 51069 51070 51071]
+Rank 12 - Read positions: [25536 25537 25538 ... 27661 27662 27663]
+Rank 1 - Read positions: [2128 2129 2130 ... 4253 4254 4255]
+Rank 11 beginning parallel compute for Forward
+Rank 13 beginning parallel compute for Forward
+Rank 10 beginning parallel compute for Forward
+Rank 0 beginning parallel compute for Forward
+Rank 4 beginning parallel compute for Forward
+Rank 6 beginning parallel compute for Forward
+Rank 27 beginning parallel compute for Forward
+Rank 2 beginning parallel compute for Forward
+Rank 7 beginning parallel compute for Forward
+Rank 15 beginning parallel compute for Forward
+Rank 23 beginning parallel compute for Forward
+Rank 12 beginning parallel compute for Forward
+Rank 11 starting computing on 1 cores (requested 1 cores)
+Rank 11 computing serially ...
+Rank 13 starting computing on 1 cores (requested 1 cores)
+Rank 13 computing serially ...
+Rank 10 starting computing on 1 cores (requested 1 cores)
+Rank 10 computing serially ...
+Rank 0 starting computing on 1 cores (requested 1 cores)
+Rank 0 computing serially ...
+Rank 4 starting computing on 1 cores (requested 1 cores)
+Rank 4 computing serially ...
+Rank 6 starting computing on 1 cores (requested 1 cores)
+Rank 6 computing serially ...
+Rank 1 beginning parallel compute for Forward
+Rank 27 starting computing on 1 cores (requested 1 cores)
+Rank 27 computing serially ...
+Rank 2 starting computing on 1 cores (requested 1 cores)
+Rank 2 computing serially ...
+Rank 7 starting computing on 1 cores (requested 1 cores)
+Rank 7 computing serially ...
+Rank 15 starting computing on 1 cores (requested 1 cores)
+Rank 15 computing serially ...
+Rank 23 starting computing on 1 cores (requested 1 cores)
+Rank 23 computing serially ...
+Rank 12 starting computing on 1 cores (requested 1 cores)
+Rank 12 computing serially ...
+Rank 1 starting computing on 1 cores (requested 1 cores)
+Rank 1 computing serially ...
+Rank 28 - Read positions: [59584 59585 59586 ... 61709 61710 61711]
+Rank 20 - Read positions: [42560 42561 42562 ... 44685 44686 44687]
+Rank 17 - Read positions: [36176 36177 36178 ... 38301 38302 38303]
+Rank 24 - Read positions: [51072 51073 51074 ... 53197 53198 53199]
+Rank 3 - Read positions: [6384 6385 6386 ... 8509 8510 8511]
+Rank 28 beginning parallel compute for Forward
+Rank 26 - Read positions: [55328 55329 55330 ... 57453 57454 57455]
+Rank 14 - Read positions: [29792 29793 29794 ... 31917 31918 31919]
+Rank 20 beginning parallel compute for Forward
+Rank 28 starting computing on 1 cores (requested 1 cores)
+Rank 28 computing serially ...
+Rank 17 beginning parallel compute for Forward
+Rank 19 - Read positions: [40432 40433 40434 ... 42557 42558 42559]
+Rank 24 beginning parallel compute for Forward
+Rank 3 beginning parallel compute for Forward
+Rank 25 - Read positions: [53200 53201 53202 ... 55325 55326 55327]
+Rank 26 beginning parallel compute for Forward
+Rank 20 starting computing on 1 cores (requested 1 cores)
+Rank 20 computing serially ...
+Rank 31 - Read positions: [65968 65969 65970 ... 68093 68094 68095]
+Rank 17 starting computing on 1 cores (requested 1 cores)
+Rank 17 computing serially ...
+Rank 14 beginning parallel compute for Forward
+Rank 21 - Read positions: [44688 44689 44690 ... 46813 46814 46815]
+Rank 3 starting computing on 1 cores (requested 1 cores)
+Rank 3 computing serially ...
+Rank 24 starting computing on 1 cores (requested 1 cores)
+Rank 24 computing serially ...
+Rank 26 starting computing on 1 cores (requested 1 cores)
+Rank 26 computing serially ...
+Rank 19 beginning parallel compute for Forward
+Rank 14 starting computing on 1 cores (requested 1 cores)
+Rank 14 computing serially ...
+Rank 25 beginning parallel compute for Forward
+Rank 31 beginning parallel compute for Forward
+Rank 19 starting computing on 1 cores (requested 1 cores)
+Rank 19 computing serially ...
+Rank 21 beginning parallel compute for Forward
+Rank 25 starting computing on 1 cores (requested 1 cores)
+Rank 25 computing serially ...
+Rank 31 starting computing on 1 cores (requested 1 cores)
+Rank 31 computing serially ...
+Rank 21 starting computing on 1 cores (requested 1 cores)
+Rank 21 computing serially ...
+Rank 29 - Read positions: [61712 61713 61714 ... 63837 63838 63839]
+Rank 29 beginning parallel compute for Forward
+Rank 29 starting computing on 1 cores (requested 1 cores)
+Rank 29 computing serially ...
+Rank 11 finished processing forward sections. Now working on reverse sections....
+Rank 11 starting computing on 1 cores (requested 1 cores)
+Rank 11 computing serially ...
+Rank 17 finished processing forward sections. Now working on reverse sections....
+Rank 17 starting computing on 1 cores (requested 1 cores)
+Rank 17 computing serially ...
+Rank 31 finished processing forward sections. Now working on reverse sections....
+Rank 31 starting computing on 1 cores (requested 1 cores)
+Rank 31 computing serially ...
+Rank 20 finished processing forward sections. Now working on reverse sections....
+Rank 20 starting computing on 1 cores (requested 1 cores)
+Rank 20 computing serially ...
+Rank 15 finished processing forward sections. Now working on reverse sections....
+Rank 15 starting computing on 1 cores (requested 1 cores)
+Rank 15 computing serially ...
+Rank 25 finished processing forward sections. Now working on reverse sections....
+Rank 25 starting computing on 1 cores (requested 1 cores)
+Rank 25 computing serially ...
+Rank 21 finished processing forward sections. Now working on reverse sections....
+Rank 21 starting computing on 1 cores (requested 1 cores)
+Rank 21 computing serially ...
+Rank 10 finished processing forward sections. Now working on reverse sections....
+Rank 10 starting computing on 1 cores (requested 1 cores)
+Rank 10 computing serially ...
+Rank 9 finished processing forward sections. Now working on reverse sections....
+Rank 9 starting computing on 1 cores (requested 1 cores)
+Rank 9 computing serially ...
+Rank 30 finished processing forward sections. Now working on reverse sections....
+Rank 30 starting computing on 1 cores (requested 1 cores)
+Rank 30 computing serially ...
+Rank 19 finished processing forward sections. Now working on reverse sections....
+Rank 19 starting computing on 1 cores (requested 1 cores)
+Rank 19 computing serially ...
+Rank 0 finished processing forward sections. Now working on reverse sections....
+Rank 0 starting computing on 1 cores (requested 1 cores)
+Rank 0 computing serially ...
+Rank 26 finished processing forward sections. Now working on reverse sections....
+Rank 26 starting computing on 1 cores (requested 1 cores)
+Rank 26 computing serially ...
+Rank 13 finished processing forward sections. Now working on reverse sections....
+Rank 13 starting computing on 1 cores (requested 1 cores)
+Rank 13 computing serially ...
+Rank 24 finished processing forward sections. Now working on reverse sections....
+Rank 24 starting computing on 1 cores (requested 1 cores)
+Rank 24 computing serially ...
+Rank 2 finished processing forward sections. Now working on reverse sections....
+Rank 2 starting computing on 1 cores (requested 1 cores)
+Rank 2 computing serially ...
+Rank 22 finished processing forward sections. Now working on reverse sections....
+Rank 22 starting computing on 1 cores (requested 1 cores)
+Rank 22 computing serially ...
+Rank 8 finished processing forward sections. Now working on reverse sections....
+Rank 8 starting computing on 1 cores (requested 1 cores)
+Rank 8 computing serially ...
+Rank 27 finished processing forward sections. Now working on reverse sections....
+Rank 27 starting computing on 1 cores (requested 1 cores)
+Rank 27 computing serially ...
+Rank 12 finished processing forward sections. Now working on reverse sections....
+Rank 12 starting computing on 1 cores (requested 1 cores)
+Rank 12 computing serially ...
+Rank 29 finished processing forward sections. Now working on reverse sections....
+Rank 29 starting computing on 1 cores (requested 1 cores)
+Rank 29 computing serially ...
+Rank 7 finished processing forward sections. Now working on reverse sections....
+Rank 7 starting computing on 1 cores (requested 1 cores)
+Rank 7 computing serially ...
+Rank 18 finished processing forward sections. Now working on reverse sections....
+Rank 18 starting computing on 1 cores (requested 1 cores)
+Rank 18 computing serially ...
+Rank 16 finished processing forward sections. Now working on reverse sections....
+Rank 16 starting computing on 1 cores (requested 1 cores)
+Rank 16 computing serially ...
+Rank 6 finished processing forward sections. Now working on reverse sections....
+Rank 6 starting computing on 1 cores (requested 1 cores)
+Rank 6 computing serially ...
+Rank 3 finished processing forward sections. Now working on reverse sections....
+Rank 3 starting computing on 1 cores (requested 1 cores)
+Rank 3 computing serially ...
+Rank 5 finished processing forward sections. Now working on reverse sections....
+Rank 5 starting computing on 1 cores (requested 1 cores)
+Rank 5 computing serially ...
+Rank 4 finished processing forward sections. Now working on reverse sections....
+Rank 4 starting computing on 1 cores (requested 1 cores)
+Rank 4 computing serially ...
+Rank 14 finished processing forward sections. Now working on reverse sections....
+Rank 14 starting computing on 1 cores (requested 1 cores)
+Rank 14 computing serially ...
+Rank 28 finished processing forward sections. Now working on reverse sections....
+Rank 28 starting computing on 1 cores (requested 1 cores)
+Rank 28 computing serially ...
+Rank 1 finished processing forward sections. Now working on reverse sections....
+Rank 1 starting computing on 1 cores (requested 1 cores)
+Rank 1 computing serially ...
+Rank 23 finished processing forward sections. Now working on reverse sections....
+Rank 23 starting computing on 1 cores (requested 1 cores)
+Rank 23 computing serially ...
+Rank 11 Finished processing reverse loops (and this chunk)
+Rank 11 - computed chunk in 5.23 mins or 147.34 msec per pixel. Average: 147.34 msec per pixel.
+Rank 11 - Started accumulating results for this chunk
+Rank 17 Finished processing reverse loops (and this chunk)
+Rank 17 - computed chunk in 5.23 mins or 147.38 msec per pixel. Average: 147.38 msec per pixel.
+Rank 17 - Started accumulating results for this chunk
+Rank 11 - Finished accumulating results. Writing results of chunk to h5
+Rank 17 - Finished accumulating results. Writing results of chunk to h5
+Rank 20 Finished processing reverse loops (and this chunk)
+Rank 20 - computed chunk in 5.23 mins or 147.55 msec per pixel. Average: 147.55 msec per pixel.
+Rank 20 - Started accumulating results for this chunk
+Rank 31 Finished processing reverse loops (and this chunk)
+Rank 31 - computed chunk in 5.23 mins or 147.56 msec per pixel. Average: 147.56 msec per pixel.
+Rank 31 - Started accumulating results for this chunk
+Rank 20 - Finished accumulating results. Writing results of chunk to h5
+Rank 31 - Finished accumulating results. Writing results of chunk to h5
+Rank 15 Finished processing reverse loops (and this chunk)
+Rank 15 - computed chunk in 5.24 mins or 147.7 msec per pixel. Average: 147.7 msec per pixel.
+Rank 15 - Started accumulating results for this chunk
+Rank 15 - Finished accumulating results. Writing results of chunk to h5
+Rank 25 Finished processing reverse loops (and this chunk)
+Rank 25 - computed chunk in 5.24 mins or 147.89 msec per pixel. Average: 147.89 msec per pixel.
+Rank 25 - Started accumulating results for this chunk
+Rank 10 Finished processing reverse loops (and this chunk)
+Rank 10 - computed chunk in 5.25 mins or 147.9 msec per pixel. Average: 147.9 msec per pixel.
+Rank 10 - Started accumulating results for this chunk
+Rank 25 - Finished accumulating results. Writing results of chunk to h5
+Rank 10 - Finished accumulating results. Writing results of chunk to h5
+Rank 21 Finished processing reverse loops (and this chunk)
+Rank 21 - computed chunk in 5.25 mins or 147.99 msec per pixel. Average: 147.99 msec per pixel.
+Rank 21 - Started accumulating results for this chunk
+Rank 9 Finished processing reverse loops (and this chunk)
+Rank 9 - computed chunk in 5.25 mins or 148.05 msec per pixel. Average: 148.05 msec per pixel.
+Rank 9 - Started accumulating results for this chunk
+Rank 21 - Finished accumulating results. Writing results of chunk to h5
+Rank 9 - Finished accumulating results. Writing results of chunk to h5
+Rank 19 Finished processing reverse loops (and this chunk)
+Rank 19 - computed chunk in 5.26 mins or 148.35 msec per pixel. Average: 148.35 msec per pixel.
+Rank 19 - Started accumulating results for this chunk
+Rank 26 Finished processing reverse loops (and this chunk)
+Rank 26 - computed chunk in 5.26 mins or 148.42 msec per pixel. Average: 148.42 msec per pixel.
+Rank 26 - Started accumulating results for this chunk
+Rank 30 Finished processing reverse loops (and this chunk)
+Rank 30 - computed chunk in 5.26 mins or 148.44 msec per pixel. Average: 148.44 msec per pixel.
+Rank 30 - Started accumulating results for this chunk
+Rank 19 - Finished accumulating results. Writing results of chunk to h5
+Rank 0 Finished processing reverse loops (and this chunk)
+Rank 0 - computed chunk in 5.27 mins or 148.46 msec per pixel. Average: 148.46 msec per pixel.
+Rank 0 - Started accumulating results for this chunk
+Rank 13 Finished processing reverse loops (and this chunk)
+Rank 13 - computed chunk in 5.27 mins or 148.5 msec per pixel. Average: 148.5 msec per pixel.
+Rank 13 - Started accumulating results for this chunk
+Rank 26 - Finished accumulating results. Writing results of chunk to h5
+Rank 30 - Finished accumulating results. Writing results of chunk to h5
+Rank 0 - Finished accumulating results. Writing results of chunk to h5
+Rank 13 - Finished accumulating results. Writing results of chunk to h5
+Rank 2 Finished processing reverse loops (and this chunk)
+Rank 2 - computed chunk in 5.28 mins or 148.88 msec per pixel. Average: 148.88 msec per pixel.
+Rank 2 - Started accumulating results for this chunk
+Rank 24 Finished processing reverse loops (and this chunk)
+Rank 24 - computed chunk in 5.28 mins or 148.88 msec per pixel. Average: 148.88 msec per pixel.
+Rank 24 - Started accumulating results for this chunk
+Rank 22 Finished processing reverse loops (and this chunk)
+Rank 22 - computed chunk in 5.28 mins or 148.97 msec per pixel. Average: 148.97 msec per pixel.
+Rank 22 - Started accumulating results for this chunk
+Rank 2 - Finished accumulating results. Writing results of chunk to h5
+Rank 24 - Finished accumulating results. Writing results of chunk to h5
+Rank 27 Finished processing reverse loops (and this chunk)
+Rank 27 - computed chunk in 5.28 mins or 149.01 msec per pixel. Average: 149.01 msec per pixel.
+Rank 27 - Started accumulating results for this chunk
+Rank 22 - Finished accumulating results. Writing results of chunk to h5
+Rank 8 Finished processing reverse loops (and this chunk)
+Rank 8 - computed chunk in 5.29 mins or 149.08 msec per pixel. Average: 149.08 msec per pixel.
+Rank 8 - Started accumulating results for this chunk
+Rank 27 - Finished accumulating results. Writing results of chunk to h5
+Rank 8 - Finished accumulating results. Writing results of chunk to h5
+Rank 12 Finished processing reverse loops (and this chunk)
+Rank 12 - computed chunk in 5.29 mins or 149.19 msec per pixel. Average: 149.19 msec per pixel.
+Rank 12 - Started accumulating results for this chunk
+Rank 29 Finished processing reverse loops (and this chunk)
+Rank 29 - computed chunk in 5.29 mins or 149.28 msec per pixel. Average: 149.28 msec per pixel.
+Rank 29 - Started accumulating results for this chunk
+Rank 12 - Finished accumulating results. Writing results of chunk to h5
+Rank 7 Finished processing reverse loops (and this chunk)
+Rank 7 - computed chunk in 5.3 mins or 149.34 msec per pixel. Average: 149.34 msec per pixel.
+Rank 7 - Started accumulating results for this chunk
+Rank 29 - Finished accumulating results. Writing results of chunk to h5
+Rank 7 - Finished accumulating results. Writing results of chunk to h5
+Rank 18 Finished processing reverse loops (and this chunk)
+Rank 18 - computed chunk in 5.31 mins or 149.66 msec per pixel. Average: 149.66 msec per pixel.
+Rank 18 - Started accumulating results for this chunk
+Rank 18 - Finished accumulating results. Writing results of chunk to h5
+Rank 16 Finished processing reverse loops (and this chunk)
+Rank 16 - computed chunk in 5.32 mins or 149.86 msec per pixel. Average: 149.86 msec per pixel.
+Rank 16 - Started accumulating results for this chunk
+Rank 6 Finished processing reverse loops (and this chunk)
+Rank 6 - computed chunk in 5.32 mins or 149.94 msec per pixel. Average: 149.94 msec per pixel.
+Rank 6 - Started accumulating results for this chunk
+Rank 16 - Finished accumulating results. Writing results of chunk to h5
+Rank 6 - Finished accumulating results. Writing results of chunk to h5
+Rank 3 Finished processing reverse loops (and this chunk)
+Rank 3 - computed chunk in 5.33 mins or 150.34 msec per pixel. Average: 150.34 msec per pixel.
+Rank 3 - Started accumulating results for this chunk
+Rank 3 - Finished accumulating results. Writing results of chunk to h5
+Rank 5 Finished processing reverse loops (and this chunk)
+Rank 5 - computed chunk in 5.35 mins or 150.8 msec per pixel. Average: 150.8 msec per pixel.
+Rank 5 - Started accumulating results for this chunk
+Rank 5 - Finished accumulating results. Writing results of chunk to h5
+Rank 4 Finished processing reverse loops (and this chunk)
+Rank 4 - computed chunk in 5.36 mins or 151.22 msec per pixel. Average: 151.22 msec per pixel.
+Rank 4 - Started accumulating results for this chunk
+Rank 4 - Finished accumulating results. Writing results of chunk to h5
+Rank 14 Finished processing reverse loops (and this chunk)
+Rank 14 - computed chunk in 5.37 mins or 151.47 msec per pixel. Average: 151.47 msec per pixel.
+Rank 14 - Started accumulating results for this chunk
+Rank 14 - Finished accumulating results. Writing results of chunk to h5
+Rank 28 Finished processing reverse loops (and this chunk)
+Rank 28 - computed chunk in 5.46 mins or 153.95 msec per pixel. Average: 153.95 msec per pixel.
+Rank 28 - Started accumulating results for this chunk
+Rank 28 - Finished accumulating results. Writing results of chunk to h5
+Rank 1 Finished processing reverse loops (and this chunk)
+Rank 1 - computed chunk in 5.48 mins or 154.37 msec per pixel. Average: 154.37 msec per pixel.
+Rank 1 - Started accumulating results for this chunk
+Rank 1 - Finished accumulating results. Writing results of chunk to h5
+Rank 23 Finished processing reverse loops (and this chunk)
+Rank 23 - computed chunk in 5.57 mins or 156.94 msec per pixel. Average: 156.94 msec per pixel.
+Rank 23 - Started accumulating results for this chunk
+Rank 23 - Finished accumulating results. Writing results of chunk to h5
+Rank 23 - wrote its 2128 pixel chunk in 410.0 msec
+Rank 23 - 100% complete. Time remaining: 0.0 msec
+Rank 13 - wrote its 2128 pixel chunk in 18.4 sec
+Rank 13 - 100% complete. Time remaining: 0.0 msec
+Rank 31 - wrote its 2128 pixel chunk in 20.44 sec
+Rank 31 - 100% complete. Time remaining: 0.0 msec
+Rank 19 - wrote its 2128 pixel chunk in 18.79 sec
+Rank 19 - 100% complete. Time remaining: 0.0 msec
+Rank 17 - wrote its 2128 pixel chunk in 20.87 sec
+Rank 17 - 100% complete. Time remaining: 0.0 msec
+Rank 27 - wrote its 2128 pixel chunk in 17.45 sec
+Rank 27 - 100% complete. Time remaining: 0.0 msec
+Rank 7 - wrote its 2128 pixel chunk in 16.79 sec
+Rank 7 - 100% complete. Time remaining: 0.0 msec
+Rank 1 - wrote its 2128 pixel chunk in 6.07 sec
+Rank 1 - 100% complete. Time remaining: 0.0 msec
+Rank 9 - wrote its 2128 pixel chunk in 19.54 sec
+Rank 9 - 100% complete. Time remaining: 0.0 msec
+Rank 5 - wrote its 2128 pixel chunk in 13.69 sec
+Rank 5 - 100% complete. Time remaining: 0.0 msec
+Rank 25 - wrote its 2128 pixel chunk in 19.88 sec
+Rank 25 - 100% complete. Time remaining: 0.0 msec
+Rank 21 - wrote its 2128 pixel chunk in 19.65 sec
+Rank 21 - 100% complete. Time remaining: 0.0 msec
+Rank 11 - wrote its 2128 pixel chunk in 21.07 sec
+Rank 11 - 100% complete. Time remaining: 0.0 msec
+Rank 28 - wrote its 2128 pixel chunk in 6.98 sec
+Rank 28 - 100% complete. Time remaining: 0.0 msec
+Rank 26 - wrote its 2128 pixel chunk in 18.75 sec
+Rank 26 - 100% complete. Time remaining: 0.0 msec
+Rank 25 - Finished reading all data!
+Rank 25 - Finished computing all jobs!
+Rank 15 - wrote its 2128 pixel chunk in 20.3 sec
+Rank 15 - 100% complete. Time remaining: 0.0 msec
+Rank 14 - wrote its 2128 pixel chunk in 12.28 sec
+Rank 14 - 100% complete. Time remaining: 0.0 msec
+Rank 29 - wrote its 2128 pixel chunk in 16.92 sec
+Rank 29 - 100% complete. Time remaining: 0.0 msec
+Rank 0 - wrote its 2128 pixel chunk in 18.69 sec
+Rank 0 - 100% complete. Time remaining: 0.0 msec
+Rank 2 - wrote its 2128 pixel chunk in 17.8 sec
+Rank 2 - 100% complete. Time remaining: 0.0 msec
+Rank 4 - wrote its 2128 pixel chunk in 12.81 sec
+Rank 4 - 100% complete. Time remaining: 0.0 msec
+Rank 12 - wrote its 2128 pixel chunk in 17.13 sec
+Rank 12 - 100% complete. Time remaining: 0.0 msec
+Rank 10 - wrote its 2128 pixel chunk in 19.88 sec
+Rank 10 - 100% complete. Time remaining: 0.0 msec
+Rank 8 - wrote its 2128 pixel chunk in 17.38 sec
+Rank 8 - 100% complete. Time remaining: 0.0 msec
+Rank 18 - wrote its 2128 pixel chunk in 16.16 sec
+Rank 18 - 100% complete. Time remaining: 0.0 msec
+Rank 16 - wrote its 2128 pixel chunk in 15.76 sec
+Rank 16 - 100% complete. Time remaining: 0.0 msec
+Rank 20 - wrote its 2128 pixel chunk in 20.69 sec
+Rank 20 - 100% complete. Time remaining: 0.0 msec
+Rank 24 - wrote its 2128 pixel chunk in 17.91 sec
+Rank 24 - 100% complete. Time remaining: 0.0 msec
+Rank 3 - wrote its 2128 pixel chunk in 14.82 sec
+Rank 3 - 100% complete. Time remaining: 0.0 msec
+Rank 30 - wrote its 2128 pixel chunk in 18.9 sec
+Rank 30 - 100% complete. Time remaining: 0.0 msec
+Rank 6 - wrote its 2128 pixel chunk in 15.76 sec
+Rank 6 - 100% complete. Time remaining: 0.0 msec
+Rank 23 - Finished reading all data!
+Rank 22 - wrote its 2128 pixel chunk in 17.87 sec
+Rank 22 - 100% complete. Time remaining: 0.0 msec
+Rank 23 - Finished computing all jobs!
+Rank 13 - Finished reading all data!
+Rank 13 - Finished computing all jobs!
+Rank 31 - Finished reading all data!
+Rank 31 - Finished computing all jobs!
+Rank 19 - Finished reading all data!
+Rank 19 - Finished computing all jobs!
+Rank 17 - Finished reading all data!
+Rank 27 - Finished reading all data!
+Rank 17 - Finished computing all jobs!
+Rank 27 - Finished computing all jobs!
+Rank 7 - Finished reading all data!
+Rank 7 - Finished computing all jobs!
+Rank 1 - Finished reading all data!
+Rank 21 - Finished reading all data!
+Rank 1 - Finished computing all jobs!
+Rank 11 - Finished reading all data!
+Rank 21 - Finished computing all jobs!
+Rank 15 - Finished reading all data!
+Rank 18 - Finished reading all data!
+Rank 11 - Finished computing all jobs!
+Rank 15 - Finished computing all jobs!
+Rank 18 - Finished computing all jobs!
+Rank 28 - Finished reading all data!
+Rank 29 - Finished reading all data!
+Rank 30 - Finished reading all data!
+Rank 26 - Finished reading all data!
+Rank 24 - Finished reading all data!
+Rank 29 - Finished computing all jobs!
+Rank 28 - Finished computing all jobs!
+Rank 26 - Finished computing all jobs!
+Rank 30 - Finished computing all jobs!
+Rank 24 - Finished computing all jobs!
+Rank 5 - Finished reading all data!
+Rank 5 - Finished computing all jobs!
+Rank 9 - Finished reading all data!
+Rank 8 - Finished reading all data!
+Rank 2 - Finished reading all data!
+Rank 0 - Finished reading all data!
+Rank 0 - Finished computing all jobs!
+Rank 14 - Finished reading all data!
+Rank 6 - Finished reading all data!
+Rank 20 - Finished reading all data!
+Rank 12 - Finished reading all data!
+Rank 16 - Finished reading all data!
+Rank 4 - Finished reading all data!
+Rank 22 - Finished reading all data!
+Rank 10 - Finished reading all data!
+Rank 9 - Finished computing all jobs!
+Rank 3 - Finished reading all data!
+Rank 3 - Finished computing all jobs!
+Rank 8 - Finished computing all jobs!
+Rank 2 - Finished computing all jobs!
+Rank 4 - Finished computing all jobs!
+Rank 14 - Finished computing all jobs!
+Rank 20 - Finished computing all jobs!
+Rank 16 - Finished computing all jobs!
+Rank 10 - Finished computing all jobs!
+Rank 22 - Finished computing all jobs!
+Rank 6 - Finished computing all jobs!
+Rank 12 - Finished computing all jobs!
+Finished processing the entire dataset!
+Execution time: 336.2538206577301 sec
