@@ -229,7 +229,7 @@ class GIVBayesian(Process):
         # raw, compensated current, resistance, variance
         self._max_pos_per_read = self._max_pos_per_read // 4  # Integer division
         # Since these computations take far longer than functional fitting, do in smaller batches:
-        self._max_pos_per_read = min(100, self._max_pos_per_read)
+        self._max_pos_per_read = min(1000, self._max_pos_per_read)
 
         if self.verbose and self.mpi_rank == 0:
             print('Max positions per read set to {}'.format(self._max_pos_per_read))
@@ -390,7 +390,7 @@ class GIVBayesian(Process):
         self.reverse_results = parallel_compute(rolled_raw_data[:, :half_v_steps] * -1, do_bayesian_inference,
                                                 cores=self._cores,
                                                 func_args=[self.rolled_bias[:half_v_steps] * -1, self.ex_freq],
-                                                func_kwargs=self._bayes_parms, lengthy_computation=True,
+                                                func_kwargs=self._bayes_parms, lengthy_computation=False,
                                                 verbose=self.verbose)
 
         if self.verbose:
@@ -399,7 +399,7 @@ class GIVBayesian(Process):
         self.forward_results = parallel_compute(rolled_raw_data[:, half_v_steps:], do_bayesian_inference,
                                                 cores=self._cores,
                                                 func_args=[self.rolled_bias[half_v_steps:], self.ex_freq],
-                                                func_kwargs=self._bayes_parms, lengthy_computation=True,
+                                                func_kwargs=self._bayes_parms, lengthy_computation=False,
                                                 verbose=self.verbose)
         if self.verbose:
             print('Rank {} Finished processing reverse loops (and this chunk)'.format(self.mpi_rank))
