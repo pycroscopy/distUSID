@@ -746,7 +746,7 @@ class Process(object):
 
         self._read_data_chunk()
 
-        if self.mpi_size > 1:
+        if self.mpi_comm is not None:
             self.mpi_comm.barrier()
 
         if self.verbose and self.mpi_rank == self.__socket_master_rank:
@@ -813,11 +813,13 @@ class Process(object):
         if self.verbose:
             print('Rank {} - Finished computing all jobs!'.format(self.mpi_rank))
 
-        self.mpi_comm.barrier()
+        if self.mpi_comm is not None:
+            self.mpi_comm.barrier()
+
         if self.mpi_rank == 0:
             print('Finished processing the entire dataset!')
 
-        # Update the 'last_pixel' attribute here:
+        # Update the legacy 'last_pixel' attribute here:
         if self.mpi_rank == 0:
             self.h5_results_grp.attrs['last_pixel'] = self.h5_main.shape[0]
 
