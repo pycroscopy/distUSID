@@ -746,7 +746,8 @@ class Process(object):
 
         self._read_data_chunk()
 
-        self.mpi_comm.barrier()
+        if self.mpi_size > 1:
+            self.mpi_comm.barrier()
 
         if self.verbose and self.mpi_rank == self.__socket_master_rank:
             print('Rank: {} - with only raw data loaded has {} free memory'
