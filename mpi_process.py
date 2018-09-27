@@ -209,7 +209,7 @@ class Process(object):
             """
 
         else:
-            print('No mpi4py found. Assuming single node computation')
+            print('No mpi4py found or script was not called via mpixexec / mpirun. Assuming single node computation')
             self.mpi_comm = None
             self.mpi_size = 1
             self.mpi_rank = 0
@@ -415,7 +415,7 @@ class Process(object):
                                                  'Set override to True to force fresh computation')
             print(duplicate_h5_groups)
 
-        if partial_h5_groups and self.mpi_rank == 0:
+        if len(partial_h5_groups) > 0 and self.mpi_rank == 0:
             print('Note: ' + self.process_name + ' has already been performed PARTIALLY with the same parameters. '
                                                  'compute() will resuming computation in the last group below. '
                                                  'To choose a different group call use_patial_computation()'
