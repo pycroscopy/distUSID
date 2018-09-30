@@ -64,5 +64,5 @@ cp $SCRIPTS_PATH/bayesian_script_mpi.py .
 ls -hl
 
 ### MPI run followed by the name/path of the binary.
-mpiexec -use-hwthread-cpus python bayesian_script_mpi.py
+mpiexec --mca mpi_warn_on_fork 0 -use-hwthread-cpus python bayesian_script_mpi.py
 ### mpiexec -use-hwthread-cpus python -m cProfile -s cumtime bayesian_script_mpi.py
