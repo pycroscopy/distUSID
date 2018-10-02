@@ -574,6 +574,7 @@ class Process(object):
         Creates a dataset that keeps track of what pixels / rows have already been computed. Users are not expected to
         extend / modify this function.
         """
+        # TODO: This will fail for Fitter and Image Processing class which will need to run Process twice . Need to allow room for customization
         # Check to make sure that such a group doesn't already exist
         if self.__status_dset_name in self.h5_results_grp.keys():
             self._h5_status_dset = self.h5_results_grp[self.__status_dset_name]
