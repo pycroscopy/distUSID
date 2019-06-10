@@ -8,21 +8,23 @@ from __future__ import division, print_function, absolute_import, unicode_litera
 import h5py
 import numpy as np
 from collections import Iterable
+# ######################################################################################################################
+# WE STILL NEED pyUSID FOR ALL THESE FUNCTIONS:
 from pyUSID.io.hdf_utils import create_results_group, write_main_dataset, write_simple_attrs, \
     write_ind_val_dsets
 from pyUSID.io.write_utils import Dimension
+from pyUSID.processing.comp_utils import parallel_compute
+# ######################################################################################################################
+# IMPORTING FROM COPES OF SPECIFIC FILES FROM PYCROSCOPY. NO NEED FOR PYCROSCOPY ITSELF
+# THESE FILES NEED TO BE WITHIN THE SAME FOLDER AS THIS FILE
 from fft import get_noise_floor, are_compatible_filters, build_composite_freq_filter
 from gmode_utils import test_filter
+# ######################################################################################################################
+# IMPORTING FROM OUR OWN COPY OF THE PROCESS CLASS HERE INSTEAD OF WHAT IS IN PYUSID
+# REPLACE Process with DaskProcess
+from dev_process import Process
+# ######################################################################################################################
 
-try:
-    from mpi4py import MPI
-    if MPI.COMM_WORLD.Get_size() == 1:
-        # mpi4py available but NOT called via mpirun or mpiexec => single node
-        MPI = None
-except ImportError:
-    # mpi4py not even present! Single node by default:
-    MPI = None
-from mpi_process import Process, parallel_compute
 # TODO: correct implementation of num_pix
 
 def create_empty_dataset(source_dset, dtype, dset_name, h5_group=None, new_attrs=None, skip_refs=False):
@@ -188,7 +190,7 @@ class SignalFilter(Process):
         scaling_factor = 1 + 2 * self.write_filtered + 0.25 * self.write_condensed
         self._max_pos_per_read = int(self._max_pos_per_read / scaling_factor)
 
-        if self.verbose and self.mpi_rank == 0:
+        if self.verbose:
             print('Allowed to read {} pixels per chunk'.format(self._max_pos_per_read))
 
         self.parms_dict = dict()
@@ -226,8 +228,6 @@ class SignalFilter(Process):
         -------
         fig, axes
         """
-        if self.mpi_rank > 0:
-            return
         if pix_ind is None:
             pix_ind = np.random.randint(0, high=self.h5_main.shape[0])
         return test_filter(self.h5_main[pix_ind], frequency_filters=self.frequency_filters, excit_wfm=excit_wfm,
@@ -251,8 +251,8 @@ class SignalFilter(Process):
             h5_comp_filt = self.h5_results_grp.create_dataset('Composite_Filter',
                                                               data=np.float32(self.composite_filter))
 
-            if self.verbose and self.mpi_rank==0:
-                print('Rank {} - Finished creating the Composite_Filter dataset'.format(self.mpi_rank))
+            if self.verbose:
+                print('Finished creating the Composite_Filter dataset')
 
         # First create the position datsets if the new indices are smaller...
         if self.num_effective_pix != self.h5_main.shape[0]:
@@ -271,32 +271,32 @@ class SignalFilter(Process):
             """
             h5_pos_inds_new, h5_pos_vals_new = write_ind_val_dsets(self.h5_results_grp,
                                                                    Dimension('pixel', 'a.u.', self.num_effective_pix),
-                                                                   is_spectral=False, verbose=self.verbose and self.mpi_rank==0)
-            if self.verbose and self.mpi_rank==0:
-                print('Rank {} - Created the new position ancillary dataset'.format(self.mpi_rank))
+                                                                   is_spectral=False, verbose=self.verbose)
+            if self.verbose:
+                print('Created the new position ancillary dataset')
 
         else:
             h5_pos_inds_new = self.h5_main.h5_pos_inds
             h5_pos_vals_new = self.h5_main.h5_pos_vals
 
-            if self.verbose and self.mpi_rank==0:
-                print('Rank {} - Reusing source datasets position datasets'.format(self.mpi_rank))
+            if self.verbose:
+                print('Reusing source datasets position datasets')
 
         if self.noise_threshold is not None:
             self.h5_noise_floors = write_main_dataset(self.h5_results_grp, (self.num_effective_pix, 1), 'Noise_Floors',
                                                       'Noise', 'a.u.', None, Dimension('arb', '', [1]),
                                                       dtype=np.float32, aux_spec_prefix='Noise_Spec_',
                                                       h5_pos_inds=h5_pos_inds_new, h5_pos_vals=h5_pos_vals_new,
-                                                      verbose=self.verbose and self.mpi_rank==0)
-            if self.verbose and self.mpi_rank==0:
-                print('Rank {} - Finished creating the Noise_Floors dataset'.format(self.mpi_rank))
+                                                      verbose=self.verbose)
+            if self.verbose:
+                print('Finished creating the Noise_Floors dataset')
 
         if self.write_filtered:
             # Filtered data is identical to Main_Data in every way - just a duplicate
             self.h5_filtered = create_empty_dataset(self.h5_main, self.h5_main.dtype, 'Filtered_Data',
                                                     h5_group=self.h5_results_grp)
-            if self.verbose and self.mpi_rank==0:
-                print('Rank {} - Finished creating the Filtered dataset'.format(self.mpi_rank))
+            if self.verbose:
+                print('Finished creating the Filtered dataset')
 
         self.hot_inds = None
 
@@ -307,13 +307,9 @@ class SignalFilter(Process):
             self.h5_condensed = write_main_dataset(self.h5_results_grp, (self.num_effective_pix, len(self.hot_inds)),
                                                    'Condensed_Data', 'Complex', 'a. u.', None, condensed_spec,
                                                    h5_pos_inds=h5_pos_inds_new, h5_pos_vals=h5_pos_vals_new,
-                                                   dtype=np.complex, verbose=self.verbose and self.mpi_rank==0)
-            if self.verbose and self.mpi_rank==0:
-                print('Rank {} - Finished creating the Condensed dataset'.format(self.mpi_rank))
-
-        if self.mpi_size > 1:
-            self.mpi_comm.Barrier()
-        self.h5_main.file.flush()
+                                                   dtype=np.complex, verbose=self.verbose)
+            if self.verbose:
+                print('Finished creating the Condensed dataset')
 
     def _get_existing_datasets(self):
         """
