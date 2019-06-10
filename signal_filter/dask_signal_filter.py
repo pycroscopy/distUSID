@@ -22,7 +22,7 @@ from gmode_utils import test_filter
 # ######################################################################################################################
 # IMPORTING FROM OUR OWN COPY OF THE PROCESS CLASS HERE INSTEAD OF WHAT IS IN PYUSID
 # REPLACE Process with DaskProcess
-from dev_process import Process
+from dev_process import DaskProcess
 # ######################################################################################################################
 
 # TODO: correct implementation of num_pix
@@ -117,7 +117,7 @@ def create_empty_dataset(source_dset, dtype, dset_name, h5_group=None, new_attrs
 
 
 
-class SignalFilter(Process):
+class SignalFilter(DaskProcess):
     def __init__(self, h5_main, frequency_filters=None, noise_threshold=None, write_filtered=True,
                  write_condensed=False, num_pix=1, phase_rad=0,  **kwargs):
         """
