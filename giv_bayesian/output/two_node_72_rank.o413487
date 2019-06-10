@@ -1,0 +1,60 @@
+/lustre/or-hydra/cades-ccsd/syz/pycroscopy_ensemble/giv_bayesian_pure_mpi
+total 301M
+-rw-r--r-- 1 syz cades-ccsd  586 Sep 22 18:25 bayesian_script_mpi.py
+-rw-r--r-- 1 syz cades-ccsd  536 Sep 21 18:23 bayesian_script_single_node.py
+-rw-r--r-- 1 syz cades-ccsd  19K Sep 22 18:25 giv_bayesian_mpi.py
+-rw-r--r-- 1 syz cades-ccsd  15K Sep 21 18:23 giv_bayesian_mpi.pyc
+-rwx------ 1 syz cades-ccsd 321M Sep 22 18:25 giv_raw.h5
+-rw-r--r-- 1 syz cades-ccsd  21K Sep 22 18:25 giv_utils.py
+-rw-r--r-- 1 syz cades-ccsd  29K Sep 22 18:25 mpi_process.py
+drwxr-sr-x 2 syz cades-ccsd  41K Sep 22 18:15 __pycache__
+--------------------------------------------------------------------------
+An MPI process has executed an operation involving a call to the
+"fork()" system call to create a child process.  Open MPI is currently
+operating in a condition that could result in memory corruption or
+other system errors; your MPI job may hang, crash, or produce silent
+data corruption.  The use of fork() (or system() or other calls that
+create child processes) is strongly discouraged.  
+
+The process that invoked fork was:
+
+  Local host:          or-condo-c174 (PID 18210)
+  MPI_COMM_WORLD rank: 53
+
+If you are *absolutely sure* that your application will successfully
+and correctly survive a call to fork(), you may disable this warning
+by setting the mpi_warn_on_fork MCA parameter to 0.
+--------------------------------------------------------------------------
+Working on 72 ranks via MPI
+Consider calling test() to check results before calling compute() which computes on the entire dataset and writes back to the HDF5 file
+Note - Each rank will compute serially using pure MPI mode
+Note - Each rank will compute serially using pure MPI mode
+Rank 0 - 10% complete. Time remaining: 1.88 mins
+Note - Each rank will compute serially using pure MPI mode
+Note - Each rank will compute serially using pure MPI mode
+Rank 0 - 21% complete. Time remaining: 1.65 mins
+Note - Each rank will compute serially using pure MPI mode
+Note - Each rank will compute serially using pure MPI mode
+Rank 0 - 31% complete. Time remaining: 1.43 mins
+Note - Each rank will compute serially using pure MPI mode
+Note - Each rank will compute serially using pure MPI mode
+Rank 0 - 42% complete. Time remaining: 1.21 mins
+Note - Each rank will compute serially using pure MPI mode
+Note - Each rank will compute serially using pure MPI mode
+Rank 0 - 52% complete. Time remaining: 59.07 sec
+Note - Each rank will compute serially using pure MPI mode
+Note - Each rank will compute serially using pure MPI mode
+Rank 0 - 63% complete. Time remaining: 45.69 sec
+Note - Each rank will compute serially using pure MPI mode
+Note - Each rank will compute serially using pure MPI mode
+Rank 0 - 74% complete. Time remaining: 32.43 sec
+Note - Each rank will compute serially using pure MPI mode
+Note - Each rank will compute serially using pure MPI mode
+Rank 0 - 84% complete. Time remaining: 19.17 sec
+Note - Each rank will compute serially using pure MPI mode
+Note - Each rank will compute serially using pure MPI mode
+Rank 0 - 95% complete. Time remaining: 5.95 sec
+Note - Each rank will compute serially using pure MPI mode
+Note - Each rank will compute serially using pure MPI mode
+Rank 0 - 100% complete. Time remaining: 0.0 msec
+Finished processing the entire dataset!

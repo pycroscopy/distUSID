@@ -150,7 +150,7 @@ class GIVBayesian(Process):
         self.num_x_steps = int(num_x_steps)
         if self.num_x_steps % 4 == 0:
             self.num_x_steps = ((self.num_x_steps // 2) + 1) * 2
-        if self.verbose:
+        if self.verbose and self.mpi_rank == 0:
             print('ensuring that half steps should be odd, num_x_steps is now', self.num_x_steps)
 
         self.h5_main = USIDataset(self.h5_main)
@@ -179,6 +179,8 @@ class GIVBayesian(Process):
         self.reverse_results = None
         self.forward_results = None
         self._bayes_parms = None
+
+        self.__first_batch = True
 
     def test(self, pix_ind=None, show_plots=True):
         """
@@ -227,7 +229,7 @@ class GIVBayesian(Process):
         # raw, compensated current, resistance, variance
         self._max_pos_per_read = self._max_pos_per_read // 4  # Integer division
         # Since these computations take far longer than functional fitting, do in smaller batches:
-        self._max_pos_per_read = min(100, self._max_pos_per_read)
+        self._max_pos_per_read = min(1000, self._max_pos_per_read)
 
         if self.verbose and self.mpi_rank == 0:
             print('Max positions per read set to {}'.format(self._max_pos_per_read))
@@ -355,26 +357,17 @@ class GIVBayesian(Process):
         if self.verbose:
             print('Rank {} - Finished accumulating results. Writing results of chunk to h5'.format(self.mpi_rank))
 
-        if self._start_pos == 0:
+        if self.__first_batch:
             self.h5_new_spec_vals[0, :] = full_results['x']  # Technically this needs to only be done once
+            self.__first_batch = False
 
-        pos_slice = slice(self._start_pos, self._end_pos)
-        self.h5_cap[pos_slice] = np.atleast_2d(stack_real_to_compound(cap_mat, cap_dtype)).T
-        self.h5_variance[pos_slice] = r_var_mat
-        self.h5_resistance[pos_slice] = r_inf_mat
-        self.h5_i_corrected[pos_slice] = i_cor_sin_mat
+        # Get access to the private variable:
+        pos_in_batch = self._get_pixels_in_current_batch()
 
-        # Leaving in this provision that will allow restarting of processes
-        self.h5_results_grp.attrs['last_pixel'] = self._end_pos
-
-        # Disabling flush because h5py-parallel doesn't like it
-        # self.h5_main.file.flush()
-
-        print('Rank {} - Finished processing up to pixel {} of {}'
-              '.'.format(self.mpi_rank, self._end_pos, self._rank_end_pos))
-
-        # Now update the start position
-        self._start_pos = self._end_pos
+        self.h5_cap[pos_in_batch, :] = np.atleast_2d(stack_real_to_compound(cap_mat, cap_dtype)).T
+        self.h5_variance[pos_in_batch, :] = r_var_mat
+        self.h5_resistance[pos_in_batch, :] = r_inf_mat
+        self.h5_i_corrected[pos_in_batch, :] = i_cor_sin_mat
 
     def _unit_computation(self, *args, **kwargs):
         """
@@ -397,7 +390,7 @@ class GIVBayesian(Process):
         self.reverse_results = parallel_compute(rolled_raw_data[:, :half_v_steps] * -1, do_bayesian_inference,
                                                 cores=self._cores,
                                                 func_args=[self.rolled_bias[:half_v_steps] * -1, self.ex_freq],
-                                                func_kwargs=self._bayes_parms, lengthy_computation=True,
+                                                func_kwargs=self._bayes_parms, lengthy_computation=False,
                                                 verbose=self.verbose)
 
         if self.verbose:
@@ -406,7 +399,7 @@ class GIVBayesian(Process):
         self.forward_results = parallel_compute(rolled_raw_data[:, half_v_steps:], do_bayesian_inference,
                                                 cores=self._cores,
                                                 func_args=[self.rolled_bias[half_v_steps:], self.ex_freq],
-                                                func_kwargs=self._bayes_parms, lengthy_computation=True,
+                                                func_kwargs=self._bayes_parms, lengthy_computation=False,
                                                 verbose=self.verbose)
         if self.verbose:
             print('Rank {} Finished processing reverse loops (and this chunk)'.format(self.mpi_rank))
