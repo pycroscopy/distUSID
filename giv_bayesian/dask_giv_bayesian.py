@@ -7,25 +7,18 @@ Created on Thu Nov 02 11:48:53 2017
 """
 
 from __future__ import division, print_function, absolute_import, unicode_literals
-
+from warnings import warn
 import numpy as np
 from pyUSID.io.dtype_utils import stack_real_to_compound
 from pyUSID.io.hdf_utils import write_main_dataset, create_results_group, write_simple_attrs, \
     print_tree, get_attributes
+from pyUSID.processing.comp_utils import parallel_compute
 from pyUSID.io.write_utils import Dimension
 from pyUSID import USIDataset
 
-try:
-    from mpi4py import MPI
-    if MPI.COMM_WORLD.Get_size() == 1:
-        # mpi4py available but NOT called via mpirun or mpiexec => single node
-        MPI = None
-except ImportError:
-    # mpi4py not even present! Single node by default:
-    MPI = None
-
-from mpi_process import Process, parallel_compute
 from giv_utils import do_bayesian_inference, bayesian_inference_on_period
+# TODO: Fix this line
+from custom_process import DaskProcess
 
 cap_dtype = np.dtype({'names': ['Forward', 'Reverse'],
                       'formats': [np.float32, np.float32]})
@@ -122,7 +115,7 @@ def create_empty_dataset(source_dset, dtype, dset_name, h5_group=None, new_attrs
     return h5_new_dset
 
 
-class GIVBayesian(Process):
+class GIVBayesian(DaskProcess):
 
     def __init__(self, h5_main, ex_freq, gain, num_x_steps=250, r_extra=110, **kwargs):
         """
@@ -181,6 +174,8 @@ class GIVBayesian(Process):
         self._bayes_parms = None
 
         self.__first_batch = True
+
+        self.mpi_rank = 0
 
     def test(self, pix_ind=None, show_plots=True):
         """
@@ -293,8 +288,6 @@ class GIVBayesian(Process):
             # print_tree(self.h5_results_grp)
             print('Done creating all results datasets!')
 
-        if self.mpi_size > 1:
-            self.mpi_comm.Barrier()
         self.h5_main.file.flush()
 
     def _get_existing_datasets(self):
